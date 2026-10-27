@@ -2,9 +2,8 @@ name: Actualizador Semanal RFAF
 
 on:
   schedule:
-    # Se ejecuta todos los lunes a las 06:00 UTC (07:00 hora española)
     - cron: '0 6 * * 1'
-  workflow_dispatch: # Permite ejecutarlo manualmente en cualquier momento desde GitHub
+  workflow_dispatch:
 
 jobs:
   scraping-semanal:
