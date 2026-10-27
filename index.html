@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFAF RefStats - Referee Intelligence Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- html2pdf.js para exportación a PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0F172A',
+                        cardbg: '#1E293B',
+                        cardborder: '#334155',
+                        accent: '#10B981',
+                        gold: '#F59E0B',
+                        danger: '#EF4444'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-darkbg text-slate-100 min-h-screen font-sans antialiased">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-cardborder bg-darkbg/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-lg tracking-wide bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">RFAF RefStats</span>
+                    <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/30 text-accent font-mono px-2 py-0.5 rounded-full ml-2">PRO v1.0</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-xs text-slate-400 font-mono flex items-center">
+                    <span class="relative flex h-2 w-2 mr-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    API Conectada
+                </div>
+                <button onclick="cargarArbitros()" class="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-accent hover:bg-emerald-500/20 rounded-lg text-xs font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i> Actualizar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        
+        <!-- Dashboard Header -->
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight">Panel de Inteligencia Arbitral</h1>
+            <p class="text-slate-400 text-sm mt-1">Análisis táctico e histórico de actas oficiales (Temporadas 23/24, 24/25 y 25/26)</p>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+            <div class="bg-cardbg border border-cardborder p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Colegiados Registrados</p>
+                        <h3 id="kpi-total-arbitros" class="text-3xl font-black mt-2 text-white">--</h3>
+                    </div>
+                    <div class="p-3 bg-slate-800/80 rounded-xl text-emerald-400 border border-cardborder">
+                        <i class="fa-solid fa-users text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3"><i class="fa-solid fa-database mr-1"></i> Base de datos RFAF</p>
+            </div>
+
+            <div class="bg-cardbg border border-cardborder p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Total Partidos Analizados</p>
+                        <h3 id="kpi-total-partidos" class="text-3xl font-black mt-2 text-white">--</h3>
+                    </div>
+                    <div class="p-3 bg-slate-800/80 rounded-xl text-blue-400 border border-cardborder">
+                        <i class="fa-solid fa-futbol text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3"><i class="fa-solid fa-calendar-check mr-1"></i> 3 temporadas completas</p>
+            </div>
+
+            <div class="bg-cardbg border border-cardborder p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Promedio Tarjetas/Partida</p>
+                        <h3 id="kpi-promedio-liga" class="text-3xl font-black mt-2 text-amber-400">--</h3>
+                    </div>
+                    <div class="p-3 bg-slate-800/80 rounded-xl text-amber-400 border border-cardborder">
+                        <i class="fa-solid fa-clone text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3"><i class="fa-solid fa-chart-line mr-1"></i> Media global andaluza</p>
+            </div>
+
+            <div class="bg-cardbg border border-cardborder p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs uppercase tracking-wider font-semibold text-slate-400">Total Rojas Registradas</p>
+                        <h3 id="kpi-total-rojas" class="text-3xl font-black mt-2 text-rose-500">--</h3>
+                    </div>
+                    <div class="p-3 bg-slate-800/80 rounded-xl text-rose-500 border border-cardborder">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3"><i class="fa-solid fa-shield-cat mr-1"></i> Expulsiones directas/dobles</p>
+            </div>
+        </div>
+
+        <!-- Section: Charts & Visual Intelligence -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-cardbg border border-cardborder p-6 rounded-2xl shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-slate-200 text-lg">Distribución de Tarjetas por Delegación Provincial</h2>
+                    <span class="text-xs text-slate-400">Promedio de amarillas</span>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="chart-delegaciones"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-cardbg border border-cardborder p-6 rounded-2xl shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-slate-200 text-lg">Proporción de Tarjetas</h2>
+                    <span class="text-xs text-slate-400">Amarillas vs Rojas</span>
+                </div>
+                <div class="h-64 relative flex items-center justify-center">
+                    <canvas id="chart-tarjetas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Data Table -->
+        <div class="bg-cardbg border border-cardborder rounded-2xl overflow-hidden shadow-xl">
+            <div class="p-5 border-b border-cardborder flex flex-col md:flex-row justify-between items-md-center gap-4">
+                <div>
+                    <h2 class="font-bold text-lg text-slate-100">Directorio de Árbitros RFAF</h2>
+                    <p class="text-xs text-slate-400">Selecciona un colegiado para generar el Informe Táctico Pre-partido</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500 text-sm"></i>
+                        <input type="text" id="busqueda" onkeyup="filtrarTabla()" placeholder="Buscar por nombre o delegación..." 
+                            class="bg-slate-900 border border-cardborder rounded-xl pl-9 pr-4 py-2 text-xs w-64 focus:outline-none focus:border-emerald-500 text-slate-200">
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-800/60 text-slate-400 uppercase text-[11px] tracking-wider font-semibold">
+                        <tr>
+                            <th class="px-6 py-4">Árbitro</th>
+                            <th class="px-6 py-4">Delegación</th>
+                            <th class="px-6 py-4 text-center">Partidos</th>
+                            <th class="px-6 py-4 text-center">Amarillas</th>
+                            <th class="px-6 py-4 text-center">Rojas</th>
+                            <th class="px-6 py-4 text-center">Promedio</th>
+                            <th class="px-6 py-4 text-center">Severidad</th>
+                            <th class="px-6 py-4 text-right">Informe Táctico</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-arbitros" class="divide-y divide-cardborder/60">
+                        <tr>
+                            <td colspan="8" class="px-6 py-12 text-center text-slate-500">
+                                <i class="fa-solid fa-circle-notch animate-spin text-2xl mb-2 text-emerald-500"></i>
+                                <p>Cargando analítica desde la API REST...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal: Tactical Pre-match Report -->
+        <div id="modal-informe" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+            <div class="bg-cardbg border border-cardborder rounded-2xl max-w-lg w-full p-6 space-y-6 shadow-2xl relative" id="contenido-pdf">
+                
+                <button onclick="cerrarModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-xl">
+                        <i class="fa-solid fa-clipboard-user"></i>
+                    </div>
+                    <div>
+                        <h3 id="modal-nombre" class="text-xl font-bold text-slate-100">---</h3>
+                        <p id="modal-delegacion" class="text-xs text-slate-400">---</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 text-center">
+                    <div class="bg-slate-800/50 p-3 rounded-xl border border-cardborder">
+                        <div class="text-[10px] uppercase font-bold text-slate-400">Partidos</div>
+                        <div id="modal-partidos" class="text-lg font-black text-white mt-1">0</div>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded-xl border border-cardborder">
+                        <div class="text-[10px] uppercase font-bold text-slate-400">Prom. Tarjetas</div>
+                        <div id="modal-promedio" class="text-lg font-black text-amber-400 mt-1">0.0</div>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded-xl border border-cardborder">
+                        <div class="text-[10px] uppercase font-bold text-slate-400">Nivel Perfil</div>
+                        <div id="modal-severidad" class="text-lg font-black text-emerald-400 mt-1">---</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-cardborder p-4 rounded-xl space-y-2">
+                    <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb"></i> Recomendación Táctica Pre-Partido
+                    </div>
+                    <p id="modal-recomendacion" class="text-xs text-slate-300 leading-relaxed">---</p>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="descargarPDF()" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> Descargar PDF Táctico
+                    </button>
+                    <button onclick="cerrarModal()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-xl border border-cardborder transition">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000/api";
+        let arbitrosData = [];
+        let chartDelegacionesInstance = null;
+        let chartTarjetasInstance = null;
+
+        async function cargarArbitros() {
+            try {
+                const res = await fetch(`${API_URL}/arbitros`);
+                arbitrosData = await res.json();
+                
+                renderKPIs();
+                renderTabla(arbitrosData);
+                renderGraficos();
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('tabla-arbitros').innerHTML = `
+                    <tr>
+                        <td colspan="8" class="px-6 py-12 text-center text-rose-400">
+                            <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
+                            <p class="font-semibold">Error al conectar con la API REST (${API_URL})</p>
+                            <p class="text-xs text-slate-500 mt-1">Verifica que el servidor Uvicorn esté en ejecución.</p>
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        function renderKPIs() {
+            const totalArbitros = arbitrosData.length;
+            const totalPartidos = arbitrosData.reduce((acc, a) => acc + parseInt(a.total_partidos || 0), 0);
+            const totalAmarillas = arbitrosData.reduce((acc, a) => acc + parseInt(a.total_amarillas || 0), 0);
+            const totalRojas = arbitrosData.reduce((acc, a) => acc + parseInt(a.total_rojas || 0), 0);
+            const promedioGlobal = totalPartidos > 0 ? (totalAmarillas / totalPartidos).toFixed(2) : '0.00';
+
+            document.getElementById('kpi-total-arbitros').textContent = totalArbitros;
+            document.getElementById('kpi-total-partidos').textContent = totalPartidos;
+            document.getElementById('kpi-promedio-liga').textContent = promedioGlobal;
+            document.getElementById('kpi-total-rojas').textContent = totalRojas;
+        }
+
+        function renderTabla(lista) {
+            const tbody = document.getElementById('tabla-arbitros');
+
+            if (lista.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-8 text-center text-slate-500">No se encontraron árbitros.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = lista.map(a => {
+                const prom = parseFloat(a.promedio_amarillas || 0);
+                let badgeClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+                let severidadTexto = "BAJO";
+
+                if (prom >= 5.5) {
+                    badgeClass = "bg-rose-500/10 text-rose-400 border-rose-500/30";
+                    severidadTexto = "ALTO";
+                } else if (prom >= 4.0) {
+                    badgeClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
+                    severidadTexto = "MEDIO";
+                }
+
+                return `
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <td class="px-6 py-4 font-semibold text-slate-100">${a.nombre}</td>
+                        <td class="px-6 py-4 text-slate-400 text-xs">${a.delegacion}</td>
+                        <td class="px-6 py-4 text-center font-mono">${a.total_partidos}</td>
+                        <td class="px-6 py-4 text-center font-mono text-amber-400 font-bold">${a.total_amarillas}</td>
+                        <td class="px-6 py-4 text-center font-mono text-rose-500 font-bold">${a.total_rojas}</td>
+                        <td class="px-6 py-4 text-center font-mono font-black text-slate-200">${a.promedio_amarillas}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-2.5 py-1 text-[10px] font-bold border rounded-full ${badgeClass}">
+                                ${severidadTexto}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="verInforme(${a.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-emerald-500/20 hover:text-emerald-400 hover:border-emerald-500/40 text-xs border border-cardborder rounded-lg transition font-medium">
+                                <i class="fa-solid fa-chart-pie mr-1"></i> Informe
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filtrarTabla() {
+            const query = document.getElementById('busqueda').value.toLowerCase();
+            const filtrados = arbitrosData.filter(a => 
+                a.nombre.toLowerCase().includes(query) || 
+                a.delegacion.toLowerCase().includes(query)
+            );
+            renderTabla(filtrados);
+        }
+
+        function renderGraficos() {
+            const delegacionesMap = {};
+            arbitrosData.forEach(a => {
+                const del = a.delegacion || 'Sin Delegación';
+                if (!delegacionesMap[del]) delegacionesMap[del] = { partidos: 0, amarillas: 0 };
+                delegacionesMap[del].partidos += parseInt(a.total_partidos || 0);
+                delegacionesMap[del].amarillas += parseInt(a.total_amarillas || 0);
+            });
+
+            const labels = Object.keys(delegacionesMap);
+            const promedios = labels.map(del => {
+                const item = delegacionesMap[del];
+                return item.partidos > 0 ? (item.amarillas / item.partidos).toFixed(2) : 0;
+            });
+
+            if (chartDelegacionesInstance) chartDelegacionesInstance.destroy();
+            if (chartTarjetasInstance) chartTarjetasInstance.destroy();
+
+            const ctx1 = document.getElementById('chart-delegaciones').getContext('2d');
+            chartDelegacionesInstance = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Promedio Amarillas/Partido',
+                        data: promedios,
+                        backgroundColor: 'rgba(16, 185, 129, 0.4)',
+                        borderColor: '#10B981',
+                        borderWidth: 2,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#334155' }, ticks: { color: '#94A3B8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94A3B8' } }
+                    }
+                }
+            });
+
+            const totalAmarillas = arbitrosData.reduce((acc, a) => acc + parseInt(a.total_amarillas || 0), 0);
+            const totalRojas = arbitrosData.reduce((acc, a) => acc + parseInt(a.total_rojas || 0), 0);
+
+            const ctx2 = document.getElementById('chart-tarjetas').getContext('2d');
+            chartTarjetasInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Amarillas', 'Rojas'],
+                    datasets: [{
+                        data: [totalAmarillas, totalRojas],
+                        backgroundColor: ['#F59E0B', '#EF4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#94A3B8', font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        async function verInforme(id) {
+            try {
+                const res = await fetch(`${API_URL}/informe-tactico/${id}`);
+                const data = await res.json();
+
+                document.getElementById('modal-nombre').textContent = data.nombre;
+                document.getElementById('modal-delegacion').textContent = `Delegación: ${data.delegacion}`;
+                document.getElementById('modal-partidos').textContent = data.partidos_analizados;
+                document.getElementById('modal-promedio').textContent = data.promedio_amarillas;
+                document.getElementById('modal-severidad').textContent = data.nivel_severidad;
+                document.getElementById('modal-recomendacion').textContent = data.recomendacion_tactica;
+
+                document.getElementById('modal-informe').classList.remove('hidden');
+            } catch (err) {
+                alert("Error al cargar el informe táctico.");
+            }
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-informe').classList.add('hidden');
+        }
+
+        function descargarPDF() {
+            const elemento = document.getElementById('contenido-pdf');
+            const nombreArbitro = document.getElementById('modal-nombre').textContent;
+
+            const opciones = {
+                margin:       10,
+                filename:     `Informe_Tactico_${nombreArbitro.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, backgroundColor: '#1E293B' },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opciones).from(elemento).save();
+        }
+
+        cargarArbitros();
+    </script>
+</body>
+</html>
