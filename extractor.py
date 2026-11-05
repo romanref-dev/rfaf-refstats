@@ -3,11 +3,11 @@ import json
 import time
 import random
 import re
+from datetime import datetime
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from supabase import create_client, Client
 
-# Cargar variables de entorno con fallback seguro
 DEFAULT_URL = "https://ijczoeyfgnngocstxgfb.supabase.co"
 DEFAULT_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqY3pvZXlmZ25uZ29jc3R4Z2ZiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MzExMzQyMiwiZXhwIjoyMTA4Njg5NDIyfQ.yPTDZIgGoRlpYUVHQSXTJ0INABGGZRxAP0leLfBDpYM"
 
@@ -15,29 +15,43 @@ SUPABASE_URL = os.getenv("SUPABASE_URL") or DEFAULT_URL
 SUPABASE_KEY = os.getenv("SUPABASE_KEY") or DEFAULT_KEY
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-def extraer_resultado_y_fecha(texto_celda):
-    """Limpia la celda central para obtener el resultado exacto."""
-    texto_limpio = texto_celda.strip()
-    match_res = re.match(r'^(\d+\s*-\s*\d+|\bDescansa\b|-)', texto_limpio)
-    return match_res.group(0).strip() if match_res else "-"
+URL_BASE = "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120"
 
-def sincronizar_supabase_con_reintentos(datos, reintentos=3):
-    """Envía los datos a Supabase con política de reintentos automáticos."""
+def parsear_resultado(res_raw):
+    """Extrae goles local/visitante y el estado del partido."""
+    res_limpio = res_raw.strip()
+    match_goles = re.match(r'^(\d+)\s*-\s*(\d+)', res_limpio)
+    
+    if match_goles:
+        g_loc = int(match_goles.group(1))
+        g_vis = int(match_goles.group(2))
+        return f"{g_loc} - {g_vis}", g_loc, g_vis, "Finalizado"
+    elif "Descansa" in res_limpio:
+        return "Descansa", None, None, "Descansa"
+    else:
+        return "-", None, None, "Pendiente"
+
+def sincronizar_supabase(partidos, reintentos=3):
+    """Upsert masivo en Supabase con política de reintentos."""
     for intento in range(1, reintentos + 1):
         try:
-            supabase.table("partidos").upsert(datos).execute()
+            supabase.table("partidos").upsert(partidos).execute()
             return True
         except Exception as e:
             if intento == reintentos:
-                print(f"         ⚠️ Error de subida tras {reintentos} intentos: {e}")
+                print(f"         ⚠️ Error al sincronizar batch: {e}")
                 return False
             time.sleep(2)
 
-def extractor_automatico_rfaf():
+def extractor_barrido_total():
+    if not os.path.exists("mapa_rfaf.json"):
+        print("❌ Error: No se encuentra 'mapa_rfaf.json'")
+        return
+
     with open("mapa_rfaf.json", "r", encoding="utf-8") as f:
         mapa_rfaf = json.load(f)
 
-    print("🚀 Iniciando extracción masiva RFAF -> Supabase...\n")
+    print("🚀 Iniciando barrido completo para BBDD de Dashboard...\n")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -56,7 +70,7 @@ def extractor_automatico_rfaf():
                 
                 jornadas = []
                 try:
-                    page.goto(URL_BASE, wait_until="networkidle", timeout=30000)
+                    page.goto(URL_BASE, wait_until="networkidle", timeout=35000)
                     page.locator('select#competicion').select_option(value=id_comp, force=True)
                     time.sleep(1.5)
                     page.locator('select#grupo').select_option(value=id_grupo, force=True)
@@ -69,19 +83,18 @@ def extractor_automatico_rfaf():
                         if val and val != "0" and "Seleccione" not in txt:
                             jornadas.append((txt, val))
 
-                    print(f"   📅 Jornadas a procesar: {len(jornadas)}")
-
+                    print(f"   📅 Total de Jornadas en la temporada: {len(jornadas)}")
                 except Exception as e:
-                    print(f"   ⚠️ Error al cargar el grupo {nombre_grupo}: {e}. Omitiendo...")
+                    print(f"   ⚠️ Error cargando grupo {nombre_grupo}: {e}")
                     continue
 
                 for txt_jornada, id_jornada in jornadas:
-                    time.sleep(random.uniform(2.0, 3.5))
+                    time.sleep(random.uniform(1.8, 3.0))
 
-                    for intento_jornada in range(1, 4):
+                    for intento in range(1, 4):
                         try:
                             page.locator('select#jornada').select_option(value=id_jornada, force=True)
-                            time.sleep(2.5)
+                            time.sleep(2.0)
                             page.wait_for_load_state("networkidle", timeout=5000)
 
                             soup = BeautifulSoup(page.content(), 'html.parser')
@@ -106,20 +119,24 @@ def extractor_automatico_rfaf():
                                             partidos_jornada.append(partido_actual)
                                             partido_actual = {}
 
-                                        resultado_limpio = extraer_resultado_y_fecha(res_raw)
+                                        res_fmt, g_loc, g_vis, estado = parsear_resultado(res_raw)
                                         partido_id = f"{id_grupo}_{id_jornada}_{local}_{visitante}".replace(" ", "_").replace(".", "")
 
                                         partido_actual = {
                                             "id": partido_id,
                                             "competicion": nombre_comp,
                                             "grupo": nombre_grupo,
-                                            "id_grupo": id_grupo,
+                                            "id_grupo": str(id_grupo),
                                             "jornada": txt_jornada,
-                                            "id_jornada": id_jornada,
+                                            "id_jornada": str(id_jornada),
                                             "equipo_local": local,
                                             "equipo_visitante": visitante,
-                                            "resultado": resultado_limpio,
-                                            "arbitro": "No asignado"
+                                            "resultado": res_fmt,
+                                            "goles_local": g_loc,
+                                            "goles_visitante": g_vis,
+                                            "estado": estado,
+                                            "arbitro": "No asignado",
+                                            "updated_at": datetime.utcnow().isoformat()
                                         }
 
                                 if "Árbitro:" in texto_fila or "Arbitro:" in texto_fila:
@@ -131,19 +148,19 @@ def extractor_automatico_rfaf():
                                 partidos_jornada.append(partido_actual)
 
                             if partidos_jornada:
-                                ok = sincronizar_supabase_con_reintentos(partidos_jornada)
+                                ok = sincronizar_supabase(partidos_jornada)
                                 if ok:
                                     print(f"      ✅ {txt_jornada}: {len(partidos_jornada)} partidos procesados.")
                                 break
 
                         except Exception as err:
-                            if intento_jornada == 3:
-                                print(f"      ❌ Error persistente en {txt_jornada}: {err}")
-                            time.sleep(2.0)
+                            if intento == 3:
+                                print(f"      ❌ Fallo en {txt_jornada}: {err}")
+                            time.sleep(1.5)
 
         browser.close()
 
-    print("\n🎉 Proceso de extracción masiva completado.")
+    print("\n🎉 Extracción completa finalizada. Base de datos lista para el Dashboard.")
 
 if __name__ == "__main__":
-    extractor_automatico_rfaf()
+    extractor_barrido_total()
