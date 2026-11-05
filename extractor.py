@@ -7,13 +7,14 @@ from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 from supabase import create_client, Client
 
-# Obtener credenciales desde variables de entorno (Local o GitHub Actions)
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://ijczoeyfgnngocstxgfb.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqY3pvZXlmZ25uZ29jc3R4Z2ZiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MzExMzQyMiwiZXhwIjoyMTA4Njg5NDIyfQ.yPTDZIgGoRlpYUVHQSXTJ0INABGGZRxAP0leLfBDpYM")
+# Cargar variables de entorno con fallback seguro
+DEFAULT_URL = "https://ijczoeyfgnngocstxgfb.supabase.co"
+DEFAULT_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqY3pvZXlmZ25uZ29jc3R4Z2ZiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MzExMzQyMiwiZXhwIjoyMTA4Njg5NDIyfQ.yPTDZIgGoRlpYUVHQSXTJ0INABGGZRxAP0leLfBDpYM"
+
+SUPABASE_URL = os.getenv("SUPABASE_URL") or DEFAULT_URL
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") or DEFAULT_KEY
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-URL_BASE = "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120"
-
 def extraer_resultado_y_fecha(texto_celda):
     """Limpia la celda central para obtener el resultado exacto."""
     texto_limpio = texto_celda.strip()
