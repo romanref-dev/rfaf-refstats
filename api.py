@@ -1,16 +1,16 @@
 import os
-import psycopg as psycopg2
-from psycopg.rows import dict_row
-from fastapi import FastAPI, HTTPException
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="RFAF RefStats API",
-    description="API REST de Inteligencia Arbitral para el fútbol andaluz",
+    description="API para consultar métricas de tarjetas e inteligencia arbitral de la RFAF",
     version="1.0.0"
 )
 
-# Permitir peticiones desde el Dashboard Frontend
+# Permitir solicitudes desde cualquier origen (CORS)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,97 +19,114 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Conexión a la base de datos PostgreSQL (Supabase / Local)
-DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/rfaf_db")
-
-def get_db():
-    return psycopg2.connect(DB_URL, row_factory=dict_row)
+def get_db_connection():
+    db_url = os.getenv("DATABASE_URL")
+    if not db_url:
+        raise HTTPException(
+            status_code=500, 
+            detail="DATABASE_URL no está configurada en las variables de entorno."
+        )
+    try:
+        return psycopg2.connect(db_url, cursor_factory=RealDictCursor)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error al conectar a la base de datos: {str(e)}"
+        )
 
 @app.get("/")
-def home():
+def read_root():
     return {
         "status": "online",
-        "system": "RFAF RefStats API",
-        "version": "1.0.0",
-        "endpoints": ["/api/arbitros", "/api/informe-tactico/{arbitro_id}"]
+        "message": "Bienvenido a RFAF RefStats API",
+        "endpoints": ["/api/stats", "/api/kpis", "/api/arbitros/search"]
     }
 
-@app.get("/api/arbitros")
-def get_arbitros():
-    """Retorna la lista de árbitros con sus métricas acumuladas de las últimas 3 temporadas"""
+@app.get("/api/kpis")
+def obtener_kpis_globales():
+    """Retorna los indicadores globales principales de la competición."""
     try:
-        conn = get_db()
+        conn = get_db_connection()
         cur = conn.cursor()
         
         query = """
             SELECT 
-                a.id, 
-                a.nombre, 
-                COALESCE(d.nombre, 'Andalucía') as delegacion, 
-                COUNT(p.id) as total_partidos,
-                COALESCE(SUM(p.amarillas_local + p.amarillas_visitante), 0) as total_amarillas,
-                COALESCE(SUM(p.rojas_local + p.rojas_visitante), 0) as total_rojas,
-                ROUND(CAST(AVG(COALESCE(p.amarillas_local, 0) + COALESCE(p.amarillas_visitante, 0)) AS numeric), 2) as promedio_amarillas
-            FROM arbitros a
-            LEFT JOIN delegaciones d ON a.delegacion_id = d.id
-            LEFT JOIN partidos p ON a.id = p.arbitro_id
-            GROUP BY a.id, d.nombre
-            ORDER BY total_partidos DESC;
+                COUNT(DISTINCT arbitro) as total_arbitros,
+                COUNT(id) as total_partidos,
+                COALESCE(SUM(tarjetas_amarillas), 0) as total_amarillas,
+                COALESCE(SUM(tarjetas_rojas), 0) as total_rojas,
+                ROUND(AVG(tarjetas_amarillas)::numeric, 2) as media_amarillas_partido,
+                ROUND(AVG(tarjetas_rojas)::numeric, 2) as media_rojas_partido
+            FROM partidos
+            WHERE arbitro IS NOT NULL AND arbitro != '';
         """
-        
         cur.execute(query)
-        arbitros = cur.fetchall()
+        kpis = cur.fetchone()
+        cur.close()
         conn.close()
-        return arbitros
-
+        return kpis
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al conectar a la base de datos: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/informe-tactico/{arbitro_id}")
-def get_informe_tactico(arbitro_id: int):
-    """Genera un informe táctico pre-partido con el perfil de un colegiado concreto"""
+@app.get("/api/stats")
+def obtener_estadisticas_arbitros():
+    """Retorna las estadísticas acumuladas y promedios agrupados por árbitro."""
     try:
-        conn = get_db()
+        conn = get_db_connection()
         cur = conn.cursor()
         
-        cur.execute("""
-            SELECT a.nombre, COALESCE(d.nombre, 'Andalucía') as delegacion, p.*
-            FROM arbitros a
-            LEFT JOIN delegaciones d ON a.delegacion_id = d.id
-            JOIN partidos p ON a.id = p.arbitro_id
-            WHERE a.id = %s
-        """, (arbitro_id,))
-        
-        partidos = cur.fetchall()
+        query = """
+            SELECT 
+                arbitro,
+                COUNT(id) as partidos,
+                SUM(tarjetas_amarillas) as total_amarillas,
+                SUM(tarjetas_rojas) as total_rojas,
+                ROUND(AVG(tarjetas_amarillas)::numeric, 2) as media_amarillas,
+                ROUND(AVG(tarjetas_rojas)::numeric, 2) as media_rojas
+            FROM partidos
+            WHERE arbitro IS NOT NULL AND arbitro != ''
+            GROUP BY arbitro
+            ORDER BY partidos DESC, media_amarillas DESC;
+        """
+        cur.execute(query)
+        stats = cur.fetchall()
+        cur.close()
         conn.close()
-
-        if not partidos:
-            raise HTTPException(status_code=404, detail="Árbitro no encontrado o sin partidos registrados")
-
-        total_partidos = len(partidos)
-        total_amarillas = sum((p['amarillas_local'] or 0) + (p['amarillas_visitante'] or 0) for p in partidos)
-        total_rojas = sum((p['rojas_local'] or 0) + (p['rojas_visitante'] or 0) for p in partidos)
-        
-        promedio_tarjetas = round(total_amarillas / total_partidos, 2) if total_partidos > 0 else 0
-        nivel_severidad = "ALTO" if promedio_tarjetas >= 5.5 else ("MEDIO" if promedio_tarjetas >= 4.0 else "BAJO")
-
-        return {
-            "arbitro_id": arbitro_id,
-            "nombre": partidos[0]['nombre'],
-            "delegacion": partidos[0]['delegacion'],
-            "partidos_analizados": total_partidos,
-            "total_amarillas": total_amarillas,
-            "total_rojas": total_rojas,
-            "promedio_amarillas": promedio_tarjetas,
-            "nivel_severidad": nivel_severidad,
-            "recomendacion_tactica": (
-                "Atención a la primera falta táctica en medio campo. Evitar protestas reiteradas al colegiado."
-                if nivel_severidad == "ALTO" else
-                "Permite juego fluido. Mantener intensidad en los duelos sin cometer faltas a destiempo."
-            )
-        }
-
-    except HTTPException as http_ex:
-        raise http_ex
+        return stats
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al generar informe: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/arbitros/search")
+def buscar_arbitro(nombre: str = Query(..., description="Nombre parcial o completo del árbitro")):
+    """Busca los partidos pitados por un árbitro concreto."""
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        query = """
+            SELECT 
+                id,
+                fecha,
+                categoria,
+                jornada,
+                equipo_local,
+                equipo_visitante,
+                goles_local,
+                goles_visitante,
+                tarjetas_amarillas,
+                tarjetas_rojas
+            FROM partidos
+            WHERE arbitro ILIKE %s
+            ORDER BY fecha DESC;
+        """
+        cur.execute(query, (f"%{nombre}%",))
+        partidos = cur.fetchall()
+        cur.close()
+        conn.close()
+        return {
+            "arbitro": nombre,
+            "total_encontrados": len(partidos),
+            "partidos": partidos
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
