@@ -65,9 +65,7 @@ def parsear_acta_detallada(url_acta, partido_id):
         html_raw = response.text.replace("&nbsp;", " ")
         soup = BeautifulSoup(html_raw, "html.parser")
 
-        # ==========================================
-        # FRONTERAS POSICIONALES EN HTML
-        # ==========================================
+        # Fronteras posicionales
         matches_ct = [
             m.start()
             for m in re.finditer(r"Cuerpo\s+T[ée]cnico", html_raw, re.I)
@@ -81,9 +79,7 @@ def parsear_acta_detallada(url_acta, partido_id):
             matches_tarjetas[1] if len(matches_tarjetas) >= 2 else len(html_raw)
         )
 
-        # ==========================================
-        # 1. ÁRBITROS Y DELEGACIONES
-        # ==========================================
+        # 1. Árbitros
         texto_plano = soup.get_text(" | ", strip=True)
         patron_arb = re.compile(
             r"(ARBITRO|ASISTENTE\s*\d*|CUARTO ÁRBITRO)\s*\|\s*([A-ZÁÉÍÓÚÑ\s,]+?)\s*\|\s*(DELEGACI[ÓO]N\s+DE\s+[A-ZÁÉÍÓÚÑ\s]+)",
@@ -104,9 +100,7 @@ def parsear_acta_detallada(url_acta, partido_id):
                 if cargo == "ARBITRO":
                     datos_acta["delegacion_principal"] = delegacion
 
-        # ==========================================
-        # 2. CUERPO TÉCNICO
-        # ==========================================
+        # 2. Cuerpo Técnico
         cuerpo_tecnico = {"local": [], "visitante": []}
         patron_ct = re.compile(
             r"(DEL\.\s*(?:Campo|Equipo)|Entrenador|2º\s*Entrenador|FISIOTERAPEUTA|ENCARGADO DE MATERIAL|PREPARADOR FISICO|DELEGADO|MEDICO)\s*:\s*([A-ZÁÉÍÓÚÑ\s,]+)",
@@ -130,9 +124,7 @@ def parsear_acta_detallada(url_acta, partido_id):
                 if registro not in cuerpo_tecnico[equipo]:
                     cuerpo_tecnico[equipo].append(registro)
 
-        # ==========================================
-        # 3. GOLES
-        # ==========================================
+        # 3. Goles
         etiquetas_goles = soup.find_all(
             lambda tag: tag.name in ["img", "a"]
             and tag.has_attr("title")
@@ -169,9 +161,7 @@ def parsear_acta_detallada(url_acta, partido_id):
                     }
                 )
 
-        # ==========================================
-        # 4. TARJETAS (POSICIONAL)
-        # ==========================================
+        # 4. Tarjetas
         iconos_tarjetas = soup.find_all(
             "img", src=re.compile(r"tarj_(amar|roja)", re.I)
         )
@@ -239,19 +229,20 @@ def parsear_acta_detallada(url_acta, partido_id):
 
 
 def extractor_profundo_rfaf():
-    if not os.path.exists("mapa_rfaf.json"):
-        print("❌ Error: No se encuentra 'mapa_rfaf.json'")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    MAPA_PATH = os.path.join(BASE_DIR, "mapa_rfaf.json")
+
+    if not os.path.exists(MAPA_PATH):
+        print(f"❌ Error: No se encuentra '{MAPA_PATH}'")
         return
 
-    with open("mapa_rfaf.json", "r", encoding="utf-8") as f:
+    with open(MAPA_PATH, "r", encoding="utf-8") as f:
         mapa_rfaf = json.load(f)
 
     print("🚀 Iniciando extracción profunda RFAF (Playwright + curl_cffi)...\n")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(viewport={"width": 1280, "height": 800})
-        page = context.new_page()
 
         for nombre_comp, datos_comp in mapa_rfaf.items():
             id_comp = datos_comp["id_competicion"]
@@ -261,16 +252,23 @@ def extractor_profundo_rfaf():
                     f" Competición: {nombre_comp} | Grupo: {nombre_grupo}\n======================================================"
                 )
 
+                # Crear nuevo contexto por grupo para limpiar la memoria y evitar timeouts
+                context = browser.new_context(viewport={"width": 1280, "height": 800})
+                page = context.new_page()
+
                 try:
-                    page.goto(URL_BASE, wait_until="networkidle", timeout=35000)
+                    page.goto(URL_BASE, wait_until="domcontentloaded", timeout=40000)
+                    time.sleep(2.0)
+
                     page.locator("select#competicion").select_option(
-                        value=id_comp, force=True
+                        value=str(id_comp), force=True
                     )
-                    time.sleep(1.5)
+                    time.sleep(2.0)
+
                     page.locator("select#grupo").select_option(
-                        value=id_grupo, force=True
+                        value=str(id_grupo), force=True
                     )
-                    time.sleep(1.5)
+                    time.sleep(2.0)
 
                     opciones_jornada = []
                     for opt in page.locator("select#jornada option").all():
@@ -291,18 +289,18 @@ def extractor_profundo_rfaf():
                         f"   ⚠️ Error de navegación inicial en grupo"
                         f" {nombre_grupo}: {e}"
                     )
+                    context.close()
                     continue
 
                 for txt_jornada, id_jornada, num_jornada in opciones_jornada:
                     print(f"\n📅 --- {txt_jornada} ---")
 
-                    time.sleep(random.uniform(1.8, 3.2))
-
                     try:
+                        # Selección limpia con reintento si salta timeout
                         page.locator("select#jornada").select_option(
-                            value=id_jornada, force=True
+                            value=str(id_jornada), force=True
                         )
-                        time.sleep(1.5)
+                        time.sleep(2.0)
                         soup = BeautifulSoup(page.content(), "html.parser")
 
                         partidos_batch = []
@@ -317,7 +315,6 @@ def extractor_profundo_rfaf():
                                 res_celda = celdas[1].get_text(strip=True)
                                 vis = celdas[2].get_text(strip=True)
 
-                                # Extraer SOLO el número del marcador limpio (ej. 5 - 4)
                                 match_goles = re.search(
                                     r"(\d+)\s*-\s*(\d+)", res_celda
                                 )
@@ -350,9 +347,6 @@ def extractor_profundo_rfaf():
                                         .replace(".", "")
                                     )
 
-                                    # ====================================================
-                                    # EXTRACCIÓN EXACTA DE LA URL DEL ACTA (CodActa)
-                                    # ====================================================
                                     url_acta = None
                                     link_acta = fila.find(
                                         "a", href=re.compile(r"CodActa=(\d+)", re.I)
@@ -362,7 +356,6 @@ def extractor_profundo_rfaf():
                                         match_cod = re.search(r"CodActa=(\d+)", link_acta["href"], re.I)
                                         if match_cod:
                                             cod_acta = match_cod.group(1)
-                                            # Construir URL canónica exacta comprobada
                                             url_acta = f"https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa={cod_acta}&cod_acta={cod_acta}"
 
                                     datos_acta = {
@@ -381,7 +374,7 @@ def extractor_profundo_rfaf():
                                     if url_acta and estado == "Finalizado":
                                         print(
                                             f"   🔎 Analizando Acta:"
-                                            f" {loc} vs {vis} ({res_limpio}) -> {url_acta}"
+                                            f" {loc} vs {vis} ({res_limpio})"
                                         )
                                         datos_acta = parsear_acta_detallada(
                                             url_acta, p_id
@@ -408,7 +401,7 @@ def extractor_profundo_rfaf():
                                             f" {datos_acta['roj_visitante']}"
                                         )
 
-                                        time.sleep(random.uniform(2.0, 4.0))
+                                        time.sleep(random.uniform(1.5, 3.0))
 
                                     arb_nombre = "No asignado"
                                     if datos_acta["arbitros"]:
@@ -423,7 +416,7 @@ def extractor_profundo_rfaf():
                                     )
                                     if arb_nombre != "No asignado":
                                         arbitros_map[arb_id] = {
-                                            "id": arb_id,
+                                            "id": str(arb_id),
                                             "nombre": arb_nombre,
                                             "delegacion": datos_acta[
                                                 "delegacion_principal"
@@ -458,7 +451,7 @@ def extractor_profundo_rfaf():
                                         "goles_local": g_loc,
                                         "goles_visitante": g_vis,
                                         "estado": estado,
-                                        "arbitro_id": arb_id,
+                                        "arbitro_id": str(arb_id), # Asegurado como STRING
                                         "arbitro_nombre": arb_nombre,
                                         "delegacion_arbitro": datos_acta[
                                             "delegacion_principal"
@@ -487,30 +480,35 @@ def extractor_profundo_rfaf():
                                         )
 
                         if partidos_batch:
-                            if arbitros_map:
-                                supabase.table("arbitros").upsert(
-                                    list(arbitros_map.values())
+                            try:
+                                if arbitros_map:
+                                    supabase.table("arbitros").upsert(
+                                        list(arbitros_map.values())
+                                    ).execute()
+                                supabase.table("partidos").upsert(
+                                    partidos_batch
                                 ).execute()
-                            supabase.table("partidos").upsert(
-                                partidos_batch
-                            ).execute()
-                            if tarjetas_batch:
-                                supabase.table("actas_tarjetas").upsert(
-                                    tarjetas_batch
-                                ).execute()
+                                if tarjetas_batch:
+                                    supabase.table("actas_tarjetas").upsert(
+                                        tarjetas_batch
+                                    ).execute()
 
-                            print(
-                                f"\n   ✅ Jornada {num_jornada} guardada en"
-                                f" Supabase: {len(partidos_batch)} partidos |"
-                                f" {len(tarjetas_batch)} incidencias"
-                                " registradas."
-                            )
+                                print(
+                                    f"   ✅ Jornada {num_jornada} guardada en"
+                                    f" Supabase: {len(partidos_batch)} partidos |"
+                                    f" {len(tarjetas_batch)} incidencias"
+                                    " registradas."
+                                )
+                            except Exception as db_err:
+                                print(f"   ❌ Error al insertar en Supabase (Jornada {num_jornada}): {db_err}")
 
                     except Exception as err:
                         print(
                             f"   ❌ Error procesando jornada {txt_jornada}:"
                             f" {err}"
                         )
+
+                context.close()
 
         browser.close()
 
