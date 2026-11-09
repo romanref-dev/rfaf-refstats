@@ -1,16 +1,13 @@
-from supabase import create_client
+import os
+from supabase import create_client, Client
 
-SUPABASE_URL = "https://ztjntikfytksixihylfs.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0am50aWtmeXRrc2l4aWh5bGZzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0MDI4ODE2NSwiZXhwIjoyMDU1ODY4MTY1fQ.vNnO_P09mJgP-OQGkU_1vT9j5dZ_X10aZ6-X6x8423g"
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://ijczoeyfgnngocstxgfb.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqY3pvZXlmZ25uZ29jc3R4Z2ZiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MzExMzQyMiwiZXhwIjoyMTA4Njg5NDIyfQ.yPTDZIgGoRlpYUVHQSXTJ0INABGGZRxAP0leLfBDpYM")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-URL_BASE = "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120"
 
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-# Consulta de comprobación
-res_total = supabase.table("partidos").select("id", count="exact").execute()
-res_arbitros = supabase.table("partidos").select("id", count="exact").neq("arbitro", "No asignado").execute()
-
-print(f"📊 Total partidos registrados en Supabase: {res_total.count}")
-print(f"👤 Partidos con árbitro asignado: {res_arbitros.count}")
+try:
+    res = supabase.table("partidos").select("id", count="exact").execute()
+    print(f"📊 Registros actuales en Supabase: {res.count}")
+except Exception as e:
+    print(f"❌ Error al consultar la base de datos: {e}")
