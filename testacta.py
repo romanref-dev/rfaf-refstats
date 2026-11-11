@@ -1,249 +1,724 @@
-import random
+
 import re
 import time
-from bs4 import BeautifulSoup
-from curl_cffi import requests
+import unicodedata
+from playwright.sync_api import sync_playwright
 
-URLS_ACTAS = [
-    (
-        "https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2733986&cod_acta=2733986"
-    ),
-]
+# ============================================================
+# CONFIGURACION
+# ============================================================
+
+URL_BASE = (
+    "https://www.rfaf.es/pnfg/NPcd/"
+    "NFG_CmpJornada?cod_primaria=1000120"
+)
+
+URL_ACTA_BASE = (
+    "https://www.rfaf.es/pnfg/NPcd/"
+    "NFG_CmpPartido?cod_primaria=1000120&CodActa={id}&cod_acta={id}"
+)
+
+COMPETICION_ID = "48466530"
+GRUPO_ID = "49641343"
+JORNADAS = [1, 2, 3]
+
+ESPERA = 1500
+ESPERA_ENTRE_ACTAS = 1
 
 
-def extraer_datos_html(url):
-    print(f"🔍 Descargando HTML directo de RFAF (anti-bot bypass): {url}")
+# ============================================================
+# UTILIDADES
+# ============================================================
 
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-            " (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        )
-    }
-    response = requests.get(url, headers=headers, impersonate="chrome110")
-    response.raise_for_status()
+def limpiar(texto):
+    return re.sub(r"\s+", " ", texto or "").strip()
 
-    html_raw = response.text.replace("&nbsp;", " ")
-    soup = BeautifulSoup(html_raw, "html.parser")
 
-    datos = {
-        "arbitros": [],
-        "cuerpo_tecnico": {"local": [], "visitante": []},
-        "goles": [],
-        "tarjetas": {
-            "local": {
-                "amarillas_jugadores": [],
-                "rojas_jugadores": [],
-                "amarillas_ct": [],
-                "rojas_ct": [],
-            },
-            "visitante": {
-                "amarillas_jugadores": [],
-                "rojas_jugadores": [],
-                "amarillas_ct": [],
-                "rojas_ct": [],
-            },
-        },
-    }
+def normalizar(texto):
+    texto = unicodedata.normalize("NFD", texto or "")
+    texto = "".join(
+        c for c in texto
+        if unicodedata.category(c) != "Mn"
+    )
+    return limpiar(texto).upper()
 
-    # ==========================================
-    # FRONTERAS POSICIONALES EN HTML
-    # ==========================================
-    matches_ct = [
-        m.start() for m in re.finditer(r"Cuerpo\s+T[ée]cnico", html_raw, re.I)
-    ]
-    pos_corte_ct = matches_ct[1] if len(matches_ct) >= 2 else len(html_raw)
 
-    matches_tarjetas = [
-        m.start() for m in re.finditer(r"Tarjetas", html_raw, re.I)
-    ]
-    pos_corte_tarjetas = (
-        matches_tarjetas[1] if len(matches_tarjetas) >= 2 else len(html_raw)
+# ============================================================
+# SELECCIONAR COMPETICION, GRUPO Y JORNADA
+# ============================================================
+
+def seleccionar_opcion(page, selector, valor, descripcion):
+
+    page.locator(selector).wait_for(
+        state="attached",
+        timeout=30000
     )
 
-    # ==========================================
-    # 1. ÁRBITROS Y DELEGACIONES
-    # ==========================================
-    texto_plano = soup.get_text(" | ", strip=True)
-    patron_arb = re.compile(
-        r"(ARBITRO|ASISTENTE\s*\d*|CUARTO ÁRBITRO)\s*\|\s*([A-ZÁÉÍÓÚÑ\s,]+?)\s*\|\s*(DELEGACI[ÓO]N\s+DE\s+[A-ZÁÉÍÓÚÑ\s]+)",
-        re.I,
-    )
-    for match in patron_arb.finditer(texto_plano):
-        cargo = match.group(1).strip().upper()
-        nombre = match.group(2).strip()
-        delegacion = match.group(3).strip().title()
-        registro = {"cargo": cargo, "nombre": nombre, "delegacion": delegacion}
-        if registro not in datos["arbitros"]:
-            datos["arbitros"].append(registro)
+    resultado = page.evaluate(
+        """
+        ({selector, valor}) => {
+            const select = document.querySelector(selector);
 
-    # ==========================================
-    # 2. CUERPO TÉCNICO
-    # ==========================================
-    # Expresión regular flexible para roles
-    patron_ct = re.compile(
-        r"(DEL\.\s*(?:Campo|Equipo)|Entrenador|2º\s*Entrenador|FISIOTERAPEUTA|ENCARGADO DE MATERIAL|PREPARADOR FISICO|DELEGADO|MEDICO)\s*:\s*([A-ZÁÉÍÓÚÑ\s,]+)",
-        re.I,
-    )
-
-    for match in patron_ct.finditer(texto_plano):
-        rol_limpio = match.group(1).strip().upper()
-        nombre_cand = match.group(2).strip()
-
-        # Cortar en caso de topar con licencias o marcadores
-        nombre = re.split(
-            r"(Licencia|DEL\.|Entrenador|FISIOTERAPEUTA|ENCARGADO|Titulares|Suplentes)",
-            nombre_cand,
-            flags=re.I,
-        )[0].strip()
-        nombre = re.sub(r"\s{2,}.*", "", nombre).strip()
-
-        if nombre and 3 < len(nombre) < 60:
-            pos_nodo = html_raw.find(nombre)
-            equipo = "visitante" if pos_nodo >= pos_corte_ct else "local"
-            registro = {"rol": rol_limpio, "nombre": nombre}
-            if registro not in datos["cuerpo_tecnico"][equipo]:
-                datos["cuerpo_tecnico"][equipo].append(registro)
-
-    # ==========================================
-    # 3. GOLES (MARCADORES CORREGIDOS)
-    # ==========================================
-    etiquetas_goles = soup.find_all(
-        lambda tag: tag.name in ["img", "a"]
-        and tag.has_attr("title")
-        and "gol" in tag.get("title", "").lower()
-    )
-
-    for tag in etiquetas_goles:
-        fila = tag.find_parent("tr") or tag.parent
-        texto = fila.get_text(" ", strip=True)
-
-        match_jugador = re.search(
-            r"\(\s*(\d+)\s*\'?\s*\)\s*([A-ZÁÉÍÓÚÑ\s,\.\-]+)", texto, re.I
-        )
-
-        if match_jugador:
-            minuto = int(match_jugador.group(1))
-            jugador = match_jugador.group(2).strip()
-            jugador = re.split(r"\s{2,}", jugador)[0]
-
-            # Buscar patrón de resultado dentro de las celdas de la fila
-            resultado = "?"
-            for celda in fila.find_all(["td", "div", "span", "b"]):
-                txt_c = celda.get_text(strip=True)
-                m_marcador = re.search(r"(\d+)\s*-\s*(\d+)", txt_c)
-                if m_marcador:
-                    # Garantizamos que no coincide con el minuto del gol
-                    g1, g2 = m_marcador.group(1), m_marcador.group(2)
-                    if int(g1) < 30 and int(g2) < 30:  # Marcador de fútbol real
-                        resultado = f"{g1} - {g2}"
-                        break
-
-            registro = {
-                "minuto": minuto,
-                "jugador": jugador,
-                "resultado": resultado,
+            if (!select) {
+                return {ok:false, error:"Select no encontrado"};
             }
-            if registro not in datos["goles"]:
-                datos["goles"].append(registro)
 
-    # ==========================================
-    # 4. TARJETAS
-    # ==========================================
-    iconos_tarjetas = soup.find_all(
-        "img", src=re.compile(r"tarj_(amar|roja)", re.I)
+            const opcion = Array.from(select.options).find(
+                o => o.value === String(valor)
+            );
+
+            if (!opcion) {
+                return {ok:false, error:"Opción no encontrada"};
+            }
+
+            select.value = opcion.value;
+
+            select.dispatchEvent(
+                new Event("input", {bubbles:true})
+            );
+
+            select.dispatchEvent(
+                new Event("change", {bubbles:true})
+            );
+
+            return {
+                ok:true,
+                texto:opcion.textContent.trim()
+            };
+        }
+        """,
+        {
+            "selector": selector,
+            "valor": str(valor)
+        }
     )
 
-    for img in iconos_tarjetas:
-        es_roja = "roja" in img.get("src", "").lower()
-        contenedor = img.find_parent("tr") or img.parent
-        if not contenedor:
-            continue
-
-        texto = contenedor.get_text(" ", strip=True)
-        match = re.search(
-            r"\(\s*(\d+)\s*\'?\s*\)\s*([A-ZÁÉÍÓÚÑ\s,\.\-]+)", texto, re.I
+    if not resultado["ok"]:
+        raise RuntimeError(
+            f"{descripcion}: {resultado}"
         )
 
-        if match:
-            minuto = int(match.group(1))
-            nombre = match.group(2).strip()
-            nombre = re.split(r"\s{2,}", nombre)[0]
-            nombre_limpio = re.sub(
-                r"\([A-Z\.]+\)", "", nombre, flags=re.I
-            ).strip()
+    print(f"{descripcion}: {resultado['texto']}")
+    page.wait_for_timeout(ESPERA)
 
-            pos_nombre = html_raw.rfind(nombre_limpio)
-            equipo = (
-                "visitante" if pos_nombre >= pos_corte_tarjetas else "local"
+
+def cargar_jornada(page, jornada):
+
+    # Siempre comenzamos desde el calendario.
+    page.goto(
+        URL_BASE,
+        wait_until="domcontentloaded",
+        timeout=60000
+    )
+
+    page.wait_for_timeout(2000)
+
+    seleccionar_opcion(
+        page,
+        "select#competicion",
+        COMPETICION_ID,
+        "Competición"
+    )
+
+    seleccionar_opcion(
+        page,
+        "select#grupo",
+        GRUPO_ID,
+        "Grupo"
+    )
+
+    seleccionar_opcion(
+        page,
+        "select#jornada",
+        str(jornada),
+        f"Jornada {jornada}"
+    )
+
+
+# ============================================================
+# EXTRAER ACTAS
+# ============================================================
+
+JS_ACTAS = r"""
+() => {
+    const enlaces = Array.from(
+        document.querySelectorAll('a[href*="CodActa"]')
+    );
+
+    const ids = [];
+
+    for (const enlace of enlaces) {
+        const href = enlace.getAttribute("href") || "";
+        const m = href.match(/[?&]CodActa=(\d+)/i);
+
+        if (m && !ids.includes(m[1])) {
+            ids.push(m[1]);
+        }
+    }
+
+    return ids;
+}
+"""
+
+
+# ============================================================
+# EXTRAER EQUIPOS DESDE EL CALENDARIO
+# ============================================================
+
+JS_CALENDARIO = r"""
+() => {
+    const limpiar = t =>
+        (t || "").replace(/\s+/g, " ").trim();
+
+    const enlaces = Array.from(
+        document.querySelectorAll('a[href*="CodActa"]')
+    );
+
+    const partidos = {};
+
+    for (const enlace of enlaces) {
+
+        const href = enlace.getAttribute("href") || "";
+        const match = href.match(/[?&]CodActa=(\d+)/i);
+
+        if (!match) continue;
+
+        const acta = match[1];
+        const fila = enlace.closest("tr");
+
+        if (!fila) continue;
+
+        const celdas = Array.from(
+            fila.querySelectorAll("td")
+        );
+
+        if (celdas.length < 3) continue;
+
+        const local = limpiar(celdas[0].innerText);
+        const visitante = limpiar(celdas[2].innerText);
+
+        if (local && visitante) {
+            partidos[acta] = {
+                local,
+                visitante
+            };
+        }
+    }
+
+    return partidos;
+}
+"""
+
+
+# ============================================================
+# EXTRAER MARCADOR VALIDADO
+# ============================================================
+
+JS_MARCADOR = r"""
+() => {
+    const strong = document.querySelector("h2.ntype strong");
+
+    if (!strong) return null;
+
+    const elementos = Array.from(strong.children).filter(el =>
+        el.tagName === "I" &&
+        el.classList.contains("fa-solid")
+    );
+
+    if (elementos.length !== 2) return null;
+
+    function visible(el) {
+        const s = getComputedStyle(el);
+        return s.display !== "none" &&
+               s.visibility !== "hidden";
+    }
+
+    function pseudo(el) {
+        const nodos = [el, ...el.querySelectorAll("*")];
+
+        for (const nodo of nodos) {
+            for (const tipo of ["::before", "::after"]) {
+
+                const s = getComputedStyle(nodo, tipo);
+
+                if (
+                    s.display === "none" ||
+                    s.visibility === "hidden"
+                ) continue;
+
+                let c = s.content;
+
+                if (
+                    !c ||
+                    c === "none" ||
+                    c === "normal" ||
+                    c === '""'
+                ) continue;
+
+                c = c.replace(/^["']|["']$/g, "");
+
+                const hex = c.match(
+                    /^\\([0-9a-fA-F]{1,6})\s*$/
+                );
+
+                if (hex) {
+                    c = String.fromCodePoint(
+                        parseInt(hex[1], 16)
+                    );
+                }
+
+                const m = c.match(/[0-9]/);
+
+                if (m) return m[0];
+            }
+        }
+
+        return null;
+    }
+
+    function clase(el) {
+        const nodos = [el, ...el.querySelectorAll("*")];
+
+        for (const nodo of nodos) {
+            for (const c of nodo.classList) {
+                const m = c.match(/^fa-([0-9])$/);
+
+                if (m) return m[1];
+            }
+        }
+
+        return null;
+    }
+
+    function texto(el) {
+
+        function recorrer(nodo) {
+
+            if (nodo.nodeType === Node.TEXT_NODE) {
+                return nodo.nodeValue || "";
+            }
+
+            if (nodo.nodeType !== Node.ELEMENT_NODE) {
+                return "";
+            }
+
+            if (
+                ["script", "style"].includes(
+                    nodo.tagName.toLowerCase()
+                ) ||
+                !visible(nodo)
+            ) return "";
+
+            return Array.from(nodo.childNodes)
+                .map(recorrer)
+                .join("");
+        }
+
+        return recorrer(el).replace(/\s+/g, "");
+    }
+
+    function extraer(el) {
+        return (
+            pseudo(el) ||
+            clase(el) ||
+            (texto(el).match(/[0-9]/) || [])[0] ||
+            null
+        );
+    }
+
+    const local = extraer(elementos[0]);
+    const visitante = extraer(elementos[1]);
+
+    if (local === null || visitante === null) {
+        return null;
+    }
+
+    return local + "-" + visitante;
+}
+"""
+
+
+# ============================================================
+# EXTRAER ARBITRO Y DELEGACION
+# ============================================================
+
+JS_ARBITRO = r"""
+() => {
+    const normalizar = t =>
+        (t || "").replace(/\s+/g, " ").trim();
+
+    const elementos = Array.from(
+        document.querySelectorAll("tr, li, div, p, span, td")
+    );
+
+    let texto = null;
+
+    for (const el of elementos) {
+
+        const t = normalizar(el.innerText);
+
+        if (
+            t.toUpperCase() !== "ARBITRO" &&
+            t.toUpperCase() !== "ÁRBITRO"
+        ) continue;
+
+        let siguiente = el.nextElementSibling;
+
+        while (siguiente) {
+
+            const contenido = normalizar(
+                siguiente.innerText
+            );
+
+            if (
+                contenido &&
+                !["ARBITRO", "ÁRBITRO"].includes(
+                    contenido.toUpperCase()
+                )
+            ) {
+                texto = contenido;
+                break;
+            }
+
+            siguiente = siguiente.nextElementSibling;
+        }
+
+        if (!texto) {
+            const fila = el.closest("tr");
+
+            if (fila && fila.nextElementSibling) {
+                texto = normalizar(
+                    fila.nextElementSibling.innerText
+                );
+            }
+        }
+
+        if (texto) break;
+    }
+
+    if (!texto) {
+        return {
+            arbitro:null,
+            delegacion:null
+        };
+    }
+
+    const patron =
+        /\s+DELEGACI[ÓO]N\s+DE\s+(.+)$/i;
+
+    const m = texto.match(patron);
+
+    return {
+        arbitro: m
+            ? texto.substring(0, m.index).trim()
+            : texto,
+
+        delegacion: m
+            ? m[1].trim()
+            : null
+    };
+}
+"""
+
+
+# ============================================================
+# EXTRAER TARJETAS
+# ============================================================
+
+JS_TARJETAS = r"""
+({local, visitante}) => {
+
+    const normalizar = t =>
+        (t || "").replace(/\s+/g, " ").trim().toUpperCase();
+
+    const equipos = {
+        local: normalizar(local),
+        visitante: normalizar(visitante)
+    };
+
+    const imagenes = Array.from(
+        document.querySelectorAll(
+            'img[src*="tarj_amar"], img[src*="tarj_roja"]'
+        )
+    );
+
+    const resultado = {
+        amarillas_local: 0,
+        amarillas_visitante: 0,
+        rojas_local: 0,
+        rojas_visitante: 0,
+        sin_asignar: 0,
+        total: imagenes.length
+    };
+
+    for (const img of imagenes) {
+
+        const src = (
+            img.getAttribute("src") || ""
+        ).toLowerCase();
+
+        let tipo = null;
+
+        if (src.includes("tarj_amar")) {
+            tipo = "amarillas";
+        }
+
+        if (src.includes("tarj_roja")) {
+            tipo = "rojas";
+        }
+
+        if (!tipo) continue;
+
+        let nodo = img;
+        let asignado = null;
+
+        for (let i = 0; i < 7 && nodo; i++) {
+
+            const texto = normalizar(nodo.innerText);
+
+            const contieneLocal =
+                equipos.local &&
+                texto.includes(equipos.local);
+
+            const contieneVisitante =
+                equipos.visitante &&
+                texto.includes(equipos.visitante);
+
+            if (contieneLocal && !contieneVisitante) {
+                asignado = "local";
+                break;
+            }
+
+            if (contieneVisitante && !contieneLocal) {
+                asignado = "visitante";
+                break;
+            }
+
+            nodo = nodo.parentElement;
+        }
+
+        if (!asignado) {
+            resultado.sin_asignar++;
+            continue;
+        }
+
+        resultado[tipo + "_" + asignado]++;
+    }
+
+    return resultado;
+}
+"""
+
+
+# ============================================================
+# PROCESAR ACTA
+# ============================================================
+
+def procesar_acta(page, jornada, acta_id, equipos_calendario):
+
+    equipos = equipos_calendario.get(acta_id, {})
+
+    try:
+
+        page.goto(
+            URL_ACTA_BASE.format(id=acta_id),
+            wait_until="domcontentloaded",
+            timeout=45000
+        )
+
+        page.wait_for_timeout(ESPERA)
+
+        resultado = page.evaluate(JS_MARCADOR)
+        arbitro = page.evaluate(JS_ARBITRO)
+
+        local = equipos.get("local")
+        visitante = equipos.get("visitante")
+
+        if local and visitante:
+
+            tarjetas = page.evaluate(
+                JS_TARJETAS,
+                {
+                    "local": local,
+                    "visitante": visitante
+                }
             )
 
-            es_ct = any(
-                nombre_limpio in ct["nombre"] or ct["nombre"] in nombre_limpio
-                for ct in datos["cuerpo_tecnico"][equipo]
-            )
+            # No mostrar recuentos parciales como totales.
+            if tarjetas["sin_asignar"] > 0:
 
-            item = {"minuto": minuto, "nombre": nombre_limpio}
-            tipo_tarjeta = "rojas" if es_roja else "amarillas"
-            tipo_persona = "ct" if es_ct else "jugadores"
-            clave = f"{tipo_tarjeta}_{tipo_persona}"
+                for campo in (
+                    "amarillas_local",
+                    "amarillas_visitante",
+                    "rojas_local",
+                    "rojas_visitante"
+                ):
+                    tarjetas[campo] = "?"
 
-            if item not in datos["tarjetas"][equipo][clave]:
-                datos["tarjetas"][equipo][clave].append(item)
+        else:
 
-    return datos
+            tarjetas = {
+                "amarillas_local": "?",
+                "amarillas_visitante": "?",
+                "rojas_local": "?",
+                "rojas_visitante": "?",
+                "sin_asignar": "?",
+                "total": "?"
+            }
+
+        correcto = all([
+            local,
+            visitante,
+            resultado,
+            arbitro.get("arbitro")
+        ])
+
+        return {
+            "jornada": jornada,
+            "acta": acta_id,
+            "local": local,
+            "visitante": visitante,
+            "resultado": resultado,
+            "arbitro": arbitro.get("arbitro"),
+            "delegacion": arbitro.get("delegacion"),
+            "tarjetas": tarjetas,
+            "estado": "OK" if correcto else "REVISAR"
+        }
+
+    except Exception as e:
+
+        return {
+            "jornada": jornada,
+            "acta": acta_id,
+            "local": equipos.get("local"),
+            "visitante": equipos.get("visitante"),
+            "resultado": None,
+            "arbitro": None,
+            "delegacion": None,
+            "tarjetas": {
+                "amarillas_local": "?",
+                "amarillas_visitante": "?",
+                "rojas_local": "?",
+                "rojas_visitante": "?",
+                "sin_asignar": "?",
+                "total": "?"
+            },
+            "estado": "ERROR: " + str(e)
+        }
+
+
+# ============================================================
+# MOSTRAR RESULTADO
+# ============================================================
+
+def mostrar_linea(r):
+
+    t = r["tarjetas"]
+
+    return (
+        f"J{r['jornada']} | "
+        f"ACTA {r['acta']} | "
+        f"{r['local'] or 'LOCAL NO IDENTIFICADO'} - "
+        f"{r['visitante'] or 'VISITANTE NO IDENTIFICADO'} | "
+        f"{r['resultado'] or 'SIN RESULTADO'} | "
+        f"{r['arbitro'] or 'SIN ARBITRO'} | "
+        f"AM {t['amarillas_local']}-{t['amarillas_visitante']} | "
+        f"RO {t['rojas_local']}-{t['rojas_visitante']} | "
+        f"{r['estado']}"
+    )
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def main():
+
+    resultados = []
+
+    print("\nRFAF - JORNADAS 1, 2 Y 3")
+    print("=" * 140)
+
+    with sync_playwright() as playwright:
+
+        navegador = playwright.chromium.launch(
+            headless=True
+        )
+
+        page = navegador.new_page(
+            viewport={"width": 1366, "height": 900}
+        )
+
+        for jornada in JORNADAS:
+
+            print(f"\nJORNADA {jornada}")
+            print("-" * 140)
+
+            # CORRECCION:
+            # Cada jornada comienza cargando nuevamente el calendario.
+            cargar_jornada(page, jornada)
+
+            actas = page.evaluate(JS_ACTAS)
+            equipos_calendario = page.evaluate(JS_CALENDARIO)
+
+            print(f"Partidos encontrados: {len(actas)}")
+
+            for acta_id in actas:
+
+                datos = procesar_acta(
+                    page,
+                    jornada,
+                    acta_id,
+                    equipos_calendario
+                )
+
+                resultados.append(datos)
+
+                print(mostrar_linea(datos))
+
+                time.sleep(ESPERA_ENTRE_ACTAS)
+
+        navegador.close()
+
+    # ========================================================
+    # RESUMEN
+    # ========================================================
+
+    print("\n" + "=" * 140)
+    print("RESUMEN")
+
+    for jornada in JORNADAS:
+
+        partidos = [
+            r for r in resultados
+            if r["jornada"] == jornada
+        ]
+
+        correctos = sum(
+            1 for r in partidos
+            if r["estado"] == "OK"
+        )
+
+        print(
+            f"JORNADA {jornada}: "
+            f"{correctos}/{len(partidos)} partidos con datos básicos"
+        )
+
+    print("-" * 80)
+    print(f"TOTAL PARTIDOS: {len(resultados)}")
+
+    with open(
+        "resultados_j1_j2_j3.txt",
+        "w",
+        encoding="utf-8"
+    ) as archivo:
+
+        for r in resultados:
+            archivo.write(mostrar_linea(r) + "\n")
+
+    print("Archivo generado: resultados_j1_j2_j3.txt")
+    print("No se ha conectado ni escrito nada en Supabase.")
 
 
 if __name__ == "__main__":
-    try:
-        total_actas = len(URLS_ACTAS)
-
-        for idx, url in enumerate(URLS_ACTAS, start=1):
-            datos = extraer_datos_html(url)
-
-            print("\n🏁 --- ÁRBITROS Y DELEGACIONES ---")
-            for arb in datos["arbitros"]:
-                print(f"[{arb['cargo']}] {arb['nombre']} - ({arb['delegacion']})")
-
-            print("\n👔 --- CUERPO TÉCNICO LOCAL ---")
-            for ct in datos["cuerpo_tecnico"]["local"]:
-                print(f"[{ct['rol']}] {ct['nombre']}")
-
-            print("\n👔 --- CUERPO TÉCNICO VISITANTE ---")
-            for ct in datos["cuerpo_tecnico"]["visitante"]:
-                print(f"[{ct['rol']}] {ct['nombre']}")
-
-            print("\n⚽ --- GOLES ---")
-            for gol in datos["goles"]:
-                print(
-                    f"Min {gol['minuto']}' | {gol['jugador']} |"
-                    f" {gol['resultado']}"
-                )
-
-            def printear_tarjetas(equipo, tipo_persona, titulo):
-                amarillas = datos["tarjetas"][equipo][
-                    f"amarillas_{tipo_persona}"
-                ]
-                rojas = datos["tarjetas"][equipo][f"rojas_{tipo_persona}"]
-                print(f"\n🟨 🟥 --- TARJETAS {titulo} ---")
-                print(f"Amarillas detectadas: {len(amarillas)}")
-                for t in amarillas:
-                    print(f"  - Min {t['minuto']}' {t['nombre']}")
-                print(f"Rojas detectadas: {len(rojas)}")
-                for t in rojas:
-                    print(f"  - Min {t['minuto']}' {t['nombre']}")
-
-            printear_tarjetas("local", "jugadores", "LOCAL (JUGADORES)")
-            printear_tarjetas("local", "ct", "LOCAL (CUERPO TÉCNICO)")
-            printear_tarjetas("visitante", "jugadores", "VISITANTE (JUGADORES)")
-            printear_tarjetas("visitante", "ct", "VISITANTE (CUERPO TÉCNICO)")
-
-            print("\n✅ Extracción completa.")
-
-            if idx < total_actas:
-                t_espera = random.uniform(2.5, 4.5)
-                print(f"\n⏳ Pausa anti-bloqueo: {t_espera:.2f}s...")
-                time.sleep(t_espera)
-
-    except Exception as e:
-        print(f"Error procesando el acta: {e}")
+    main()
