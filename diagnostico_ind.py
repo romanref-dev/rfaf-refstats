@@ -1,169 +1,95 @@
 
+import re
 from playwright.sync_api import sync_playwright
 import testacta as rfaf
-import re
 
+GRUPOS = {
+    "Grupo 1": "49641343",
+    "Grupo 2": "48933162"
+}
 
-ACTA_ID = "2733997"
+def seleccionar(page, selector, valor):
+    resultado = page.evaluate(
+        """
+        ({selector, valor}) => {
+            const select = document.querySelector(selector);
+            if (!select) return "SELECT NO ENCONTRADO";
 
-
-def extraer_tarjetas(page):
-
-    return page.evaluate("""
-        () => {
-
-            const imagenes = Array.from(
-                document.querySelectorAll(
-                    'img[src*="tarj_amar"], img[src*="tarj_roja"]'
-                )
+            const opcion = Array.from(select.options).find(
+                o => o.value === String(valor)
             );
 
-            return imagenes.map(img => {
+            if (!opcion) return "OPCION NO ENCONTRADA";
 
-                const src = (
-                    img.getAttribute("src") || ""
-                ).toLowerCase();
+            select.value = opcion.value;
+            select.dispatchEvent(new Event("change", {bubbles:true}));
 
-                const fila = img.closest("tr");
-                const celda = img.closest("td");
-                const equipoContenedor = img.closest("div.details");
-
-                const textoFila = (
-                    fila?.innerText || ""
-                ).replace(/\\\\s+/g, " ").trim();
-
-                const textoEquipo = (
-                    equipoContenedor?.innerText || ""
-                ).replace(/\\\\s+/g, " ").trim();
-
-                const nombreEquipo = textoEquipo
-                    .split(/Titulares/i)[0]
-                    .trim();
-
-                const coincidencia = textoFila.match(
-                    /\\((\\d+\\+?\\d*)'\\)\\s*(.+)/
-                );
-
-                return {
-
-                    tipo: src.includes("tarj_amar")
-                        ? "AMARILLA"
-                        : "ROJA",
-
-                    minuto: coincidencia
-                        ? coincidencia[1]
-                        : "",
-
-                    jugador: coincidencia
-                        ? coincidencia[2].trim()
-                        : "",
-
-                    equipo: nombreEquipo,
-
-                    fila: textoFila,
-
-                    encontrado_equipo: !!equipoContenedor
-
-                };
-
-            });
-
+            return opcion.textContent.trim();
         }
-    """)
+        """,
+        {"selector": selector, "valor": str(valor)}
+    )
+
+    if resultado in ("SELECT NO ENCONTRADO", "OPCION NO ENCONTRADA"):
+        raise RuntimeError(resultado)
+
+    page.wait_for_timeout(1500)
+    return resultado
 
 
-def main():
+with sync_playwright() as p:
+    navegador = p.chromium.launch(headless=True)
+    page = navegador.new_page()
 
-    print("DIAGNOSTICO DE TARJETAS INDIVIDUALES RFAF")
-    print("=" * 80)
+    try:
+        for nombre, grupo_id in GRUPOS.items():
 
-    with sync_playwright() as playwright:
-
-        navegador = playwright.chromium.launch(headless=True)
-        page = navegador.new_page()
-
-        try:
+            print("\n" + "=" * 70)
+            print(nombre)
+            print("=" * 70)
 
             page.goto(
-                rfaf.URL_ACTA_BASE.format(id=ACTA_ID),
+                rfaf.URL_BASE,
                 wait_until="domcontentloaded",
                 timeout=60000
             )
 
-            page.wait_for_timeout(2500)
+            page.wait_for_timeout(2000)
 
-            tarjetas = extraer_tarjetas(page)
-
-            print("Acta:", ACTA_ID)
-            print("Tarjetas encontradas:", len(tarjetas))
-            print("-" * 80)
-
-            resumen = {}
-
-            for numero, tarjeta in enumerate(tarjetas, start=1):
-
-                equipo = tarjeta["equipo"] or "EQUIPO NO IDENTIFICADO"
-
-                resumen.setdefault(
-                    equipo,
-                    {"AMARILLA": 0, "ROJA": 0}
-                )
-
-                resumen[equipo][tarjeta["tipo"]] += 1
-
-                estado = (
-                    "OK"
-                    if tarjeta["jugador"]
-                    and tarjeta["minuto"]
-                    and tarjeta["encontrado_equipo"]
-                    else "REVISAR"
-                )
-
-                print(
-                    f"{numero:02d}. [{estado}] "
-                    f"{tarjeta['tipo']} | "
-                    f"{tarjeta['minuto']}' | "
-                    f"{tarjeta['jugador'] or 'JUGADOR NO IDENTIFICADO'}"
-                )
-
-                print(
-                    f"    Equipo: {equipo or 'NO IDENTIFICADO'}"
-                )
-
-            print("\\nRESUMEN POR EQUIPO")
-            print("-" * 80)
-
-            for equipo, datos in resumen.items():
-
-                print(
-                    f"{equipo}: "
-                    f"{datos['AMARILLA']} amarillas | "
-                    f"{datos['ROJA']} rojas"
-                )
-
-            errores = sum(
-                1 for tarjeta in tarjetas
-                if (
-                    not tarjeta["jugador"]
-                    or not tarjeta["minuto"]
-                    or not tarjeta["encontrado_equipo"]
+            print(
+                "Competición:",
+                seleccionar(
+                    page,
+                    "select#competicion",
+                    rfaf.COMPETICION_ID
                 )
             )
 
-            print("\\nRESULTADO")
-            print("-" * 80)
-            print("Tarjetas:", len(tarjetas))
-            print("Errores:", errores)
+            print(
+                "Grupo:",
+                seleccionar(
+                    page,
+                    "select#grupo",
+                    grupo_id
+                )
+            )
 
-            if tarjetas and errores == 0:
-                print("EXTRACCION INDIVIDUAL CORRECTA")
-            else:
-                print("EXTRACCION PENDIENTE DE REVISION")
+            opciones = page.locator(
+                "select#jornada"
+            ).evaluate(
+                """select => Array.from(select.options).map(o => ({
+                    value: o.value,
+                    texto: o.textContent.trim()
+                }))"""
+            )
 
-        finally:
+            print("\nOPCIONES DEL DESPLEGABLE:")
 
-            navegador.close()
+            for opcion in opciones:
+                print(
+                    f"Texto: {opcion['texto']} | "
+                    f"VALUE: {opcion['value']!r}"
+                )
 
-
-if __name__ == "__main__":
-    main()
+    finally:
+        navegador.close()

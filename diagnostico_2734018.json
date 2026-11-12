@@ -1,0 +1,514 @@
+[
+  {
+    "tarjeta": 1,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE LUIS 21 HOPT",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRI"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjI"
+      }
+    ]
+  },
+  {
+    "tarjeta": 2,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(41') NUÑEZ GOMEZ, JOSE LUIS",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE LUIS 21 HOPT",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRI"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjI"
+      }
+    ]
+  },
+  {
+    "tarjeta": 3,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(73') NUÑEZ GOMEZ, JOSE LUIS",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE LUIS 21 HOPT",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRI"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjI"
+      }
+    ]
+  },
+  {
+    "tarjeta": 4,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(27') VAZQUEZ ROMERO, JOSE (41') NUÑEZ GOMEZ, JOSE LUIS (73') NUÑEZ GOMEZ, JOSE LUIS (79') LOBO ALCAIDE, JOSE PEDRO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(27')</span> VAZQUEZ ROMERO, JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(41')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_roja.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(73')</span> NUÑEZ GOMEZ, JOSE LUIS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(79')</span> LOBO ALCAIDE, JOSE PEDRO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE LUIS 21 HOPT",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRI"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "AROCHE C.F. Titulares 13 BEATO BANDA, NATAN 4 PEREA BECERRA, YEIFER SENEN 6 MENA ASPRILIA, HENRY FABIAN 7 PERERA MAESTRE, CECILIO 10 VAZQUEZ ROMERO, JOSE 11 LÓPEZ MURILLO, JUAN CAMILO 12 LOPEZ MURILLO, ANDRES FELIPE 17 DE LEON NORIEGA, OSCAR JULIAN 19 CAÑATE VEGA, LEIDER MANUEL 20 NUÑEZ GOMEZ, JOSE ",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">AROCHE C.F. </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=10469876&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">13</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/retrato_licencia.jpg\" class=\"fotojug\"> </td> <td class=\"font_responsive\" style=\"vertical-align:middle\"> BEATO BANDA, NATAN</td> </tr> <tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=27722528&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">4</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjI"
+      }
+    ]
+  },
+  {
+    "tarjeta": 5,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ, JUAN JESUS 25 ",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0EfWnAdKQCngVIABS0oHrTgKYABTxSAU4UAOAqRRTBUimgBwFOpBTxQAAU7FA6UooAAKcBQKWgAxS0UvagAoopaADFFGKKAOfFOFNFPAqQHCnCmgU8UwFHSnUgp2KYCinimAYp460hjxTwaqyXdtAcSTxqfQtSxX1r"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAP"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYG"
+      }
+    ]
+  },
+  {
+    "tarjeta": 6,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(70') SEGURA REAL, JOSE ANTONIO",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ, JUAN JESUS 25 ",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0EfWnAdKQCngVIABS0oHrTgKYABTxSAU4UAOAqRRTBUimgBwFOpBTxQAAU7FA6UooAAKcBQKWgAxS0UvagAoopaADFFGKKAOfFOFNFPAqQHCnCmgU8UwFHSnUgp2KYCinimAYp460hjxTwaqyXdtAcSTxqfQtSxX1r"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAP"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYG"
+      }
+    ]
+  },
+  {
+    "tarjeta": 7,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(81') GARCIA MORENO, DIEGO JOSE",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ, JUAN JESUS 25 ",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0EfWnAdKQCngVIABS0oHrTgKYABTxSAU4UAOAqRRTBUimgBwFOpBTxQAAU7FA6UooAAKcBQKWgAxS0UvagAoopaADFFGKKAOfFOFNFPAqQHCnCmgU8UwFHSnUgp2KYCinimAYp460hjxTwaqyXdtAcSTxqfQtSxX1r"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAP"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYG"
+      }
+    ]
+  },
+  {
+    "tarjeta": 8,
+    "src": "https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif",
+    "alt": null,
+    "title": null,
+    "ancestros": [
+      {
+        "nivel": 0,
+        "etiqueta": "IMG",
+        "clases": "",
+        "texto": "",
+        "html": "<img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\">"
+      },
+      {
+        "nivel": 1,
+        "etiqueta": "TD",
+        "clases": "font_responsive",
+        "texto": "",
+        "html": "<td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td>"
+      },
+      {
+        "nivel": 2,
+        "etiqueta": "TR",
+        "clases": "",
+        "texto": "(89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr>"
+      },
+      {
+        "nivel": 3,
+        "etiqueta": "TBODY",
+        "clases": "",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody>"
+      },
+      {
+        "nivel": 4,
+        "etiqueta": "TABLE",
+        "clases": "table table-striped table-hover",
+        "texto": "(25') GOMEZ DE TEJADA MOREJON, CARLOS (70') SEGURA REAL, JOSE ANTONIO (81') GARCIA MORENO, DIEGO JOSE (89') MARTIN GARCIA, JOSE ANTONIO",
+        "html": "<table class=\"table table-striped table-hover\" width=\"100%\"> <tbody><tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(25')</span> GOMEZ DE TEJADA MOREJON, CARLOS </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(70')</span> SEGURA REAL, JOSE ANTONIO </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(81')</span> GARCIA MORENO, DIEGO JOSE </td> </tr> <tr> <td width=\"10%\" height=\"15\" align=\"center\" class=\"font_responsive\"><img src=\"https://filesrfaf.filesnovanet.es/pnfg/img/web_responsive_2/ESP/tarj_amar.gif\" width=\"8\" height=\"11\"></td> <td width=\"90%\" class=\"font_responsive\"><span class=\"font-blue\">(89')</span> MARTIN GARCIA, JOSE ANTONIO </td> </tr> </tbody></table>"
+      },
+      {
+        "nivel": 5,
+        "etiqueta": "DIV",
+        "clases": "desc",
+        "texto": "Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ, JUAN JESUS 25 ",
+        "html": "<div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD0EfWnAdKQCngVIABS0oHrTgKYABTxSAU4UAOAqRRTBUimgBwFOpBTxQAAU7FA6UooAAKcBQKWgAxS0UvagAoopaADFFGKKAOfFOFNFPAqQHCnCmgU8UwFHSnUgp2KYCinimAYp460hjxTwaqyXdtAcSTxqfQtSxX1r"
+      },
+      {
+        "nivel": 6,
+        "etiqueta": "DIV",
+        "clases": "details",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAP"
+      },
+      {
+        "nivel": 7,
+        "etiqueta": "DIV",
+        "clases": "dashboard-stat grey",
+        "texto": "U.D. RINCONADA Titulares 1 GARCIA SANCHEZ, FERMIN 2 SEGURA REAL, JOSE ANTONIO 3 LOPEZ CARVAJAL, FRANCISCO JOSE 4 GALLARDO MATEOS, MANUEL 6 GOMEZ DE TEJADA MOREJON, CARLOS 7 LOPEZ RODRIGUEZ, SERGIO 9 JARANA CID, DOMINGO 10 GUERRERO CUBERO, ANGEL 14 MORALES CARRASCO, JUAN FRANCISCO 18 JIMENEZ MARQUEZ,",
+        "html": "<div class=\"dashboard-stat grey\" style=\"margin-top:10px;margin-bottom:0px\"> <div class=\"visual\" style=\"height: 30px;margin-bottom:0px;\"> <i class=\"fa fa-users\"></i> </div> <div class=\"details\" style=\"position:initial !important;padding-bottom:10px;\"> <div class=\"number\" style=\"font-size: 20px;line-height: 30px;\">U.D. RINCONADA </div> <div class=\"desc\" style=\"padding-left:20px;text-align:left !important;\"> <h5><strong>Titulares</strong></h5> <table width=\"100%\" class=\"table table-striped table-hover\"> <tbody><tr onclick=\"location.href='NFG_EstadisticasJugador?cod_primaria=5000274&amp;jugador=15154&amp;codacta=2734018&amp;nueva_ventana=';\" style=\"cursor: pointer;\"> <td width=\"1%\" align=\"center\" class=\"font_responsive\" style=\"vertical-align:middle\">1</td> <td style=\"vertical-align:middle\" width=\"35px\"> <img src=\"data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAC0AJYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYG"
+      }
+    ]
+  }
+]

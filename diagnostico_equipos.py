@@ -1,141 +1,182 @@
+
+import re
+import time
 from playwright.sync_api import sync_playwright
-import testacta as rfaf
-
-ACTA_ID = "2733996"
 
 
-def main():
+URL = (
+    "https://www.rfaf.es/pnfg/NPcd/"
+    "NFG_CmpJornada?cod_primaria=1000120"
+)
 
-    print("DIAGNOSTICO DE ESTRUCTURA DE EQUIPOS")
-    print("=" * 75)
+COMPETICION_ID = "48466530"
+GRUPO_ID = "49641343"
+JORNADA = "1"
 
-    with sync_playwright() as playwright:
 
-        navegador = playwright.chromium.launch(headless=True)
-        page = navegador.new_page()
+def seleccionar(page, selector, valor):
 
-        try:
+    page.locator(selector).wait_for(
+        state="attached",
+        timeout=30000
+    )
 
-            page.goto(
-                rfaf.URL_ACTA_BASE.format(id=ACTA_ID),
-                wait_until="domcontentloaded",
-                timeout=60000
+    resultado = page.evaluate(
+        """
+        ({selector, valor}) => {
+            const select = document.querySelector(selector);
+
+            if (!select) {
+                return "SELECT NO ENCONTRADO";
+            }
+
+            const opcion = Array.from(select.options).find(
+                o => o.value === String(valor)
+            );
+
+            if (!opcion) {
+                return "OPCION NO ENCONTRADA";
+            }
+
+            select.value = opcion.value;
+
+            select.dispatchEvent(
+                new Event("input", {bubbles:true})
+            );
+
+            select.dispatchEvent(
+                new Event("change", {bubbles:true})
+            );
+
+            return opcion.textContent.trim();
+        }
+        """,
+        {
+            "selector": selector,
+            "valor": str(valor)
+        }
+    )
+
+    if resultado in (
+        "SELECT NO ENCONTRADO",
+        "OPCION NO ENCONTRADA"
+    ):
+        raise RuntimeError(resultado)
+
+    print(resultado)
+    page.wait_for_timeout(2000)
+
+
+def obtener_actas(page):
+
+    return page.evaluate(
+        """
+        () => {
+            const enlaces = Array.from(
+                document.querySelectorAll('a[href*="CodActa"]')
+            );
+
+            return enlaces.map(enlace => {
+
+                const href = enlace.getAttribute("href") || "";
+                const match = href.match(/[?&]CodActa=(\\d+)/i);
+
+                if (!match) return null;
+
+                const fila = enlace.closest("tr");
+
+                return {
+                    acta: match[1],
+                    texto: (fila?.innerText || "")
+                        .replace(/\\s+/g, " ")
+                        .trim(),
+                    href: href
+                };
+
+            }).filter(Boolean);
+        }
+        """
+    )
+
+
+with sync_playwright() as p:
+
+    navegador = p.chromium.launch(headless=True)
+
+    page = navegador.new_page(
+        viewport={"width": 1366, "height": 900}
+    )
+
+    try:
+
+        print("\nDIAGNOSTICO RFAF - JORNADA 1")
+        print("=" * 70)
+
+        page.goto(
+            URL,
+            wait_until="domcontentloaded",
+            timeout=60000
+        )
+
+        page.wait_for_timeout(3000)
+
+        print("\nSeleccionando competición:")
+        seleccionar(
+            page,
+            "select#competicion",
+            COMPETICION_ID
+        )
+
+        print("\nSeleccionando grupo:")
+        seleccionar(
+            page,
+            "select#grupo",
+            GRUPO_ID
+        )
+
+        print("\nSeleccionando jornada:")
+        seleccionar(
+            page,
+            "select#jornada",
+            JORNADA
+        )
+
+        print("\nEsperando a que los partidos se estabilicen...")
+
+        ultimo_numero = -1
+        repeticiones = 0
+        actas = []
+
+        for intento in range(40):
+
+            actas = obtener_actas(page)
+
+            if len(actas) == ultimo_numero:
+                repeticiones += 1
+            else:
+                repeticiones = 0
+                ultimo_numero = len(actas)
+
+            if repeticiones >= 5:
+                break
+
+            page.wait_for_timeout(500)
+
+        print("\nRESULTADO")
+        print("=" * 70)
+        print("Partidos detectados:", len(actas))
+
+        for numero, partido in enumerate(actas, start=1):
+
+            print(
+                f"{numero}. ACTA {partido['acta']} | "
+                f"{partido['texto'] or 'SIN TEXTO EN FILA'}"
             )
 
-            page.wait_for_timeout(2000)
+        print("\nURL FINAL:")
+        print(page.url)
 
-            bloques = page.evaluate("""
-                () => {
+        print("\nDIAGNOSTICO TERMINADO")
 
-                    const imagenes = Array.from(
-                        document.querySelectorAll(
-                            'img[src*="tarj_amar"], img[src*="tarj_roja"]'
-                        )
-                    );
-
-                    const grupos = new Map();
-
-                    imagenes.forEach(img => {
-
-                        let nodo = img.parentElement;
-                        let bloqueTarjeta = "";
-
-                        for (let i = 0; i < 5 && nodo; i++) {
-
-                            const texto = (nodo.innerText || "")
-                                .replace(/\\\\s+/g, " ")
-                                .trim();
-
-                            if (texto.includes("Titulares")) {
-                                bloqueTarjeta = texto;
-                                break;
-                            }
-
-                            nodo = nodo.parentElement;
-                        }
-
-                        if (!grupos.has(bloqueTarjeta)) {
-                            grupos.set(bloqueTarjeta, img);
-                        }
-
-                    });
-
-                    return Array.from(grupos.entries()).map(
-                        ([texto, img], indice) => {
-
-                            const niveles = [];
-                            let nodo = img;
-
-                            for (let i = 1; i <= 9 && nodo; i++) {
-
-                                const textoNodo = (
-                                    nodo.innerText || ""
-                                ).replace(/\\\\s+/g, " ").trim();
-
-                                const anterior = nodo.previousElementSibling;
-                                const siguiente = nodo.nextElementSibling;
-
-                                niveles.push({
-                                    nivel: i,
-                                    etiqueta: nodo.tagName,
-                                    clase: nodo.className?.toString() || "",
-                                    id: nodo.id || "",
-                                    texto: textoNodo.substring(0, 160),
-                                    anterior: (
-                                        anterior?.innerText || ""
-                                    ).replace(/\\\\s+/g, " ").trim().substring(0, 100),
-                                    siguiente: (
-                                        siguiente?.innerText || ""
-                                    ).replace(/\\\\s+/g, " ").trim().substring(0, 100)
-                                });
-
-                                nodo = nodo.parentElement;
-                            }
-
-                            return {
-                                grupo: indice + 1,
-                                jugador: (
-                                    img.parentElement?.innerText || ""
-                                ).replace(/\\\\s+/g, " ").trim(),
-                                niveles: niveles
-                            };
-
-                        }
-                    );
-
-                }
-            """)
-
-            for grupo in bloques:
-
-                print(f"\\nBLOQUE {grupo['grupo']}")
-                print("-" * 75)
-
-                print("Tarjeta de referencia:", grupo["jugador"])
-
-                for nivel in grupo["niveles"]:
-
-                    print(
-                        f"Nivel {nivel['nivel']} | "
-                        f"{nivel['etiqueta']} | "
-                        f"class={nivel['clase']} | "
-                        f"id={nivel['id']}"
-                    )
-
-                    if nivel["texto"]:
-                        print("  Texto:", nivel["texto"])
-
-                    if nivel["anterior"]:
-                        print("  Anterior:", nivel["anterior"])
-
-                    if nivel["siguiente"]:
-                        print("  Siguiente:", nivel["siguiente"])
-
-            print("\\nDIAGNOSTICO TERMINADO")
-
-        finally:
-            navegador.close()
-
-
-if __name__ == "__main__":
-    main()
+    finally:
+        navegador.close()
