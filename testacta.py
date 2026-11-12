@@ -274,17 +274,6 @@ JS_CALENDARIO = r"""
 
         const textoFila = limpiar(fila.innerText);
 
-        /*
-         * Formato habitual:
-         *
-         * EQUIPO LOCAL - FECHA HORA EQUIPO VISITANTE
-         *
-         * También puede aparecer un marcador antes
-         * de la fecha:
-         *
-         * EQUIPO LOCAL - 1 FECHA HORA EQUIPO VISITANTE
-         */
-
         const fecha = textoFila.match(
             /(\d{2}-\d{2}-\d{4}\s+\d{1,2}:\d{2})/
         );
@@ -306,11 +295,6 @@ JS_CALENDARIO = r"""
                 )
             );
 
-            /*
-             * Eliminamos el separador y el posible
-             * marcador que aparece antes de la fecha.
-             */
-
             const localMatch = parteLocal.match(
                 /^(.*?)\s+-\s*(?:\d+\s*)?$/
             );
@@ -322,12 +306,6 @@ JS_CALENDARIO = r"""
             visitante = parteVisitante;
 
         }
-
-        /*
-         * Alternativa para filas con otra estructura.
-         * Solo se utiliza si no se ha podido identificar
-         * correctamente alguno de los dos equipos.
-         */
 
         if (!local || !visitante) {
 
@@ -588,7 +566,12 @@ JS_TARJETAS = r"""
 ({local, visitante}) => {
 
     const normalizar = t =>
-        (t || "").replace(/\s+/g, " ").trim().toUpperCase();
+        (t || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .toUpperCase();
 
     const equipos = {
         local: normalizar(local),
@@ -620,40 +603,35 @@ JS_TARJETAS = r"""
 
         if (src.includes("tarj_amar")) {
             tipo = "amarillas";
-        }
-
-        if (src.includes("tarj_roja")) {
+        } else if (src.includes("tarj_roja")) {
             tipo = "rojas";
         }
 
         if (!tipo) continue;
 
-        let nodo = img;
+        // El equipo se encuentra en div.details > div.number
+        const details = img.closest("div.details");
+
+        const elementoEquipo = details
+            ? details.querySelector(".number")
+            : null;
+
+        const nombreEquipo = normalizar(
+            elementoEquipo ? elementoEquipo.innerText : ""
+        );
+
         let asignado = null;
 
-        for (let i = 0; i < 7 && nodo; i++) {
-
-            const texto = normalizar(nodo.innerText);
-
-            const contieneLocal =
-                equipos.local &&
-                texto.includes(equipos.local);
-
-            const contieneVisitante =
-                equipos.visitante &&
-                texto.includes(equipos.visitante);
-
-            if (contieneLocal && !contieneVisitante) {
-                asignado = "local";
-                break;
-            }
-
-            if (contieneVisitante && !contieneLocal) {
-                asignado = "visitante";
-                break;
-            }
-
-            nodo = nodo.parentElement;
+        if (
+            nombreEquipo &&
+            nombreEquipo === equipos.local
+        ) {
+            asignado = "local";
+        } else if (
+            nombreEquipo &&
+            nombreEquipo === equipos.visitante
+        ) {
+            asignado = "visitante";
         }
 
         if (!asignado) {
@@ -696,20 +674,23 @@ JS_TARJETAS_INDIVIDUALES = r"""
             tipo = "roja";
         }
 
+        // Jugador y minuto: fila que contiene la imagen
         const fila = img.closest("tr");
-        const equipoContenedor = img.closest("div.details");
 
         const textoFila = (
             fila?.innerText || ""
         ).replace(/\s+/g, " ").trim();
 
-        const textoEquipo = (
-            equipoContenedor?.innerText || ""
-        ).replace(/\s+/g, " ").trim();
+        // Equipo: nombre situado en div.details > div.number
+        const equipoContenedor = img.closest("div.details");
 
-        const nombreEquipo = textoEquipo
-            .split(/Titulares/i)[0]
-            .trim();
+        const elementoEquipo = equipoContenedor
+            ? equipoContenedor.querySelector(".number")
+            : null;
+
+        const nombreEquipo = (
+            elementoEquipo?.innerText || ""
+        ).replace(/\s+/g, " ").trim();
 
         const coincidencia = textoFila.match(
             /\((\d+(?:\+\d+)?)'\)\s*(.+)/
