@@ -1,4 +1,3 @@
-
 import re
 import time
 import unicodedata
@@ -25,8 +24,6 @@ JORNADAS = [1, 2, 3]
 
 ESPERA = 1500
 ESPERA_ENTRE_ACTAS = 1
-
-# Espera de carga de partidos
 ESPERA_ESTABILIDAD = 500
 REPETICIONES_ESTABLES = 5
 INTENTOS_ESTABILIDAD = 40
@@ -49,12 +46,21 @@ def normalizar(texto):
     return limpiar(texto).upper()
 
 
+def normalizar_equipo(texto):
+    """
+    El calendario puede mostrar el marcador pegado al nombre:
+    'LA PALMA C.F. 3'. Elimina ese numero final.
+    """
+    texto = normalizar(texto)
+    texto = re.sub(r"\s+\d{1,2}\s*$", "", texto)
+    return limpiar(texto)
+
+
 # ============================================================
 # SELECCIONAR COMPETICION, GRUPO Y JORNADA
 # ============================================================
 
 def seleccionar_opcion(page, selector, valor, descripcion):
-
     page.locator(selector).wait_for(
         state="attached",
         timeout=30000
@@ -64,17 +70,12 @@ def seleccionar_opcion(page, selector, valor, descripcion):
         """
         ({selector, valor}) => {
             const select = document.querySelector(selector);
-
-            return select &&
-                Array.from(select.options).some(
-                    o => o.value === String(valor)
-                );
+            return select && Array.from(select.options).some(
+                o => o.value === String(valor)
+            );
         }
         """,
-        arg={
-            "selector": selector,
-            "valor": str(valor)
-        },
+        arg={"selector": selector, "valor": str(valor)},
         timeout=30000
     )
 
@@ -82,7 +83,6 @@ def seleccionar_opcion(page, selector, valor, descripcion):
         """
         ({selector, valor}) => {
             const select = document.querySelector(selector);
-
             if (!select) {
                 return {ok:false, error:"Select no encontrado"};
             }
@@ -96,31 +96,17 @@ def seleccionar_opcion(page, selector, valor, descripcion):
             }
 
             select.value = opcion.value;
+            select.dispatchEvent(new Event("input", {bubbles:true}));
+            select.dispatchEvent(new Event("change", {bubbles:true}));
 
-            select.dispatchEvent(
-                new Event("input", {bubbles:true})
-            );
-
-            select.dispatchEvent(
-                new Event("change", {bubbles:true})
-            );
-
-            return {
-                ok:true,
-                texto:opcion.textContent.trim()
-            };
+            return {ok:true, texto:opcion.textContent.trim()};
         }
         """,
-        {
-            "selector": selector,
-            "valor": str(valor)
-        }
+        {"selector": selector, "valor": str(valor)}
     )
 
     if not resultado["ok"]:
-        raise RuntimeError(
-            f"{descripcion}: {resultado}"
-        )
+        raise RuntimeError(f"{descripcion}: {resultado}")
 
     print(f"{descripcion}: {resultado['texto']}")
     page.wait_for_timeout(ESPERA)
@@ -137,29 +123,22 @@ JS_ACTAS = r"""
     );
 
     const ids = [];
-
     for (const enlace of enlaces) {
         const href = enlace.getAttribute("href") || "";
         const m = href.match(/[?&]CodActa=(\d+)/i);
-
-        if (m && !ids.includes(m[1])) {
-            ids.push(m[1]);
-        }
+        if (m && !ids.includes(m[1])) ids.push(m[1]);
     }
-
     return ids;
 }
 """
 
 
 def esperar_actas_estables(page):
-
     ultimo_numero = -1
     repeticiones = 0
     actas = []
 
     for _ in range(INTENTOS_ESTABILIDAD):
-
         actas = page.evaluate(JS_ACTAS)
         numero_actual = len(actas)
 
@@ -169,64 +148,43 @@ def esperar_actas_estables(page):
             repeticiones = 0
             ultimo_numero = numero_actual
 
-        if (
-            numero_actual > 0
-            and repeticiones >= REPETICIONES_ESTABLES
-        ):
+        if numero_actual > 0 and repeticiones >= REPETICIONES_ESTABLES:
             return actas
 
         page.wait_for_timeout(ESPERA_ESTABILIDAD)
 
     if not actas:
-        raise RuntimeError(
-            "RFAF no ha cargado ningún enlace de acta."
-        )
+        raise RuntimeError("RFAF no ha cargado ningún enlace de acta.")
 
     print(
         "AVISO: No se confirmó la estabilidad completa "
         "de los partidos."
     )
-
     return actas
 
 
 def cargar_jornada(page, jornada):
-
     page.goto(
         URL_BASE,
         wait_until="domcontentloaded",
         timeout=60000
     )
-
     page.wait_for_timeout(2000)
 
     seleccionar_opcion(
-        page,
-        "select#competicion",
-        COMPETICION_ID,
-        "Competición"
+        page, "select#competicion", COMPETICION_ID, "Competición"
     )
-
     seleccionar_opcion(
-        page,
-        "select#grupo",
-        GRUPO_ID,
-        "Grupo"
+        page, "select#grupo", GRUPO_ID, "Grupo"
     )
 
     page.wait_for_timeout(2000)
 
     seleccionar_opcion(
-        page,
-        "select#jornada",
-        str(jornada),
-        f"Jornada {jornada}"
+        page, "select#jornada", str(jornada), f"Jornada {jornada}"
     )
 
-    seleccionada = page.locator(
-        "select#jornada"
-    ).input_value()
-
+    seleccionada = page.locator("select#jornada").input_value()
     if seleccionada != str(jornada):
         raise RuntimeError(
             f"Jornada incorrecta. Esperada: {jornada}. "
@@ -234,13 +192,8 @@ def cargar_jornada(page, jornada):
         )
 
     print("Esperando a que se carguen todos los partidos...")
-
     actas = esperar_actas_estables(page)
-
-    print(
-        f"Partidos cargados y estabilizados: {len(actas)}"
-    )
-
+    print(f"Partidos cargados y estabilizados: {len(actas)}")
     return actas
 
 
@@ -250,9 +203,13 @@ def cargar_jornada(page, jornada):
 
 JS_CALENDARIO = r"""
 () => {
+    const limpiar = t => (t || "").replace(/\s+/g, " ").trim();
 
-    const limpiar = t =>
-        (t || "").replace(/\s+/g, " ").trim();
+    const limpiarEquipo = t => {
+        let v = limpiar(t);
+        v = v.replace(/\s+\d{1,2}\s*$/, "");
+        return limpiar(v.replace(/\s+-\s*$/, ""));
+    };
 
     const enlaces = Array.from(
         document.querySelectorAll('a[href*="CodActa"]')
@@ -261,19 +218,15 @@ JS_CALENDARIO = r"""
     const partidos = {};
 
     for (const enlace of enlaces) {
-
         const href = enlace.getAttribute("href") || "";
         const match = href.match(/[?&]CodActa=(\d+)/i);
-
         if (!match) continue;
 
         const acta = match[1];
         const fila = enlace.closest("tr");
-
         if (!fila) continue;
 
         const textoFila = limpiar(fila.innerText);
-
         const fecha = textoFila.match(
             /(\d{2}-\d{2}-\d{4}\s+\d{1,2}:\d{2})/
         );
@@ -282,17 +235,12 @@ JS_CALENDARIO = r"""
         let visitante = null;
 
         if (fecha) {
-
             const posicion = fecha.index;
-
             const parteLocal = limpiar(
                 textoFila.substring(0, posicion)
             );
-
             const parteVisitante = limpiar(
-                textoFila.substring(
-                    posicion + fecha[0].length
-                )
+                textoFila.substring(posicion + fecha[0].length)
             );
 
             const localMatch = parteLocal.match(
@@ -300,45 +248,39 @@ JS_CALENDARIO = r"""
             );
 
             if (localMatch) {
-                local = limpiar(localMatch[1]);
+                local = limpiarEquipo(localMatch[1]);
             }
 
-            visitante = parteVisitante;
-
+            if (parteVisitante) {
+                visitante = limpiarEquipo(parteVisitante);
+            }
         }
 
         if (!local || !visitante) {
-
-            const celdas = Array.from(
-                fila.querySelectorAll("td")
-            );
-
+            const celdas = Array.from(fila.querySelectorAll("td"));
             const textos = celdas.map(
                 celda => limpiar(celda.innerText)
             ).filter(Boolean);
 
-            const candidatos = textos.filter(
-                texto =>
-                    !/^\d{1,2}-\d{1,2}-\d{4}/.test(texto) &&
-                    !/^\d+$/.test(texto)
+            const candidatos = textos.filter(texto =>
+                !/^\d{1,2}-\d{1,2}-\d{4}/.test(texto) &&
+                !/^\d+$/.test(texto)
             );
 
             if (!local && candidatos.length >= 2) {
-                local = candidatos[0];
+                local = limpiarEquipo(candidatos[0]);
             }
 
             if (!visitante && candidatos.length >= 2) {
-                visitante = candidatos[candidatos.length - 1];
+                visitante = limpiarEquipo(candidatos[candidatos.length - 1]);
             }
         }
 
         if (local && visitante) {
-
             partidos[acta] = {
                 local: local,
                 visitante: visitante
             };
-
         }
     }
 
@@ -348,128 +290,85 @@ JS_CALENDARIO = r"""
 
 
 # ============================================================
-# EXTRAER MARCADOR VALIDADO
+# EXTRAER MARCADOR
 # ============================================================
 
 JS_MARCADOR = r"""
 () => {
     const strong = document.querySelector("h2.ntype strong");
-
     if (!strong) return null;
 
     const elementos = Array.from(strong.children).filter(el =>
-        el.tagName === "I" &&
-        el.classList.contains("fa-solid")
+        el.tagName === "I" && el.classList.contains("fa-solid")
     );
-
     if (elementos.length !== 2) return null;
 
     function visible(el) {
         const s = getComputedStyle(el);
-        return s.display !== "none" &&
-               s.visibility !== "hidden";
+        return s.display !== "none" && s.visibility !== "hidden";
     }
 
-    function pseudo(el) {
+    function extraer(el) {
         const nodos = [el, ...el.querySelectorAll("*")];
 
         for (const nodo of nodos) {
             for (const tipo of ["::before", "::after"]) {
-
-                const s = getComputedStyle(nodo, tipo);
-
+                const estilo = getComputedStyle(nodo, tipo);
                 if (
-                    s.display === "none" ||
-                    s.visibility === "hidden"
+                    estilo.display === "none" ||
+                    estilo.visibility === "hidden"
                 ) continue;
 
-                let c = s.content;
-
+                let contenido = estilo.content;
                 if (
-                    !c ||
-                    c === "none" ||
-                    c === "normal" ||
-                    c === '""'
+                    !contenido ||
+                    contenido === "none" ||
+                    contenido === "normal" ||
+                    contenido === '""'
                 ) continue;
 
-                c = c.replace(/^["']|["']$/g, "");
-
-                const hex = c.match(
-                    /^\\([0-9a-fA-F]{1,6})\s*$/
-                );
-
+                contenido = contenido.replace(/^["']|["']$/g, "");
+                const hex = contenido.match(/^\\([0-9a-fA-F]{1,6})$/);
                 if (hex) {
-                    c = String.fromCodePoint(
+                    contenido = String.fromCodePoint(
                         parseInt(hex[1], 16)
                     );
                 }
 
-                const m = c.match(/[0-9]/);
-
-                if (m) return m[0];
+                const digito = contenido.match(/[0-9]/);
+                if (digito) return digito[0];
             }
         }
 
-        return null;
-    }
-
-    function clase(el) {
-        const nodos = [el, ...el.querySelectorAll("*")];
-
         for (const nodo of nodos) {
-            for (const c of nodo.classList) {
-                const m = c.match(/^fa-([0-9])$/);
-
+            for (const clase of nodo.classList) {
+                const m = clase.match(/^fa-([0-9])$/);
                 if (m) return m[1];
             }
         }
 
-        return null;
-    }
-
-    function texto(el) {
-
         function recorrer(nodo) {
-
             if (nodo.nodeType === Node.TEXT_NODE) {
                 return nodo.nodeValue || "";
             }
-
-            if (nodo.nodeType !== Node.ELEMENT_NODE) {
+            if (nodo.nodeType !== Node.ELEMENT_NODE || !visible(nodo)) {
                 return "";
             }
-
-            if (
-                ["script", "style"].includes(
-                    nodo.tagName.toLowerCase()
-                ) ||
-                !visible(nodo)
-            ) return "";
-
-            return Array.from(nodo.childNodes)
-                .map(recorrer)
-                .join("");
+            if (["script", "style"].includes(nodo.tagName.toLowerCase())) {
+                return "";
+            }
+            return Array.from(nodo.childNodes).map(recorrer).join("");
         }
 
-        return recorrer(el).replace(/\s+/g, "");
-    }
-
-    function extraer(el) {
-        return (
-            pseudo(el) ||
-            clase(el) ||
-            (texto(el).match(/[0-9]/) || [])[0] ||
-            null
-        );
+        const texto = recorrer(el).replace(/\s+/g, "");
+        const m = texto.match(/[0-9]/);
+        return m ? m[0] : null;
     }
 
     const local = extraer(elementos[0]);
     const visitante = extraer(elementos[1]);
 
-    if (local === null || visitante === null) {
-        return null;
-    }
-
+    if (local === null || visitante === null) return null;
     return local + "-" + visitante;
 }
 """
@@ -481,9 +380,7 @@ JS_MARCADOR = r"""
 
 JS_ARBITRO = r"""
 () => {
-    const normalizar = t =>
-        (t || "").replace(/\s+/g, " ").trim();
-
+    const normalizar = t => (t || "").replace(/\s+/g, " ").trim();
     const elementos = Array.from(
         document.querySelectorAll("tr, li, div, p, span, td")
     );
@@ -491,68 +388,39 @@ JS_ARBITRO = r"""
     let texto = null;
 
     for (const el of elementos) {
-
         const t = normalizar(el.innerText);
-
-        if (
-            t.toUpperCase() !== "ARBITRO" &&
-            t.toUpperCase() !== "ÁRBITRO"
-        ) continue;
+        if (!["ARBITRO", "ÁRBITRO"].includes(t.toUpperCase())) continue;
 
         let siguiente = el.nextElementSibling;
-
         while (siguiente) {
-
-            const contenido = normalizar(
-                siguiente.innerText
-            );
-
+            const contenido = normalizar(siguiente.innerText);
             if (
                 contenido &&
-                !["ARBITRO", "ÁRBITRO"].includes(
-                    contenido.toUpperCase()
-                )
+                !["ARBITRO", "ÁRBITRO"].includes(contenido.toUpperCase())
             ) {
                 texto = contenido;
                 break;
             }
-
             siguiente = siguiente.nextElementSibling;
         }
 
         if (!texto) {
             const fila = el.closest("tr");
-
             if (fila && fila.nextElementSibling) {
-                texto = normalizar(
-                    fila.nextElementSibling.innerText
-                );
+                texto = normalizar(fila.nextElementSibling.innerText);
             }
         }
-
         if (texto) break;
     }
 
-    if (!texto) {
-        return {
-            arbitro:null,
-            delegacion:null
-        };
-    }
+    if (!texto) return {arbitro:null, delegacion:null};
 
-    const patron =
-        /\s+DELEGACI[ÓO]N\s+DE\s+(.+)$/i;
-
+    const patron = /\s+DELEGACI[ÓO]N\s+DE\s+(.+)$/i;
     const m = texto.match(patron);
 
     return {
-        arbitro: m
-            ? texto.substring(0, m.index).trim()
-            : texto,
-
-        delegacion: m
-            ? m[1].trim()
-            : null
+        arbitro: m ? texto.substring(0, m.index).trim() : texto,
+        delegacion: m ? m[1].trim() : null
     };
 }
 """
@@ -564,14 +432,18 @@ JS_ARBITRO = r"""
 
 JS_TARJETAS = r"""
 ({local, visitante}) => {
-
-    const normalizar = t =>
-        (t || "")
+    const normalizar = t => {
+        let v = (t || "")
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/\s+/g, " ")
             .trim()
             .toUpperCase();
+
+        // Evita que 'LA PALMA C.F. 3' sea distinto de 'LA PALMA C.F.'
+        v = v.replace(/\s+\d{1,2}\s*$/, "");
+        return v;
+    };
 
     const equipos = {
         local: normalizar(local),
@@ -594,26 +466,19 @@ JS_TARJETAS = r"""
     };
 
     for (const img of imagenes) {
-
-        const src = (
-            img.getAttribute("src") || ""
-        ).toLowerCase();
+        const src = (img.getAttribute("src") || "").toLowerCase();
 
         let tipo = null;
-
         if (src.includes("tarj_amar")) {
             tipo = "amarillas";
         } else if (src.includes("tarj_roja")) {
             tipo = "rojas";
         }
-
         if (!tipo) continue;
 
-        // El equipo se encuentra en div.details > div.number
         const details = img.closest("div.details");
-
         const elementoEquipo = details
-            ? details.querySelector(".number")
+            ? details.querySelector(":scope > .number")
             : null;
 
         const nombreEquipo = normalizar(
@@ -621,16 +486,9 @@ JS_TARJETAS = r"""
         );
 
         let asignado = null;
-
-        if (
-            nombreEquipo &&
-            nombreEquipo === equipos.local
-        ) {
+        if (nombreEquipo && nombreEquipo === equipos.local) {
             asignado = "local";
-        } else if (
-            nombreEquipo &&
-            nombreEquipo === equipos.visitante
-        ) {
+        } else if (nombreEquipo && nombreEquipo === equipos.visitante) {
             asignado = "visitante";
         }
 
@@ -653,7 +511,6 @@ JS_TARJETAS = r"""
 
 JS_TARJETAS_INDIVIDUALES = r"""
 () => {
-
     const imagenes = Array.from(
         document.querySelectorAll(
             'img[src*="tarj_amar"], img[src*="tarj_roja"]'
@@ -661,61 +518,118 @@ JS_TARJETAS_INDIVIDUALES = r"""
     );
 
     return imagenes.map(img => {
-
-        const src = (
-            img.getAttribute("src") || ""
-        ).toLowerCase();
+        const src = (img.getAttribute("src") || "").toLowerCase();
 
         let tipo = null;
-
         if (src.includes("tarj_amar")) {
             tipo = "amarilla";
         } else if (src.includes("tarj_roja")) {
             tipo = "roja";
         }
 
-        // Jugador y minuto: fila que contiene la imagen
         const fila = img.closest("tr");
+        const textoFila = (fila?.innerText || "")
+            .replace(/\s+/g, " ")
+            .trim();
 
-        const textoFila = (
-            fila?.innerText || ""
-        ).replace(/\s+/g, " ").trim();
-
-        // Equipo: nombre situado en div.details > div.number
         const equipoContenedor = img.closest("div.details");
-
         const elementoEquipo = equipoContenedor
-            ? equipoContenedor.querySelector(".number")
+            ? equipoContenedor.querySelector(":scope > .number")
             : null;
 
-        const nombreEquipo = (
-            elementoEquipo?.innerText || ""
-        ).replace(/\s+/g, " ").trim();
+        const nombreEquipo = (elementoEquipo?.innerText || "")
+            .replace(/\s+/g, " ")
+            .trim();
 
         const coincidencia = textoFila.match(
-            /\((\d+(?:\+\d+)?)'\)\s*(.+)/
+            /\(?(\d+(?:\+\d+)?)'\)?\s*(.+)/
         );
 
         return {
-
             tipo: tipo,
-
-            minuto: coincidencia
-                ? coincidencia[1]
-                : null,
-
-            jugador: coincidencia
-                ? coincidencia[2].trim()
-                : null,
-
+            minuto: coincidencia ? coincidencia[1] : null,
+            jugador: coincidencia ? coincidencia[2].trim() : null,
             equipo: nombreEquipo || null
-
         };
-
     });
-
 }
 """
+
+
+# ============================================================
+# VALIDAR TOTALES CONTRA TARJETAS INDIVIDUALES
+# ============================================================
+
+def validar_totales_tarjetas(tarjetas, tarjetas_individuales, local, visitante):
+    errores = []
+
+    campos = (
+        "amarillas_local",
+        "amarillas_visitante",
+        "rojas_local",
+        "rojas_visitante",
+    )
+
+    if tarjetas.get("sin_asignar") != 0:
+        errores.append(
+            f"Tarjetas sin asignar: {tarjetas.get('sin_asignar')}"
+        )
+
+    if tarjetas.get("total") != len(tarjetas_individuales):
+        errores.append(
+            "El total de imágenes de tarjetas no coincide con "
+            "las tarjetas individuales "
+            f"({tarjetas.get('total')} frente a "
+            f"{len(tarjetas_individuales)})"
+        )
+
+    esperados = {
+        "amarillas_local": 0,
+        "amarillas_visitante": 0,
+        "rojas_local": 0,
+        "rojas_visitante": 0,
+    }
+
+    local_norm = normalizar_equipo(local)
+    visitante_norm = normalizar_equipo(visitante)
+
+    for numero, tarjeta in enumerate(tarjetas_individuales, start=1):
+        tipo = tarjeta.get("tipo")
+        equipo = normalizar_equipo(tarjeta.get("equipo") or "")
+
+        if tipo not in ("amarilla", "roja"):
+            errores.append(f"Tarjeta {numero}: tipo no válido")
+            continue
+
+        if equipo == local_norm:
+            lado = "local"
+        elif equipo == visitante_norm:
+            lado = "visitante"
+        else:
+            errores.append(
+                f"Tarjeta {numero}: equipo no coincide "
+                f"({tarjeta.get('equipo')})"
+            )
+            continue
+
+        clave = ("amarillas" if tipo == "amarilla" else "rojas") + "_" + lado
+        esperados[clave] += 1
+
+    for campo in campos:
+        obtenido = tarjetas.get(campo)
+        esperado = esperados[campo]
+
+        if obtenido != esperado:
+            errores.append(
+                f"{campo}: total extraído={obtenido}, "
+                f"tarjetas individuales={esperado}"
+            )
+
+    if errores:
+        for campo in campos:
+            tarjetas[campo] = "?"
+
+    return errores
 
 
 # ============================================================
@@ -723,51 +637,57 @@ JS_TARJETAS_INDIVIDUALES = r"""
 # ============================================================
 
 def procesar_acta(page, jornada, acta_id, equipos_calendario):
-
     equipos = equipos_calendario.get(acta_id, {})
 
     try:
-
         page.goto(
             URL_ACTA_BASE.format(id=acta_id),
             wait_until="domcontentloaded",
             timeout=45000
         )
-
         page.wait_for_timeout(ESPERA)
 
         resultado = page.evaluate(JS_MARCADOR)
         arbitro = page.evaluate(JS_ARBITRO)
 
-        # ----------------------------------------------------
-        # TOTALES DE TARJETAS
-        # ----------------------------------------------------
-
         local = equipos.get("local")
         visitante = equipos.get("visitante")
 
-        if local and visitante:
+        tarjetas_individuales = page.evaluate(
+            JS_TARJETAS_INDIVIDUALES
+        )
 
+        errores_individuales = []
+        for numero, tarjeta in enumerate(tarjetas_individuales, start=1):
+            if not tarjeta.get("jugador"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: jugador no identificado"
+                )
+            if not tarjeta.get("minuto"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: minuto no identificado"
+                )
+            if not tarjeta.get("equipo"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: equipo no identificado"
+                )
+            if not tarjeta.get("tipo"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: tipo no identificado"
+                )
+
+        if local and visitante:
             tarjetas = page.evaluate(
                 JS_TARJETAS,
-                {
-                    "local": local,
-                    "visitante": visitante
-                }
+                {"local": local, "visitante": visitante}
             )
-
-            if tarjetas["sin_asignar"] > 0:
-
-                for campo in (
-                    "amarillas_local",
-                    "amarillas_visitante",
-                    "rojas_local",
-                    "rojas_visitante"
-                ):
-                    tarjetas[campo] = "?"
-
+            errores_tarjetas = validar_totales_tarjetas(
+                tarjetas,
+                tarjetas_individuales,
+                local,
+                visitante
+            )
         else:
-
             tarjetas = {
                 "amarillas_local": "?",
                 "amarillas_visitante": "?",
@@ -776,47 +696,23 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
                 "sin_asignar": "?",
                 "total": "?"
             }
-
-        # ----------------------------------------------------
-        # TARJETAS INDIVIDUALES
-        # ----------------------------------------------------
-
-        tarjetas_individuales = page.evaluate(
-            JS_TARJETAS_INDIVIDUALES
-        )
-
-        errores_individuales = []
-
-        for numero, tarjeta in enumerate(
-            tarjetas_individuales,
-            start=1
-        ):
-
-            if not tarjeta.get("jugador"):
-                errores_individuales.append(
-                    f"Tarjeta {numero}: jugador no identificado"
-                )
-
-            if not tarjeta.get("minuto"):
-                errores_individuales.append(
-                    f"Tarjeta {numero}: minuto no identificado"
-                )
-
-            if not tarjeta.get("equipo"):
-                errores_individuales.append(
-                    f"Tarjeta {numero}: equipo no identificado"
-                )
-
-            if not tarjeta.get("tipo"):
-                errores_individuales.append(
-                    f"Tarjeta {numero}: tipo no identificado"
-                )
+            errores_tarjetas = [
+                "No se han podido identificar los dos equipos del calendario."
+            ]
 
         correcto = all([
             local,
             visitante,
             resultado,
-            arbitro.get("arbitro")
+            arbitro.get("arbitro"),
+            not errores_tarjetas,
+            not errores_individuales,
+            all(tarjetas.get(campo) != "?" for campo in (
+                "amarillas_local",
+                "amarillas_visitante",
+                "rojas_local",
+                "rojas_visitante",
+            ))
         ])
 
         return {
@@ -830,11 +726,11 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
             "tarjetas": tarjetas,
             "tarjetas_individuales": tarjetas_individuales,
             "errores_individuales": errores_individuales,
+            "errores_tarjetas": errores_tarjetas,
             "estado": "OK" if correcto else "REVISAR"
         }
 
     except Exception as e:
-
         return {
             "jornada": jornada,
             "acta": acta_id,
@@ -852,9 +748,8 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
                 "total": "?"
             },
             "tarjetas_individuales": [],
-            "errores_individuales": [
-                "Error procesando acta: " + str(e)
-            ],
+            "errores_individuales": ["Error procesando acta: " + str(e)],
+            "errores_tarjetas": [],
             "estado": "ERROR: " + str(e)
         }
 
@@ -864,9 +759,7 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
 # ============================================================
 
 def mostrar_linea(r):
-
     t = r["tarjetas"]
-
     return (
         f"J{r['jornada']} | "
         f"ACTA {r['acta']} | "
@@ -881,41 +774,38 @@ def mostrar_linea(r):
 
 
 def mostrar_tarjetas_individuales(r):
-
     tarjetas = r.get("tarjetas_individuales", [])
 
     if not tarjetas:
         print("    Sin tarjetas individuales encontradas.")
-        return
+    else:
+        for tarjeta in tarjetas:
+            jugador = tarjeta.get("jugador") or "JUGADOR NO IDENTIFICADO"
+            equipo = tarjeta.get("equipo") or "EQUIPO NO IDENTIFICADO"
+            minuto = tarjeta.get("minuto") or "?"
+            tipo = (tarjeta.get("tipo") or "DESCONOCIDA").upper()
 
-    for tarjeta in tarjetas:
-
-        jugador = tarjeta.get("jugador") or "JUGADOR NO IDENTIFICADO"
-        equipo = tarjeta.get("equipo") or "EQUIPO NO IDENTIFICADO"
-        minuto = tarjeta.get("minuto") or "?"
-        tipo = (tarjeta.get("tipo") or "DESCONOCIDA").upper()
-
-        estado = (
-            "OK"
-            if (
-                tarjeta.get("jugador")
-                and tarjeta.get("equipo")
-                and tarjeta.get("minuto")
-                and tarjeta.get("tipo")
+            estado = (
+                "OK"
+                if (
+                    tarjeta.get("jugador")
+                    and tarjeta.get("equipo")
+                    and tarjeta.get("minuto")
+                    and tarjeta.get("tipo")
+                )
+                else "REVISAR"
             )
-            else "REVISAR"
-        )
 
-        print(
-            f"    [{estado}] {tipo} | "
-            f"{minuto}' | {jugador} | {equipo}"
-        )
+            print(
+                f"    [{estado}] {tipo} | "
+                f"{minuto}' | {jugador} | {equipo}"
+            )
 
-    errores = r.get("errores_individuales", [])
+    for error in r.get("errores_tarjetas", []):
+        print(f"    ERROR TARJETAS: {error}")
 
-    if errores:
-        for error in errores:
-            print(f"    ERROR: {error}")
+    for error in r.get("errores_individuales", []):
+        print(f"    ERROR INDIVIDUAL: {error}")
 
 
 # ============================================================
@@ -923,129 +813,94 @@ def mostrar_tarjetas_individuales(r):
 # ============================================================
 
 def main():
-
     resultados = []
 
     print("\nRFAF - JORNADAS 1, 2 Y 3")
     print("=" * 140)
 
     with sync_playwright() as playwright:
-
-        navegador = playwright.chromium.launch(
-            headless=True
-        )
-
+        navegador = playwright.chromium.launch(headless=True)
         page = navegador.new_page(
             viewport={"width": 1366, "height": 900}
         )
 
         try:
-
             for jornada in JORNADAS:
-
                 print(f"\nJORNADA {jornada}")
                 print("-" * 140)
 
                 actas = cargar_jornada(page, jornada)
-
-                equipos_calendario = page.evaluate(
-                    JS_CALENDARIO
-                )
+                equipos_calendario = page.evaluate(JS_CALENDARIO)
 
                 print(
-                    f"Partidos con equipos identificados: "
+                    "Partidos con equipos identificados: "
                     f"{len(equipos_calendario)}"
                 )
 
                 for acta_id in actas:
-
                     datos = procesar_acta(
                         page,
                         jornada,
                         acta_id,
                         equipos_calendario
                     )
-
                     resultados.append(datos)
 
                     print(mostrar_linea(datos))
-
                     print("  TARJETAS INDIVIDUALES:")
                     mostrar_tarjetas_individuales(datos)
-
                     time.sleep(ESPERA_ENTRE_ACTAS)
 
         finally:
             navegador.close()
 
-    # ========================================================
-    # RESUMEN
-    # ========================================================
-
     print("\n" + "=" * 140)
     print("RESUMEN")
 
     for jornada in JORNADAS:
-
-        partidos = [
-            r for r in resultados
-            if r["jornada"] == jornada
-        ]
-
-        correctos = sum(
-            1 for r in partidos
-            if r["estado"] == "OK"
-        )
-
+        partidos = [r for r in resultados if r["jornada"] == jornada]
+        correctos = sum(1 for r in partidos if r["estado"] == "OK")
         tarjetas_individuales = sum(
-            len(r["tarjetas_individuales"])
-            for r in partidos
+            len(r["tarjetas_individuales"]) for r in partidos
         )
-
-        errores_individuales = sum(
-            len(r["errores_individuales"])
+        errores = sum(
+            len(r.get("errores_individuales", [])) +
+            len(r.get("errores_tarjetas", []))
             for r in partidos
         )
 
         print(
             f"JORNADA {jornada}: "
-            f"{correctos}/{len(partidos)} partidos con datos básicos | "
+            f"{correctos}/{len(partidos)} actas completamente validadas | "
             f"{tarjetas_individuales} tarjetas individuales | "
-            f"{errores_individuales} errores individuales"
+            f"{errores} errores"
         )
 
     print("-" * 80)
     print(f"TOTAL PARTIDOS: {len(resultados)}")
-
-    total_tarjetas = sum(
-        len(r["tarjetas_individuales"])
-        for r in resultados
+    print(
+        "TOTAL TARJETAS INDIVIDUALES: "
+        f"{sum(len(r['tarjetas_individuales']) for r in resultados)}"
     )
-
-    total_errores = sum(
-        len(r["errores_individuales"])
-        for r in resultados
+    print(
+        "ERRORES TOTALES: "
+        f"{sum(
+            len(r.get('errores_individuales', [])) +
+            len(r.get('errores_tarjetas', []))
+            for r in resultados
+        )}"
     )
-
-    print(f"TOTAL TARJETAS INDIVIDUALES: {total_tarjetas}")
-    print(f"ERRORES DE EXTRACCION INDIVIDUAL: {total_errores}")
 
     with open(
         "resultados_j1_j2_j3.txt",
         "w",
         encoding="utf-8"
     ) as archivo:
-
         for r in resultados:
-
-            archivo.write(
-                mostrar_linea(r) + "\n"
-            )
-
+            archivo.write(mostrar_linea(r) + "\n")
             archivo.write("  TARJETAS INDIVIDUALES:\n")
 
             for tarjeta in r["tarjetas_individuales"]:
-
                 archivo.write(
                     "    "
                     + str(tarjeta.get("tipo"))
@@ -1058,8 +913,10 @@ def main():
                     + "\n"
                 )
 
-            for error in r["errores_individuales"]:
-                archivo.write("    ERROR: " + error + "\n")
+            for error in r.get("errores_tarjetas", []):
+                archivo.write("    ERROR TARJETAS: " + error + "\n")
+            for error in r.get("errores_individuales", []):
+                archivo.write("    ERROR INDIVIDUAL: " + error + "\n")
 
     print("Archivo generado: resultados_j1_j2_j3.txt")
     print("No se ha conectado ni escrito nada en Supabase.")
