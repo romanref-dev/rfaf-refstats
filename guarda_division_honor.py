@@ -37,6 +37,10 @@ def limpiar(texto):
     return re.sub(r"\s+", " ", texto or "").strip()
 
 
+def normalizar(texto):
+    return limpiar(texto).casefold()
+
+
 def obtener_opciones(page, selector):
 
     opciones = page.locator(
@@ -60,7 +64,6 @@ def obtener_opciones(page, selector):
 
         texto_normalizado = texto.lower()
 
-        # Ignorar opciones vacías y opciones de selección.
         if not valor or valor == "0":
             continue
 
@@ -114,7 +117,7 @@ def cargar_grupo(page, grupo_id):
 
 
 # ============================================================
-# DESCUBRIR LOS DOS GRUPOS
+# DESCUBRIR GRUPOS
 # ============================================================
 
 def descubrir_grupos(page):
@@ -148,7 +151,7 @@ def descubrir_grupos(page):
 
 
 # ============================================================
-# DESCUBRIR JORNADAS DE UN GRUPO
+# DESCUBRIR JORNADAS
 # ============================================================
 
 def descubrir_jornadas(page, grupo):
@@ -174,15 +177,11 @@ def descubrir_jornadas(page, grupo):
         valor = str(opcion["value"]).strip()
         texto = str(opcion["texto"]).strip()
 
-        # En primer lugar intentamos obtener el número
-        # desde el valor real de la opción.
         coincidencia = re.fullmatch(
             r"\s*(\d+)\s*",
             valor
         )
 
-        # Si el valor no es numérico, buscamos el número
-        # al principio del texto de la jornada.
         if not coincidencia:
 
             coincidencia = re.match(
@@ -227,16 +226,31 @@ def descubrir_jornadas(page, grupo):
 # OBTENER FECHA DE JORNADA
 # ============================================================
 
-def obtener_fecha(page):
+def obtener_fecha(page, jornada):
 
-    texto = page.locator(
-        "select#jornada option:checked"
-    ).inner_text()
+    texto = limpiar(jornada.get("texto", ""))
 
     coincidencia = re.search(
-        r"(\d{2})-(\d{2})-(\d{4})",
+        r"(\d{1,2})-(\d{1,2})-(\d{4})",
         texto
     )
+
+    if not coincidencia:
+
+        texto = page.locator(
+            "select#jornada"
+        ).evaluate(
+            """
+            select => select.selectedOptions.length
+                ? select.selectedOptions[0].textContent.trim()
+                : ""
+            """
+        )
+
+        coincidencia = re.search(
+            r"(\d{1,2})-(\d{1,2})-(\d{4})",
+            texto
+        )
 
     if not coincidencia:
 
@@ -247,11 +261,147 @@ def obtener_fecha(page):
 
     dia, mes, anio = coincidencia.groups()
 
-    return f"{anio}-{mes}-{dia}"
+    return f"{anio}-{int(mes):02d}-{int(dia):02d}"
 
 
 # ============================================================
-# VALIDAR DATOS
+# VALIDAR TARJETAS INDIVIDUALES
+# ============================================================
+
+def validar_tarjetas_individuales(datos):
+
+    tarjetas = datos.get("tarjetas", {})
+    individuales = datos.get("tarjetas_individuales")
+
+    if not isinstance(individuales, list):
+
+        raise RuntimeError(
+            "No se ha obtenido la lista de tarjetas individuales."
+        )
+
+    errores_individuales = datos.get(
+        "errores_individuales"
+    )
+
+    if errores_individuales:
+
+        raise RuntimeError(
+            "La extracción individual contiene errores: "
+            f"{errores_individuales}"
+        )
+
+    for numero, tarjeta in enumerate(
+        individuales,
+        start=1
+    ):
+
+        if not isinstance(tarjeta, dict):
+
+            raise RuntimeError(
+                f"La tarjeta {numero} no tiene formato válido."
+            )
+
+        campos = [
+            "tipo",
+            "minuto",
+            "jugador",
+            "equipo"
+        ]
+
+        for campo in campos:
+
+            if not limpiar(str(tarjeta.get(campo) or "")):
+
+                raise RuntimeError(
+                    f"Tarjeta {numero}: falta el campo {campo}."
+                )
+
+        tipo = str(tarjeta["tipo"]).lower().strip()
+
+        if tipo not in ("amarilla", "roja"):
+
+            raise RuntimeError(
+                f"Tarjeta {numero}: tipo desconocido: {tipo}"
+            )
+
+        if not re.fullmatch(
+            r"\d+(?:\+\d+)?",
+            str(tarjeta["minuto"]).strip()
+        ):
+
+            raise RuntimeError(
+                f"Tarjeta {numero}: minuto no válido: "
+                f"{tarjeta['minuto']}"
+            )
+
+    total_esperado = sum([
+        tarjetas.get("amarillas_local", 0),
+        tarjetas.get("amarillas_visitante", 0),
+        tarjetas.get("rojas_local", 0),
+        tarjetas.get("rojas_visitante", 0)
+    ])
+
+    if len(individuales) != total_esperado:
+
+        raise RuntimeError(
+            "No coinciden las tarjetas individuales con "
+            f"el total del acta: {len(individuales)} "
+            f"individuales frente a {total_esperado} totales."
+        )
+
+    equipos = {
+        normalizar(datos["local"]): {
+            "amarilla": tarjetas["amarillas_local"],
+            "roja": tarjetas["rojas_local"]
+        },
+        normalizar(datos["visitante"]): {
+            "amarilla": tarjetas["amarillas_visitante"],
+            "roja": tarjetas["rojas_visitante"]
+        }
+    }
+
+    recuento = {
+        equipo: {
+            "amarilla": 0,
+            "roja": 0
+        }
+        for equipo in equipos
+    }
+
+    for tarjeta in individuales:
+
+        equipo = normalizar(tarjeta["equipo"])
+
+        if equipo not in recuento:
+
+            raise RuntimeError(
+                "Equipo de tarjeta no coincide con los equipos "
+                f"del partido: {tarjeta['equipo']}"
+            )
+
+        tipo = str(tarjeta["tipo"]).lower().strip()
+
+        recuento[equipo][tipo] += 1
+
+    for equipo, esperados in equipos.items():
+
+        obtenidos = recuento[equipo]
+
+        for tipo in ("amarilla", "roja"):
+
+            if obtenidos[tipo] != esperados[tipo]:
+
+                raise RuntimeError(
+                    f"Descuadre de {tipo} para {equipo}: "
+                    f"esperadas {esperados[tipo]}, "
+                    f"extraídas {obtenidos[tipo]}."
+                )
+
+    return True
+
+
+# ============================================================
+# VALIDAR DATOS DEL PARTIDO
 # ============================================================
 
 def validar(datos):
@@ -316,6 +466,8 @@ def validar(datos):
             "El total de tarjetas no coincide."
         )
 
+    validar_tarjetas_individuales(datos)
+
     return True
 
 
@@ -345,7 +497,10 @@ def extraer_jornada(
         numero_jornada
     )
 
-    fecha = obtener_fecha(page)
+    fecha = obtener_fecha(
+        page,
+        jornada
+    )
 
     actas = page.evaluate(
         rfaf.JS_ACTAS
@@ -403,10 +558,10 @@ def extraer_jornada(
             datos["acta_id"] = str(acta_id)
             datos["jornada"] = numero_jornada
 
-            validar(datos)
-
             datos["grupo"] = grupo["texto"]
             datos["id_grupo"] = grupo["value"]
+
+            validar(datos)
 
             resultados.append(datos)
 
@@ -421,7 +576,9 @@ def extraer_jornada(
                 f"AM {tarjetas['amarillas_local']}-"
                 f"{tarjetas['amarillas_visitante']} | "
                 f"RO {tarjetas['rojas_local']}-"
-                f"{tarjetas['rojas_visitante']}"
+                f"{tarjetas['rojas_visitante']} | "
+                f"Tarjetas individuales: "
+                f"{len(datos['tarjetas_individuales'])}"
             )
 
         except Exception as error:
@@ -439,7 +596,7 @@ def extraer_jornada(
 
 
 # ============================================================
-# CONSTRUIR REGISTRO SUPABASE
+# CONSTRUIR REGISTRO SUPABASE: PARTIDO
 # ============================================================
 
 def construir_registro(datos):
@@ -618,6 +775,156 @@ def guardar_partido(
 
 
 # ============================================================
+# CONSTRUIR REGISTROS DE TARJETAS INDIVIDUALES
+# ============================================================
+
+def construir_registros_tarjetas(datos):
+
+    validar_tarjetas_individuales(datos)
+
+    acta_id = str(datos["acta_id"])
+    partido_id = f"rfaf_{acta_id}"
+
+    ahora = datetime.now(
+        timezone.utc
+    ).isoformat()
+
+    registros = []
+
+    for numero, tarjeta in enumerate(
+        datos["tarjetas_individuales"],
+        start=1
+    ):
+
+        registros.append({
+
+            "partido_id": partido_id,
+
+            "acta_id": acta_id,
+            "numero_tarjeta": numero,
+
+            "competicion": COMPETICION,
+            "grupo": datos["grupo"],
+            "jornada": datos["jornada"],
+            "fecha": datos["fecha"],
+
+            "equipo": limpiar(tarjeta["equipo"]),
+            "jugador": limpiar(tarjeta["jugador"]),
+
+            "minuto": str(tarjeta["minuto"]).strip(),
+
+            "tipo_persona": "jugador",
+            "tipo_tarjeta": str(
+                tarjeta["tipo"]
+            ).lower().strip(),
+
+            "updated_at": ahora
+        })
+
+    return registros
+
+
+# ============================================================
+# GUARDAR TARJETAS INDIVIDUALES
+# ============================================================
+
+def guardar_tarjetas_individuales(
+    supabase,
+    datos
+):
+
+    acta_id = str(datos["acta_id"])
+
+    registros = construir_registros_tarjetas(
+        datos
+    )
+
+    print(
+        f"Guardando {len(registros)} tarjetas "
+        f"individuales del acta {acta_id}..."
+    )
+
+    # Primero insertamos o actualizamos las tarjetas.
+    if registros:
+
+        supabase.table(
+            "actas_tarjetas"
+        ).upsert(
+            registros,
+            on_conflict="acta_id,numero_tarjeta"
+        ).execute()
+
+    # Eliminamos posibles tarjetas sobrantes de una
+    # versión anterior del acta si esta fue corregida.
+    consulta = (
+        supabase
+        .table("actas_tarjetas")
+        .delete()
+        .eq("acta_id", acta_id)
+    )
+
+    if registros:
+
+        consulta = consulta.gt(
+            "numero_tarjeta",
+            len(registros)
+        )
+
+    consulta.execute()
+
+    # Comprobamos lo que realmente quedó guardado.
+    respuesta = (
+        supabase
+        .table("actas_tarjetas")
+        .select(
+            "acta_id,numero_tarjeta,equipo,jugador,"
+            "minuto,tipo_tarjeta"
+        )
+        .eq("acta_id", acta_id)
+        .order("numero_tarjeta")
+        .execute()
+    )
+
+    filas = respuesta.data or []
+
+    if len(filas) != len(registros):
+
+        raise RuntimeError(
+            f"Acta {acta_id}: se esperaban "
+            f"{len(registros)} tarjetas guardadas, "
+            f"pero se encontraron {len(filas)}."
+        )
+
+    for esperado, obtenido in zip(
+        registros,
+        filas
+    ):
+
+        campos = [
+            "acta_id",
+            "numero_tarjeta",
+            "equipo",
+            "jugador",
+            "minuto",
+            "tipo_tarjeta"
+        ]
+
+        for campo in campos:
+
+            if str(esperado[campo]) != str(obtenido[campo]):
+
+                raise RuntimeError(
+                    f"Acta {acta_id}: discrepancia en "
+                    f"tarjeta {esperado['numero_tarjeta']}, "
+                    f"campo {campo}. "
+                    f"Esperado: {esperado[campo]!r}; "
+                    f"obtenido: {obtenido[campo]!r}"
+                )
+
+    return len(filas)
+
+
+# ============================================================
 # MOSTRAR PARTIDO
 # ============================================================
 
@@ -674,6 +981,7 @@ def main():
     total_actas = 0
     total_extraidos = 0
     total_guardados = 0
+    total_tarjetas_guardadas = 0
     total_errores = 0
 
     with sync_playwright() as playwright:
@@ -732,6 +1040,7 @@ def main():
 
                             try:
 
+                                # Guardar primero el partido.
                                 guardar_partido(
                                     supabase,
                                     datos
@@ -740,6 +1049,19 @@ def main():
                                 total_guardados += 1
 
                                 mostrar_partido(datos)
+
+                                # Después guardar sus tarjetas.
+                                cantidad = guardar_tarjetas_individuales(
+                                    supabase,
+                                    datos
+                                )
+
+                                total_tarjetas_guardadas += cantidad
+
+                                print(
+                                    f"TARJETAS GUARDADAS Y "
+                                    f"VERIFICADAS: {cantidad}"
+                                )
 
                             except Exception as error:
 
@@ -787,6 +1109,11 @@ def main():
     print(
         "Partidos guardados y verificados:",
         total_guardados
+    )
+
+    print(
+        "Tarjetas individuales guardadas y verificadas:",
+        total_tarjetas_guardadas
     )
 
     print(

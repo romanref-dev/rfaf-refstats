@@ -4,6 +4,7 @@ import time
 import unicodedata
 from playwright.sync_api import sync_playwright
 
+
 # ============================================================
 # CONFIGURACION
 # ============================================================
@@ -104,7 +105,6 @@ def seleccionar_opcion(page, selector, valor, descripcion):
 
 def cargar_jornada(page, jornada):
 
-    # Siempre comenzamos desde el calendario.
     page.goto(
         URL_BASE,
         wait_until="domcontentloaded",
@@ -422,7 +422,7 @@ JS_ARBITRO = r"""
 
 
 # ============================================================
-# EXTRAER TARJETAS
+# EXTRAER TOTALES DE TARJETAS POR EQUIPO
 # ============================================================
 
 JS_TARJETAS = r"""
@@ -511,6 +511,74 @@ JS_TARJETAS = r"""
 
 
 # ============================================================
+# EXTRAER TARJETAS INDIVIDUALES
+# ============================================================
+
+JS_TARJETAS_INDIVIDUALES = r"""
+() => {
+
+    const imagenes = Array.from(
+        document.querySelectorAll(
+            'img[src*="tarj_amar"], img[src*="tarj_roja"]'
+        )
+    );
+
+    return imagenes.map(img => {
+
+        const src = (
+            img.getAttribute("src") || ""
+        ).toLowerCase();
+
+        let tipo = null;
+
+        if (src.includes("tarj_amar")) {
+            tipo = "amarilla";
+        } else if (src.includes("tarj_roja")) {
+            tipo = "roja";
+        }
+
+        const fila = img.closest("tr");
+        const equipoContenedor = img.closest("div.details");
+
+        const textoFila = (
+            fila?.innerText || ""
+        ).replace(/\s+/g, " ").trim();
+
+        const textoEquipo = (
+            equipoContenedor?.innerText || ""
+        ).replace(/\s+/g, " ").trim();
+
+        const nombreEquipo = textoEquipo
+            .split(/Titulares/i)[0]
+            .trim();
+
+        const coincidencia = textoFila.match(
+            /\((\d+(?:\+\d+)?)'\)\s*(.+)/
+        );
+
+        return {
+
+            tipo: tipo,
+
+            minuto: coincidencia
+                ? coincidencia[1]
+                : null,
+
+            jugador: coincidencia
+                ? coincidencia[2].trim()
+                : null,
+
+            equipo: nombreEquipo || null
+
+        };
+
+    });
+
+}
+"""
+
+
+# ============================================================
 # PROCESAR ACTA
 # ============================================================
 
@@ -531,6 +599,10 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
         resultado = page.evaluate(JS_MARCADOR)
         arbitro = page.evaluate(JS_ARBITRO)
 
+        # ----------------------------------------------------
+        # TOTALES DE TARJETAS
+        # ----------------------------------------------------
+
         local = equipos.get("local")
         visitante = equipos.get("visitante")
 
@@ -544,7 +616,6 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
                 }
             )
 
-            # No mostrar recuentos parciales como totales.
             if tarjetas["sin_asignar"] > 0:
 
                 for campo in (
@@ -566,6 +637,41 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
                 "total": "?"
             }
 
+        # ----------------------------------------------------
+        # TARJETAS INDIVIDUALES
+        # ----------------------------------------------------
+
+        tarjetas_individuales = page.evaluate(
+            JS_TARJETAS_INDIVIDUALES
+        )
+
+        errores_individuales = []
+
+        for numero, tarjeta in enumerate(
+            tarjetas_individuales,
+            start=1
+        ):
+
+            if not tarjeta.get("jugador"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: jugador no identificado"
+                )
+
+            if not tarjeta.get("minuto"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: minuto no identificado"
+                )
+
+            if not tarjeta.get("equipo"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: equipo no identificado"
+                )
+
+            if not tarjeta.get("tipo"):
+                errores_individuales.append(
+                    f"Tarjeta {numero}: tipo no identificado"
+                )
+
         correcto = all([
             local,
             visitante,
@@ -582,6 +688,8 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
             "arbitro": arbitro.get("arbitro"),
             "delegacion": arbitro.get("delegacion"),
             "tarjetas": tarjetas,
+            "tarjetas_individuales": tarjetas_individuales,
+            "errores_individuales": errores_individuales,
             "estado": "OK" if correcto else "REVISAR"
         }
 
@@ -603,6 +711,10 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
                 "sin_asignar": "?",
                 "total": "?"
             },
+            "tarjetas_individuales": [],
+            "errores_individuales": [
+                "Error procesando acta: " + str(e)
+            ],
             "estado": "ERROR: " + str(e)
         }
 
@@ -628,6 +740,44 @@ def mostrar_linea(r):
     )
 
 
+def mostrar_tarjetas_individuales(r):
+
+    tarjetas = r.get("tarjetas_individuales", [])
+
+    if not tarjetas:
+        print("    Sin tarjetas individuales encontradas.")
+        return
+
+    for tarjeta in tarjetas:
+
+        jugador = tarjeta.get("jugador") or "JUGADOR NO IDENTIFICADO"
+        equipo = tarjeta.get("equipo") or "EQUIPO NO IDENTIFICADO"
+        minuto = tarjeta.get("minuto") or "?"
+        tipo = (tarjeta.get("tipo") or "DESCONOCIDA").upper()
+
+        estado = (
+            "OK"
+            if (
+                tarjeta.get("jugador")
+                and tarjeta.get("equipo")
+                and tarjeta.get("minuto")
+                and tarjeta.get("tipo")
+            )
+            else "REVISAR"
+        )
+
+        print(
+            f"    [{estado}] {tipo} | "
+            f"{minuto}' | {jugador} | {equipo}"
+        )
+
+    errores = r.get("errores_individuales", [])
+
+    if errores:
+        for error in errores:
+            print(f"    ERROR: {error}")
+
+
 # ============================================================
 # MAIN
 # ============================================================
@@ -649,36 +799,41 @@ def main():
             viewport={"width": 1366, "height": 900}
         )
 
-        for jornada in JORNADAS:
+        try:
 
-            print(f"\nJORNADA {jornada}")
-            print("-" * 140)
+            for jornada in JORNADAS:
 
-            # CORRECCION:
-            # Cada jornada comienza cargando nuevamente el calendario.
-            cargar_jornada(page, jornada)
+                print(f"\nJORNADA {jornada}")
+                print("-" * 140)
 
-            actas = page.evaluate(JS_ACTAS)
-            equipos_calendario = page.evaluate(JS_CALENDARIO)
+                cargar_jornada(page, jornada)
 
-            print(f"Partidos encontrados: {len(actas)}")
+                actas = page.evaluate(JS_ACTAS)
+                equipos_calendario = page.evaluate(JS_CALENDARIO)
 
-            for acta_id in actas:
+                print(f"Partidos encontrados: {len(actas)}")
 
-                datos = procesar_acta(
-                    page,
-                    jornada,
-                    acta_id,
-                    equipos_calendario
-                )
+                for acta_id in actas:
 
-                resultados.append(datos)
+                    datos = procesar_acta(
+                        page,
+                        jornada,
+                        acta_id,
+                        equipos_calendario
+                    )
 
-                print(mostrar_linea(datos))
+                    resultados.append(datos)
 
-                time.sleep(ESPERA_ENTRE_ACTAS)
+                    print(mostrar_linea(datos))
 
-        navegador.close()
+                    # Mostrar tarjetas individuales
+                    print("  TARJETAS INDIVIDUALES:")
+                    mostrar_tarjetas_individuales(datos)
+
+                    time.sleep(ESPERA_ENTRE_ACTAS)
+
+        finally:
+            navegador.close()
 
     # ========================================================
     # RESUMEN
@@ -699,13 +854,38 @@ def main():
             if r["estado"] == "OK"
         )
 
+        tarjetas_individuales = sum(
+            len(r["tarjetas_individuales"])
+            for r in partidos
+        )
+
+        errores_individuales = sum(
+            len(r["errores_individuales"])
+            for r in partidos
+        )
+
         print(
             f"JORNADA {jornada}: "
-            f"{correctos}/{len(partidos)} partidos con datos básicos"
+            f"{correctos}/{len(partidos)} partidos con datos básicos | "
+            f"{tarjetas_individuales} tarjetas individuales | "
+            f"{errores_individuales} errores individuales"
         )
 
     print("-" * 80)
     print(f"TOTAL PARTIDOS: {len(resultados)}")
+
+    total_tarjetas = sum(
+        len(r["tarjetas_individuales"])
+        for r in resultados
+    )
+
+    total_errores = sum(
+        len(r["errores_individuales"])
+        for r in resultados
+    )
+
+    print(f"TOTAL TARJETAS INDIVIDUALES: {total_tarjetas}")
+    print(f"ERRORES DE EXTRACCION INDIVIDUAL: {total_errores}")
 
     with open(
         "resultados_j1_j2_j3.txt",
@@ -714,7 +894,29 @@ def main():
     ) as archivo:
 
         for r in resultados:
-            archivo.write(mostrar_linea(r) + "\n")
+
+            archivo.write(
+                mostrar_linea(r) + "\n"
+            )
+
+            archivo.write("  TARJETAS INDIVIDUALES:\n")
+
+            for tarjeta in r["tarjetas_individuales"]:
+
+                archivo.write(
+                    "    "
+                    + str(tarjeta.get("tipo"))
+                    + " | "
+                    + str(tarjeta.get("minuto"))
+                    + "' | "
+                    + str(tarjeta.get("jugador"))
+                    + " | "
+                    + str(tarjeta.get("equipo"))
+                    + "\n"
+                )
+
+            for error in r["errores_individuales"]:
+                archivo.write("    ERROR: " + error + "\n")
 
     print("Archivo generado: resultados_j1_j2_j3.txt")
     print("No se ha conectado ni escrito nada en Supabase.")

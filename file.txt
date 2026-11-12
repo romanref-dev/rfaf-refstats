@@ -1,0 +1,887 @@
+Run python extractor.py
+🚀 Iniciando extracción profunda RFAF (Playwright + curl_cffi)...
+
+
+======================================================
+⚽ Competición: División Honor Sénior | Grupo: Grupo 1
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo 1: Page.goto: Timeout 35000ms exceeded.
+Call log:
+  - navigating to "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120", waiting until "networkidle"
+
+
+======================================================
+⚽ Competición: División Honor Sénior | Grupo: Grupo 2
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo 2: Page.goto: Timeout 35000ms exceeded.
+Call log:
+  - navigating to "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120", waiting until "networkidle"
+
+
+======================================================
+⚽ Competición: 3ª Federación | Grupo: Grupo 9
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo 9: Page.goto: Timeout 35000ms exceeded.
+Call log:
+  - navigating to "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120", waiting until "networkidle"
+
+
+======================================================
+⚽ Competición: 3ª Federación | Grupo: Grupo 10
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo 10: Page.goto: Timeout 35000ms exceeded.
+Call log:
+  - navigating to "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120", waiting until "networkidle"
+
+
+======================================================
+⚽ Competición: 1ª Andaluza Sénior (Sevilla) | Grupo: Grupo Único
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo Único: Page.goto: Timeout 35000ms exceeded.
+Call log:
+  - navigating to "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120", waiting until "networkidle"
+
+
+======================================================
+⚽ Competición: 1ª Andaluza Sénior (Málaga) | Grupo: GRUPO UNICO
+======================================================
+
+📅 --- 1 - 13-09-2026 ---
+   🔎 Analizando Acta: ANTEQUERA C.F. S.A.D. vs C.D. ATHLETIC DE COIN (412 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642219&cod_acta=2642219
+      🏁 Árbitros: GONZALEZ FERNANDEZ, ESTHER (Delegación De Málaga), PEÑA RAMÍREZ, RUBÉN (Delegación De Málaga), FERNANDEZ ENNACIRI, ISMAEL (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 4
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: LA CALA C.D. vs C.D. CAMPANILLAS (5 - 12) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642220&cod_acta=2642220
+      🏁 Árbitros: AZUAGA GARCIA, ADRIAN (Delegación De Málaga), MARTIN BARRANQUERO, ALEXIS (Delegación De Málaga), ZAFRA TORRES, DIEGO (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: JUVENTUD DE TORREMOLINOS CF CD vs C.D. ESTEPONA FÚTBOL SENIOR (7 - 12) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642221&cod_acta=2642221
+      🏁 Árbitros: SANCHEZ AYALA, JAVIER (Delegación De Málaga), TORO MUÑOZ, IVAN (Delegación De Málaga), RODRIGUEZ PASTOR, PABLO FELIPE (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 3
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. ATLETICO BENAMIEL C.F. vs PEÑA COMPADRES (512 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642226&cod_acta=2642226
+      🏁 Árbitros: MARQUEZ POSTIGO, FERNANDO ALONSO (Delegación De Málaga), TRUJILLO FERNANDEZ, JUAN ANTONIO (Delegación De Málaga), CARDENAS GONZALEZ, FRANCISCO (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 3
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: U.D. FUENGIROLA LOS BOLICHES vs ATLETICO ESTACION (3 - 13) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642227&cod_acta=2642227
+      🏁 Árbitros: TRUJILLO FERNANDEZ, JUAN ANTONIO (Delegación De Málaga), AGUILAR PANIAGUA, SALVADOR (Delegación De Málaga), CARDENAS GONZALEZ, FRANCISCO (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 6
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. RONDA vs CARTAMA C.D. (613 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642223&cod_acta=2642223
+      🏁 Árbitros: RUEDA VARGAS, JUAN MARCOS (Delegación De Málaga), CARDENAS MARTIN, GUILLERMO (Delegación De Málaga), CASTRO BRAVO, ÁLVARO (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. MIJAS vs CLUB POLIDEPORTIVO MIJAS LAS LAGUNAS (3 - 1113) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642224&cod_acta=2642224
+      🏁 Árbitros: MARTINEZ GOMEZ, GONZALO (Delegación De Málaga), EL MOHAMMADI HAFAF, ADAM (Delegación De Málaga), RUBIO RIVERA, FRANCISCO JAVIER (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 7 | Visitante 7
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. UNION MANILVA C.F. vs MALAGA C.F. SAD (5 - 113) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2726359&cod_acta=2726359
+      🏁 Árbitros: DOMINGUEZ AGUILERA, PEDRO (Delegación De Málaga), RIVAS DOMINGUEZ, JOSE FRANCISCO (Delegación De Málaga), PIMENTEL AVILES, JOSE MARIA (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. TRABUCO vs C.D. PIZARRA ATLÉTICO C.F. (4 - 313) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642222&cod_acta=2642222
+      🏁 Árbitros: AGUILAR SANCHEZ, RAFAEL LIBERTO (Delegación De Málaga), GALLARDO CONEJO, EDUARDO (Delegación De Málaga), MORALES MUÑOZ, SANDRA MARIA (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 6
+      🟥 Tarjetas Rojas: Local 0 | Visitante 1
+   ❌ Error procesando jornada 1 - 13-09-2026: {'message': 'invalid input syntax for type integer: "gonzalez_fernandez_esther"', 'code': '22P02', 'hint': None, 'details': None}
+
+📅 --- 2 - 20-09-2026 ---
+   🔎 Analizando Acta: CLUB POLIDEPORTIVO MIJAS LAS LAGUNAS vs C.D. RONDA (2 - 419) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642233&cod_acta=2642233
+      🏁 Árbitros: CABALLERO BERLANGA, MARCOS (Delegación De Málaga), DEL PINO LITVINENKO, ALEXEY (Delegación De Málaga), LOPEZ RODRIGUEZ, AITOR (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: CARTAMA C.D. vs C.D. TRABUCO (13 - 219) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642232&cod_acta=2642232
+      🏁 Árbitros: MOLINA LÓPEZ, ALBA (Delegación De Málaga), HEVILLA JIMENEZ, FRANCISCA MARIA (Delegación De Málaga), TORO MUÑOZ, IVAN (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: ATLETICO ESTACION vs C.D. ATLETICO BENAMIEL C.F. (1 - 619) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642236&cod_acta=2642236
+      🏁 Árbitros: FERNANDEZ SABORITO, ALEJANDRO (Delegación De Málaga), FERNANDEZ LARA, ALEJANDRO (Delegación De Málaga), RAMOS RUIZ, MIGUEL ANGEL (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 6
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. ATHLETIC DE COIN vs U.D. FUENGIROLA LOS BOLICHES (5 - 219) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642228&cod_acta=2642228
+      🏁 Árbitros: GONZÁLEZ JIMÉNEZ, JESÚS (Delegación De Málaga), GUILLÉN REDONDO, ISRAEL (Delegación De Málaga), RUIZ TIRADO, FRANCISCO JAVIER (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 6
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. PIZARRA ATLÉTICO C.F. vs JUVENTUD DE TORREMOLINOS CF CD (3 - 419) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642231&cod_acta=2642231
+      🏁 Árbitros: COZZOLINO CAMPITELLI, MÁXIMO (Delegación De Málaga), PERALTA GODOY, DAVID (Delegación De Málaga), RUBIO RIVERA, FRANCISCO JAVIER (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 6 | Visitante 3
+      🟥 Tarjetas Rojas: Local 1 | Visitante 0
+   🔎 Analizando Acta: PEÑA COMPADRES vs C.D. UNION MANILVA C.F. (6 - 19) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2726376&cod_acta=2726376
+      🏁 Árbitros: DEL PINO LITVINENKO, ALEXEY (Delegación De Málaga), CABALLERO BERLANGA, MARCOS (Delegación De Málaga), LOPEZ RODRIGUEZ, AITOR (Delegación De Málaga)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 0
+      🟥 Tarjetas Rojas: Local 1 | Visitante 0
+   🔎 Analizando Acta: MALAGA C.F. SAD vs C.D. MIJAS (22 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642234&cod_acta=2642234
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. CAMPANILLAS vs ANTEQUERA C.F. S.A.D. (5 - 220) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642229&cod_acta=2642229
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. ESTEPONA FÚTBOL SENIOR vs LA CALA C.D. (1 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2642230&cod_acta=2642230
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   ❌ Error procesando jornada 2 - 20-09-2026: {'message': 'invalid input syntax for type integer: "caballero_berlanga_marcos"', 'code': '22P02', 'hint': None, 'details': None}
+
+📅 --- 3 - 27-09-2026 ---
+
+📅 --- 4 - 04-10-2026 ---
+   ❌ Error procesando jornada 4 - 04-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 5 - 11-10-2026 ---
+   ❌ Error procesando jornada 5 - 11-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 6 - 18-10-2026 ---
+   ❌ Error procesando jornada 6 - 18-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 7 - 25-10-2026 ---
+   ❌ Error procesando jornada 7 - 25-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 8 - 01-11-2026 ---
+   ❌ Error procesando jornada 8 - 01-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 9 - 08-11-2026 ---
+   ❌ Error procesando jornada 9 - 08-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 10 - 15-11-2026 ---
+   ❌ Error procesando jornada 10 - 15-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 11 - 22-11-2026 ---
+   ❌ Error procesando jornada 11 - 22-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 12 - 29-11-2026 ---
+   ❌ Error procesando jornada 12 - 29-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 13 - 06-12-2026 ---
+   ❌ Error procesando jornada 13 - 06-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 14 - 08-12-2026 ---
+   ❌ Error procesando jornada 14 - 08-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 15 - 13-12-2026 ---
+   ❌ Error procesando jornada 15 - 13-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 16 - 20-12-2026 ---
+   ❌ Error procesando jornada 16 - 20-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 17 - 03-01-2027 ---
+   ❌ Error procesando jornada 17 - 03-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 18 - 10-01-2027 ---
+   ❌ Error procesando jornada 18 - 10-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 19 - 17-01-2027 ---
+   ❌ Error procesando jornada 19 - 17-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 20 - 24-01-2027 ---
+   ❌ Error procesando jornada 20 - 24-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 21 - 31-01-2027 ---
+   ❌ Error procesando jornada 21 - 31-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 22 - 07-02-2027 ---
+   ❌ Error procesando jornada 22 - 07-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 23 - 14-02-2027 ---
+   ❌ Error procesando jornada 23 - 14-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 24 - 21-02-2027 ---
+   ❌ Error procesando jornada 24 - 21-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 25 - 28-02-2027 ---
+   ❌ Error procesando jornada 25 - 28-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 26 - 07-03-2027 ---
+   ❌ Error procesando jornada 26 - 07-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 27 - 14-03-2027 ---
+   ❌ Error procesando jornada 27 - 14-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 28 - 21-03-2027 ---
+   ❌ Error procesando jornada 28 - 21-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 29 - 28-03-2027 ---
+   ❌ Error procesando jornada 29 - 28-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 30 - 04-04-2027 ---
+   ❌ Error procesando jornada 30 - 04-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 31 - 11-04-2027 ---
+   ❌ Error procesando jornada 31 - 11-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 32 - 18-04-2027 ---
+   ❌ Error procesando jornada 32 - 18-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 33 - 25-04-2027 ---
+   ❌ Error procesando jornada 33 - 25-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 34 - 02-05-2027 ---
+   ❌ Error procesando jornada 34 - 02-05-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+======================================================
+⚽ Competición: 1ª Andaluza SENIOR (CADIZ) | Grupo: UNICO
+======================================================
+   ⚠️ Error de navegación inicial en grupo UNICO: Page.goto: Timeout 35000ms exceeded.
+Call log:
+  - navigating to "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120", waiting until "networkidle"
+
+
+======================================================
+⚽ Competición: 1ª Andaluza Sénior (Granada) | Grupo: Grupo Único
+======================================================
+
+📅 --- 1 - 13-09-2026 ---
+   🔎 Analizando Acta: C.D. SANTA FE vs C.D. ATLETICO MONACHIL (1513 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680403&cod_acta=2680403
+      🏁 Árbitros: BAILON ARBOL, ALFONSO (Delegación De Granada), GONZALEZ RIQUELME, ALVARO (Delegación De Granada), ROMERO EGEA, CARLOS (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 5
+      🟥 Tarjetas Rojas: Local 0 | Visitante 1
+   🔎 Analizando Acta: CULLAR VEGA C.F. PORTALHOME vs CLUB DE FUTBOL INTERNACIONAL DE GRANADA (5 - 13) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680406&cod_acta=2680406
+      🏁 Árbitros: BERBEL HERNÁNDEZ, MANUEL (Delegación De Granada), BERBEL HERNANDEZ, JAVIER (Delegación De Granada), BOLIVAR ALONSO, AITOR (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. ATLÉTICO LA ZUBIA vs FUTBOL CLUB GABIA 1932 (6 - 113) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680407&cod_acta=2680407
+      🏁 Árbitros: FERNANDEZ OLIVER, JOSE ANTONIO (Delegación De Granada), RAMOS CACERES, LEONARDO (Delegación De Granada), HUERTAS GONZALEZ, DIEGO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 4
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: ATARFE INDUSTRIAL C.F. vs PURULLENA C.F. (47 - 213) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680408&cod_acta=2680408
+      🏁 Árbitros: MUÑOZ LUQUE, JOSE MARIA (Delegación De Granada), LOPEZ ASENSIO, RAÚL (Delegación De Granada), ORANTES TUNARU, JAVIER (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 5
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.F. VILLANUEVA MESÍA vs ALMUÑECAR C.F. (0 - 13) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680401&cod_acta=2680401
+      🏁 Árbitros: BERBEL HERNANDEZ, JAVIER (Delegación De Granada), BERBEL HERNÁNDEZ, MANUEL (Delegación De Granada), AGUILAR LUCENA, ALEJANDRO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: CLUB DE FÚTBOL IMPERIO DE ALBOLOTE vs C.D. VANDALIA DE PELIGROS C.F. (4 - 613) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680404&cod_acta=2680404
+      🏁 Árbitros: LOPEZ MAROTO, MIGUEL (Delegación De Granada), VALDIVIA TITOS, DAVID (Delegación De Granada), MARTIN MANTAS, JUAN PABLO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 2
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: MONTEFRIO C.F. vs C. D. ALOMARTES CLUB DE FÚTBOL (113 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680402&cod_acta=2680402
+      🏁 Árbitros: GONZALEZ ARAGON, GERMAN (Delegación De Granada), ROLDAN CABRERA, GONZALO (Delegación De Granada), MAZA LOPEZ, GONZALO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 2
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: SALAR C.F. vs ÁGUILAS DE ZUJÁIRA C.F. (0 - 13) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680409&cod_acta=2680409
+      🏁 Árbitros: PERTIÑEZ ALCOBA, RAFAEL JULIAN (Delegación De Granada), MORENO CÓRDOBA, BLAS (Delegación De Granada), CARRERAS RUIZ, ALEJANDRO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 2
+      🟥 Tarjetas Rojas: Local 0 | Visitante 1
+   🔎 Analizando Acta: A.D.F. COSTA TROPICAL vs CELTIC C.F. PULIANAS (2 - 513) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680405&cod_acta=2680405
+      🏁 Árbitros: MARTINEZ URQUIZAR, RAUL (Delegación De Granada), SUALIS MEDINA, MARIO ATREYU (Delegación De Granada), LORENTE CERVILLA, CARLOS (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 2
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   ❌ Error procesando jornada 1 - 13-09-2026: {'message': 'invalid input syntax for type integer: "bailon_arbol_alfonso"', 'code': '22P02', 'hint': None, 'details': None}
+
+📅 --- 2 - 20-09-2026 ---
+   🔎 Analizando Acta: ALMUÑECAR C.F. vs SALAR C.F. (5 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680410&cod_acta=2680410
+      🏁 Árbitros: GONZALEZ AMIGO, SAMUEL (Delegación De Granada), MARTINEZ AGUILERA, JOSE MARIA (Delegación De Granada), DE LA TORRE MORENO, AMAYA (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. VANDALIA DE PELIGROS C.F. vs C.D. SANTA FE (20 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680413&cod_acta=2680413
+      🏁 Árbitros: SANJUAN PEREZ, MARIANO JERONIMO (Delegación De Granada), SOTO EGEA, JUAN FRANCISCO (Delegación De Granada), CARRERAS RUIZ, ALEJANDRO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 3
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: CLUB DE FUTBOL INTERNACIONAL DE GRANADA vs A.D.F. COSTA TROPICAL (6 - 120) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680415&cod_acta=2680415
+      🏁 Árbitros: BERBEL HERNANDEZ, ELOY (Delegación De Granada), BERBEL HERNÁNDEZ, MANUEL (Delegación De Granada), ROLDAN CABRERA, GONZALO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 4
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: PURULLENA C.F. vs C.D. ATLÉTICO LA ZUBIA (3 - 120) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680417&cod_acta=2680417
+      🏁 Árbitros: MIÑÁN MOLINA, PABLO DAVID (Delegación De Granada), BAILON ARBOL, ALFONSO (Delegación De Granada), AGUILAR LUCENA, ALEJANDRO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 2
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. ATLETICO MONACHIL vs MONTEFRIO C.F. (120 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680412&cod_acta=2680412
+      🏁 Árbitros: PEREZ ALONSO, JAVIER (Delegación De Granada), MINGO HARO, NICOLAS (Delegación De Granada), CAUMONS ROMÁN, DEY (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 3
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: CELTIC C.F. PULIANAS vs CLUB DE FÚTBOL IMPERIO DE ALBOLOTE (3 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680414&cod_acta=2680414
+      🏁 Árbitros: GONZALEZ SALAZAR, IVAN GABRIEL (Delegación De Granada), LOPEZ DE LA CUEVA, JORGE (Delegación De Granada), GARCIA GARRIDO, DIEGO (Delegación De Granada)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 3
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C. D. ALOMARTES CLUB DE FÚTBOL vs C.F. VILLANUEVA MESÍA (0 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680411&cod_acta=2680411
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: ÁGUILAS DE ZUJÁIRA C.F. vs ATARFE INDUSTRIAL C.F. (3 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680418&cod_acta=2680418
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: FUTBOL CLUB GABIA 1932 vs CULLAR VEGA C.F. PORTALHOME (2 - 420) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2680416&cod_acta=2680416
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   ❌ Error procesando jornada 2 - 20-09-2026: {'message': 'invalid input syntax for type integer: "gonzalez_amigo_samuel"', 'code': '22P02', 'hint': None, 'details': None}
+
+📅 --- 3 - 27-09-2026 ---
+
+📅 --- 4 - 04-10-2026 ---
+   ❌ Error procesando jornada 4 - 04-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 5 - 11-10-2026 ---
+   ❌ Error procesando jornada 5 - 11-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 6 - 18-10-2026 ---
+   ❌ Error procesando jornada 6 - 18-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 7 - 25-10-2026 ---
+   ❌ Error procesando jornada 7 - 25-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 8 - 01-11-2026 ---
+   ❌ Error procesando jornada 8 - 01-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 9 - 08-11-2026 ---
+   ❌ Error procesando jornada 9 - 08-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 10 - 15-11-2026 ---
+   ❌ Error procesando jornada 10 - 15-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 11 - 22-11-2026 ---
+   ❌ Error procesando jornada 11 - 22-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 12 - 29-11-2026 ---
+   ❌ Error procesando jornada 12 - 29-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 13 - 06-12-2026 ---
+   ❌ Error procesando jornada 13 - 06-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 14 - 13-12-2026 ---
+   ❌ Error procesando jornada 14 - 13-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 15 - 20-12-2026 ---
+   ❌ Error procesando jornada 15 - 20-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 16 - 03-01-2027 ---
+   ❌ Error procesando jornada 16 - 03-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 17 - 10-01-2027 ---
+   ❌ Error procesando jornada 17 - 10-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 18 - 17-01-2027 ---
+   ❌ Error procesando jornada 18 - 17-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 19 - 24-01-2027 ---
+   ❌ Error procesando jornada 19 - 24-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 20 - 31-01-2027 ---
+   ❌ Error procesando jornada 20 - 31-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 21 - 07-02-2027 ---
+   ❌ Error procesando jornada 21 - 07-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 22 - 14-02-2027 ---
+   ❌ Error procesando jornada 22 - 14-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 23 - 21-02-2027 ---
+   ❌ Error procesando jornada 23 - 21-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 24 - 28-02-2027 ---
+   ❌ Error procesando jornada 24 - 28-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 25 - 03-03-2027 ---
+   ❌ Error procesando jornada 25 - 03-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 26 - 07-03-2027 ---
+   ❌ Error procesando jornada 26 - 07-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 27 - 14-03-2027 ---
+   ❌ Error procesando jornada 27 - 14-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 28 - 21-03-2027 ---
+   ❌ Error procesando jornada 28 - 21-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 29 - 28-03-2027 ---
+   ❌ Error procesando jornada 29 - 28-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 30 - 04-04-2027 ---
+   ❌ Error procesando jornada 30 - 04-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 31 - 11-04-2027 ---
+   ❌ Error procesando jornada 31 - 11-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 32 - 18-04-2027 ---
+   ❌ Error procesando jornada 32 - 18-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 33 - 25-04-2027 ---
+   ❌ Error procesando jornada 33 - 25-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 34 - 02-05-2027 ---
+   ❌ Error procesando jornada 34 - 02-05-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+======================================================
+⚽ Competición: 1ª Andaluza Senior (Cordoba) | Grupo: Grupo Unico
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo Unico: Page.goto: Timeout 35000ms exceeded.
+Call log:
+  - navigating to "https://www.rfaf.es/pnfg/NPcd/NFG_CmpJornada?cod_primaria=1000120", waiting until "networkidle"
+
+
+======================================================
+⚽ Competición: 1ª Andaluza Senior (Huelva) | Grupo: GRUPO ÚNICO
+======================================================
+
+📅 --- 1 - 13-09-2026 ---
+   🔎 Analizando Acta: AYAMONTE C.F. vs C.F. OLIMPICA VALVERDEÑA (5 - 113) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639987&cod_acta=2639987
+      🏁 Árbitros: BARROSO PEREZ, SERGIO (Delegación De Huelva), BORRERO MÁRQUEZ, DANIEL (Delegación De Huelva), BENITEZ CALAÑAS, JESUS JAVIER (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. PUNTA UMBRIA vs ARACENA CLUB DE FUTBOL (4 - 413) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639988&cod_acta=2639988
+      🏁 Árbitros: SANCHEZ MORENO, SERGIO (Delegación De Huelva), MARQUEZ ARROYO, ÁLVARO (Delegación De Huelva), MORA VILLEGAS, PABLO (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: SAN ROQUE DE LEPE C.D., S.A.D. vs C.D. CANELA (3 - 313) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639995&cod_acta=2639995
+      🏁 Árbitros: DIAZ ACOSTA, SERGIO (Delegación De Huelva), FORTES POMARES, CARMELO (Delegación De Huelva), RODRIGUEZ MIRA, MANUEL (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. LAMIYA vs C.D. ROCIANA (2 - 113) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639991&cod_acta=2639991
+      🏁 Árbitros: MARTINEZ ROSA, RAFAEL (Delegación De Huelva), LÓPEZ BURGOS, JORGE (Delegación De Huelva), MARQUEZ GONZALEZ, PEDRO (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: BEAS C.F. vs CARTAYA A.D. (1 - 13) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639993&cod_acta=2639993
+      🏁 Árbitros: BENITEZ ANTONIO, RAUL (Delegación De Huelva), RAGGIO ORILLAN, OLIVER (Delegación De Huelva), BORRERO TORRES, JOSÉ RAMÓN (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 2
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: ATLETICO CALAÑAS "AC" vs C.D. BONARES (0 - 13) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639989&cod_acta=2639989
+      🏁 Árbitros: BARRAGAN HERNANDEZ, JOSE LUIS (Delegación De Huelva), FERRERA MACÍAS, ALBERTO (Delegación De Huelva), DOMINGUEZ SUAREZ, ALEJANDRO (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 5
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. RUBIAS vs ATLETICO CRUCEÑO C.F. (9 - 313) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639990&cod_acta=2639990
+      🏁 Árbitros: GONZALEZ MARTINEZ, FRANCISCO ANGEL (Delegación De Huelva), DOMINGUEZ ANAYA, MOISES (Delegación De Huelva), CALVO TENOR , VICTOR (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: ALMONTE BALOMPIE vs PINZON C.D. (113 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639992&cod_acta=2639992
+      🏁 Árbitros: CASILLAS DOMINGUEZ, IVAN (Delegación De Huelva), BORRERO AITLOUCHI, JAIME (Delegación De Huelva), BARBA SALAS, JOSE MANUEL (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. TRIGUEROS BALOMPIE vs RIOTINTO BALOMPIE (31 - 13) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639994&cod_acta=2639994
+      🏁 Árbitros: SANCHEZ ANGULO, MANUEL (Delegación De Huelva), MORA RANDO, JUAN PEDRO (Delegación De Huelva), CARBALLO BARRASO, RICARDO (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 4
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   ❌ Error procesando jornada 1 - 13-09-2026: {'message': 'invalid input syntax for type integer: "barroso_perez_sergio"', 'code': '22P02', 'hint': None, 'details': None}
+
+📅 --- 2 - 20-09-2026 ---
+   🔎 Analizando Acta: C.F. OLIMPICA VALVERDEÑA vs SAN ROQUE DE LEPE C.D., S.A.D. (4 - 520) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639996&cod_acta=2639996
+      🏁 Árbitros: BERNAL PEREZ, ANGEL (Delegación De Huelva), GARCIA CARRASCO, MANUEL JESUS (Delegación De Huelva), DINAR ETTOUIZI, ANÁS (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 2 | Visitante 3
+      🟥 Tarjetas Rojas: Local 1 | Visitante 0
+   🔎 Analizando Acta: ARACENA CLUB DE FUTBOL vs AYAMONTE C.F. (0 - 320) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639997&cod_acta=2639997
+      🏁 Árbitros: PICOS PANIAGUA, DAVID (Delegación De Huelva), MARQUEZ GONZALEZ, PEDRO (Delegación De Huelva), GONZALEZ VAZQUEZ, DANIEL (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 3
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: CARTAYA A.D. vs ALMONTE BALOMPIE (120 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2640002&cod_acta=2640002
+      🏁 Árbitros: LOZANO GOMEZ, MANUEL MARIA (Delegación De Huelva), MORA RANDO, JUAN PEDRO (Delegación De Huelva), ROMERO GUZMAN , FELIX (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 1 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. BONARES vs C.D. PUNTA UMBRIA (2 - 120) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639998&cod_acta=2639998
+      🏁 Árbitros: MARQUEZ VELO, JOSE DE JESUS (Delegación De Huelva), BORRERO AITLOUCHI, JAIME (Delegación De Huelva), GARRIDO AQUINO, FRANCISCO MANUEL (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 4 | Visitante 5
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: ATLETICO CRUCEÑO C.F. vs ATLETICO CALAÑAS "AC" (2 - 220) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2639999&cod_acta=2639999
+      🏁 Árbitros: LUNA FLORES, SERGIO (Delegación De Huelva), LÓPEZ BURGOS, JORGE (Delegación De Huelva), GIRALDO GODOY, SAUL (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 3 | Visitante 3
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. CANELA vs C.D. TRIGUEROS BALOMPIE (5 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2640004&cod_acta=2640004
+      🏁 Árbitros: ISCAR ACOSTA, PABLO (Delegación De Huelva), ALDEA CASAU, JAIRO (Delegación De Huelva), BARROSO NAVARRO, HECTOR (Delegación De Huelva)
+      🟨 Tarjetas Amarillas: Local 5 | Visitante 1
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: C.D. ROCIANA vs C.D. RUBIAS (420 - 9) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2640000&cod_acta=2640000
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: PINZON C.D. vs C.D. LAMIYA (0 - 20) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2640001&cod_acta=2640001
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   🔎 Analizando Acta: RIOTINTO BALOMPIE vs BEAS C.F. (2 - 220) -> https://www.rfaf.es/pnfg/NPcd/NFG_CmpPartido?cod_primaria=1000120&CodActa=2812161&cod_acta=2812161
+      🏁 Árbitros: No asignado
+      🟨 Tarjetas Amarillas: Local 0 | Visitante 0
+      🟥 Tarjetas Rojas: Local 0 | Visitante 0
+   ❌ Error procesando jornada 2 - 20-09-2026: {'message': 'invalid input syntax for type integer: "bernal_perez_angel"', 'code': '22P02', 'hint': None, 'details': None}
+
+📅 --- 3 - 27-09-2026 ---
+
+📅 --- 4 - 04-10-2026 ---
+   ❌ Error procesando jornada 4 - 04-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 5 - 11-10-2026 ---
+   ❌ Error procesando jornada 5 - 11-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 6 - 18-10-2026 ---
+   ❌ Error procesando jornada 6 - 18-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 7 - 25-10-2026 ---
+   ❌ Error procesando jornada 7 - 25-10-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 8 - 01-11-2026 ---
+   ❌ Error procesando jornada 8 - 01-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 9 - 08-11-2026 ---
+   ❌ Error procesando jornada 9 - 08-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 10 - 15-11-2026 ---
+   ❌ Error procesando jornada 10 - 15-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 11 - 22-11-2026 ---
+   ❌ Error procesando jornada 11 - 22-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 12 - 29-11-2026 ---
+   ❌ Error procesando jornada 12 - 29-11-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 13 - 06-12-2026 ---
+   ❌ Error procesando jornada 13 - 06-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 14 - 08-12-2026 ---
+   ❌ Error procesando jornada 14 - 08-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 15 - 13-12-2026 ---
+   ❌ Error procesando jornada 15 - 13-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 16 - 20-12-2026 ---
+   ❌ Error procesando jornada 16 - 20-12-2026: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 17 - 03-01-2027 ---
+   ❌ Error procesando jornada 17 - 03-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 18 - 10-01-2027 ---
+   ❌ Error procesando jornada 18 - 10-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 19 - 17-01-2027 ---
+   ❌ Error procesando jornada 19 - 17-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 20 - 24-01-2027 ---
+   ❌ Error procesando jornada 20 - 24-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 21 - 31-01-2027 ---
+   ❌ Error procesando jornada 21 - 31-01-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 22 - 07-02-2027 ---
+   ❌ Error procesando jornada 22 - 07-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 23 - 14-02-2027 ---
+   ❌ Error procesando jornada 23 - 14-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 24 - 21-02-2027 ---
+   ❌ Error procesando jornada 24 - 21-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 25 - 28-02-2027 ---
+   ❌ Error procesando jornada 25 - 28-02-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 26 - 07-03-2027 ---
+   ❌ Error procesando jornada 26 - 07-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 27 - 14-03-2027 ---
+   ❌ Error procesando jornada 27 - 14-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 28 - 21-03-2027 ---
+   ❌ Error procesando jornada 28 - 21-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 29 - 28-03-2027 ---
+   ❌ Error procesando jornada 29 - 28-03-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 30 - 04-04-2027 ---
+   ❌ Error procesando jornada 30 - 04-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 31 - 11-04-2027 ---
+   ❌ Error procesando jornada 31 - 11-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 32 - 18-04-2027 ---
+   ❌ Error procesando jornada 32 - 18-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 33 - 25-04-2027 ---
+   ❌ Error procesando jornada 33 - 25-04-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+📅 --- 34 - 02-05-2027 ---
+   ❌ Error procesando jornada 34 - 02-05-2027: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#jornada")
+
+
+======================================================
+⚽ Competición: 1ª Andaluza Sénior (Jaén) | Grupo: Grupo Único
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo Único: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#competicion")
+
+
+======================================================
+⚽ Competición: 1ª Andaluza Sénior (Almería) | Grupo: Grupo Unico
+======================================================
+   ⚠️ Error de navegación inicial en grupo Grupo Unico: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("select#competicion")
+
+
+🎉 Extracción completa finalizada. Datos 100% listos en Supabase.
