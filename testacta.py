@@ -1,3 +1,4 @@
+
 import re
 import time
 import unicodedata
@@ -882,14 +883,14 @@ def main():
         "TOTAL TARJETAS INDIVIDUALES: "
         f"{sum(len(r['tarjetas_individuales']) for r in resultados)}"
     )
-    print(
-        "ERRORES TOTALES: "
-        f"{sum(
-            len(r.get('errores_individuales', [])) +
-            len(r.get('errores_tarjetas', []))
-            for r in resultados
-        )}"
+
+    # CORRECCION: calcular antes de imprimir para evitar el SyntaxError.
+    errores_totales = sum(
+        len(r.get("errores_individuales", []))
+        + len(r.get("errores_tarjetas", []))
+        for r in resultados
     )
+    print("ERRORES TOTALES:", errores_totales)
 
     with open(
         "resultados_j1_j2_j3.txt",
