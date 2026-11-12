@@ -26,8 +26,6 @@ COMPETICION = "División Honor Sénior"
 COMPETICION_ID = rfaf.COMPETICION_ID
 
 ESPERA_ENTRE_ACTAS = 1
-
-# Se espera encontrar exactamente dos grupos.
 NUMERO_GRUPOS_ESPERADO = 2
 
 
@@ -41,18 +39,43 @@ def limpiar(texto):
 
 def obtener_opciones(page, selector):
 
-    return page.locator(
+    opciones = page.locator(
         selector
     ).evaluate(
         """
         select => Array.from(select.options)
             .map(o => ({
-                value: o.value,
+                value: o.value.trim(),
                 texto: o.textContent.trim()
             }))
-            .filter(o => o.value !== "")
         """
     )
+
+    opciones_validas = []
+
+    for opcion in opciones:
+
+        valor = str(opcion["value"]).strip()
+        texto = limpiar(opcion["texto"])
+
+        texto_normalizado = texto.lower()
+
+        # Ignorar opciones vacías y opciones de selección.
+        if not valor or valor == "0":
+            continue
+
+        if "seleccione" in texto_normalizado:
+            continue
+
+        if texto_normalizado in ("--", "-", "seleccionar"):
+            continue
+
+        opciones_validas.append({
+            "value": valor,
+            "texto": texto
+        })
+
+    return opciones_validas
 
 
 def seleccionar_competicion(page):
@@ -110,11 +133,12 @@ def descubrir_grupos(page):
 
         raise RuntimeError(
             "Se esperaban exactamente "
-            f"{NUMERO_GRUPOS_ESPERADO} grupos, "
+            f"{NUMERO_GRUPOS_ESPERADO} grupos reales, "
             f"pero se han encontrado {len(grupos)}: {grupos}"
         )
 
     for grupo in grupos:
+
         print(
             f"Grupo detectado: {grupo['texto']} "
             f"| ID: {grupo['value']}"
@@ -150,24 +174,32 @@ def descubrir_jornadas(page, grupo):
         valor = str(opcion["value"]).strip()
         texto = str(opcion["texto"]).strip()
 
-        coincidencia = re.search(
-            r"\d+",
+        # En primer lugar intentamos obtener el número
+        # desde el valor real de la opción.
+        coincidencia = re.fullmatch(
+            r"\s*(\d+)\s*",
             valor
         )
 
+        # Si el valor no es numérico, buscamos el número
+        # al principio del texto de la jornada.
         if not coincidencia:
-            coincidencia = re.search(
-                r"\d+",
+
+            coincidencia = re.match(
+                r"\s*(\d+)",
                 texto
             )
 
         if not coincidencia:
             continue
 
-        jornada = int(coincidencia.group())
+        numero = int(coincidencia.group(1))
 
-        jornadas[jornada] = {
-            "numero": jornada,
+        if numero <= 0:
+            continue
+
+        jornadas[numero] = {
+            "numero": numero,
             "valor": valor,
             "texto": texto
         }
@@ -182,6 +214,7 @@ def descubrir_jornadas(page, grupo):
     )
 
     for jornada in resultado:
+
         print(
             f"  Jornada {jornada['numero']} "
             f"| {jornada['texto']}"
@@ -305,7 +338,6 @@ def extraer_jornada(
     )
     print("=" * 100)
 
-    # Actualizamos el grupo utilizado por testacta.py.
     rfaf.GRUPO_ID = grupo["value"]
 
     rfaf.cargar_jornada(
@@ -353,7 +385,6 @@ def extraer_jornada(
 
         try:
 
-            # Volvemos a cargar el calendario antes de cada acta.
             rfaf.GRUPO_ID = grupo["value"]
 
             rfaf.cargar_jornada(
@@ -573,9 +604,7 @@ def guardar_partido(
 
     if errores:
 
-        print(
-            "\nERROR DE VERIFICACIÓN:"
-        )
+        print("\nERROR DE VERIFICACIÓN:")
 
         for error in errores:
             print("-", error)
@@ -624,6 +653,12 @@ def main():
             "Falta SUPABASE_KEY en las variables de entorno."
         )
 
+    if not SUPABASE_URL:
+
+        raise RuntimeError(
+            "Falta SUPABASE_URL en las variables de entorno."
+        )
+
     print("\nRFAF - DIVISIÓN HONOR SÉNIOR")
     print("=" * 100)
 
@@ -662,12 +697,14 @@ def main():
 
                 print("\n\n")
                 print("#" * 100)
+
                 print(
                     "PROCESANDO",
                     grupo["texto"].upper(),
                     "| ID:",
                     grupo["value"]
                 )
+
                 print("#" * 100)
 
                 jornadas = descubrir_jornadas(
@@ -738,7 +775,7 @@ def main():
     print("=" * 100)
 
     print("Competición:", COMPETICION)
-    print("Grupos detectados:", NUMERO_GRUPOS_ESPERADO)
+    print("Grupos detectados:", len(grupos))
     print("Jornadas examinadas:", total_jornadas)
     print("Actas procesadas:", total_actas)
 
