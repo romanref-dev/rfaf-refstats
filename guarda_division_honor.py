@@ -1,4 +1,3 @@
-
 import os
 import re
 import sys
@@ -442,11 +441,36 @@ def extraer_jornada(page, grupo, jornada):
     )
     print("=" * 100)
 
+    # --------------------------------------------------------
+    # PRIMERO: COMPROBAR LA FECHA SIN CARGAR LA JORNADA
+    # --------------------------------------------------------
+
+    fecha = obtener_fecha(page, jornada)
+    hoy = fecha_actual_espana()
+
+    print("Fecha de la jornada:", fecha)
+    print("Fecha actual del ordenador:", hoy)
+
+    if fecha > hoy:
+        print()
+        print("JORNADA FUTURA/PENDIENTE")
+        print("No se intenta cargar la jornada.")
+        print("No se buscan enlaces de actas.")
+        print("No se accede a Supabase.")
+        print(
+            f"Jornada {numero_jornada} omitida correctamente."
+        )
+
+        # Se contabiliza una jornada futura omitida.
+        return [], 0, 1
+
+    # --------------------------------------------------------
+    # SI NO ES FUTURA, CARGARLA NORMALMENTE
+    # --------------------------------------------------------
+
     rfaf.GRUPO_ID = grupo["value"]
 
     rfaf.cargar_jornada(page, numero_jornada)
-
-    fecha = obtener_fecha(page, jornada)
 
     actas = page.evaluate(rfaf.JS_ACTAS)
 
@@ -454,33 +478,17 @@ def extraer_jornada(page, grupo, jornada):
         str(acta) for acta in actas
     ))
 
-    print("Fecha:", fecha)
     print("Actas encontradas:", len(actas))
 
     if not actas:
-        print("Jornada sin actas. Se omite.")
-        return [], 0, 0
-
-    # FILTRO DE JORNADAS FUTURAS
-
-    hoy = fecha_actual_espana()
-
-    if fecha > hoy:
-        print()
-        print("JORNADA FUTURA/PENDIENTE")
-        print("Fecha del encuentro:", fecha)
-        print("Fecha actual del ordenador:", hoy)
-        print(
-            f"Se omiten las {len(actas)} actas de esta jornada."
-        )
-        print(
-            "No se abrirán las actas ni se guardarán "
-            "partidos o tarjetas en Supabase."
+        raise RuntimeError(
+            "RFAF no ha cargado ningún enlace de acta "
+            "en una jornada que no es futura."
         )
 
-        return [], 0, len(actas)
-
+    # --------------------------------------------------------
     # PROCESAMIENTO NORMAL
+    # --------------------------------------------------------
 
     equipos_calendario = page.evaluate(rfaf.JS_CALENDARIO)
 
@@ -855,6 +863,8 @@ def main():
     total_errores = 0
     total_omitidos = 0
 
+    grupos = []
+
     with sync_playwright() as playwright:
         navegador = playwright.chromium.launch(headless=True)
 
@@ -950,7 +960,7 @@ def main():
     print("Grupos detectados:", len(grupos))
     print("Jornadas examinadas:", total_jornadas)
     print("Actas procesadas:", total_actas)
-    print("Actas omitidas por fecha futura:", total_omitidos)
+    print("Jornadas futuras omitidas:", total_omitidos)
     print("Partidos extraídos y validados:", total_extraidos)
     print("Partidos guardados y verificados:", total_guardados)
 
