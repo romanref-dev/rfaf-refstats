@@ -26,6 +26,11 @@ JORNADAS = [1, 2, 3]
 ESPERA = 1500
 ESPERA_ENTRE_ACTAS = 1
 
+# Espera de carga de partidos
+ESPERA_ESTABILIDAD = 500
+REPETICIONES_ESTABLES = 5
+INTENTOS_ESTABILIDAD = 40
+
 
 # ============================================================
 # UTILIDADES
@@ -52,6 +57,24 @@ def seleccionar_opcion(page, selector, valor, descripcion):
 
     page.locator(selector).wait_for(
         state="attached",
+        timeout=30000
+    )
+
+    page.wait_for_function(
+        """
+        ({selector, valor}) => {
+            const select = document.querySelector(selector);
+
+            return select &&
+                Array.from(select.options).some(
+                    o => o.value === String(valor)
+                );
+        }
+        """,
+        arg={
+            "selector": selector,
+            "valor": str(valor)
+        },
         timeout=30000
     )
 
@@ -103,38 +126,6 @@ def seleccionar_opcion(page, selector, valor, descripcion):
     page.wait_for_timeout(ESPERA)
 
 
-def cargar_jornada(page, jornada):
-
-    page.goto(
-        URL_BASE,
-        wait_until="domcontentloaded",
-        timeout=60000
-    )
-
-    page.wait_for_timeout(2000)
-
-    seleccionar_opcion(
-        page,
-        "select#competicion",
-        COMPETICION_ID,
-        "Competición"
-    )
-
-    seleccionar_opcion(
-        page,
-        "select#grupo",
-        GRUPO_ID,
-        "Grupo"
-    )
-
-    seleccionar_opcion(
-        page,
-        "select#jornada",
-        str(jornada),
-        f"Jornada {jornada}"
-    )
-
-
 # ============================================================
 # EXTRAER ACTAS
 # ============================================================
@@ -161,12 +152,105 @@ JS_ACTAS = r"""
 """
 
 
+def esperar_actas_estables(page):
+
+    ultimo_numero = -1
+    repeticiones = 0
+    actas = []
+
+    for _ in range(INTENTOS_ESTABILIDAD):
+
+        actas = page.evaluate(JS_ACTAS)
+        numero_actual = len(actas)
+
+        if numero_actual == ultimo_numero:
+            repeticiones += 1
+        else:
+            repeticiones = 0
+            ultimo_numero = numero_actual
+
+        if (
+            numero_actual > 0
+            and repeticiones >= REPETICIONES_ESTABLES
+        ):
+            return actas
+
+        page.wait_for_timeout(ESPERA_ESTABILIDAD)
+
+    if not actas:
+        raise RuntimeError(
+            "RFAF no ha cargado ningún enlace de acta."
+        )
+
+    print(
+        "AVISO: No se confirmó la estabilidad completa "
+        "de los partidos."
+    )
+
+    return actas
+
+
+def cargar_jornada(page, jornada):
+
+    page.goto(
+        URL_BASE,
+        wait_until="domcontentloaded",
+        timeout=60000
+    )
+
+    page.wait_for_timeout(2000)
+
+    seleccionar_opcion(
+        page,
+        "select#competicion",
+        COMPETICION_ID,
+        "Competición"
+    )
+
+    seleccionar_opcion(
+        page,
+        "select#grupo",
+        GRUPO_ID,
+        "Grupo"
+    )
+
+    page.wait_for_timeout(2000)
+
+    seleccionar_opcion(
+        page,
+        "select#jornada",
+        str(jornada),
+        f"Jornada {jornada}"
+    )
+
+    seleccionada = page.locator(
+        "select#jornada"
+    ).input_value()
+
+    if seleccionada != str(jornada):
+        raise RuntimeError(
+            f"Jornada incorrecta. Esperada: {jornada}. "
+            f"Seleccionada: {seleccionada}"
+        )
+
+    print("Esperando a que se carguen todos los partidos...")
+
+    actas = esperar_actas_estables(page)
+
+    print(
+        f"Partidos cargados y estabilizados: {len(actas)}"
+    )
+
+    return actas
+
+
 # ============================================================
 # EXTRAER EQUIPOS DESDE EL CALENDARIO
 # ============================================================
 
 JS_CALENDARIO = r"""
 () => {
+
     const limpiar = t =>
         (t || "").replace(/\s+/g, " ").trim();
 
@@ -188,20 +272,95 @@ JS_CALENDARIO = r"""
 
         if (!fila) continue;
 
-        const celdas = Array.from(
-            fila.querySelectorAll("td")
+        const textoFila = limpiar(fila.innerText);
+
+        /*
+         * Formato habitual:
+         *
+         * EQUIPO LOCAL - FECHA HORA EQUIPO VISITANTE
+         *
+         * También puede aparecer un marcador antes
+         * de la fecha:
+         *
+         * EQUIPO LOCAL - 1 FECHA HORA EQUIPO VISITANTE
+         */
+
+        const fecha = textoFila.match(
+            /(\d{2}-\d{2}-\d{4}\s+\d{1,2}:\d{2})/
         );
 
-        if (celdas.length < 3) continue;
+        let local = null;
+        let visitante = null;
 
-        const local = limpiar(celdas[0].innerText);
-        const visitante = limpiar(celdas[2].innerText);
+        if (fecha) {
+
+            const posicion = fecha.index;
+
+            const parteLocal = limpiar(
+                textoFila.substring(0, posicion)
+            );
+
+            const parteVisitante = limpiar(
+                textoFila.substring(
+                    posicion + fecha[0].length
+                )
+            );
+
+            /*
+             * Eliminamos el separador y el posible
+             * marcador que aparece antes de la fecha.
+             */
+
+            const localMatch = parteLocal.match(
+                /^(.*?)\s+-\s*(?:\d+\s*)?$/
+            );
+
+            if (localMatch) {
+                local = limpiar(localMatch[1]);
+            }
+
+            visitante = parteVisitante;
+
+        }
+
+        /*
+         * Alternativa para filas con otra estructura.
+         * Solo se utiliza si no se ha podido identificar
+         * correctamente alguno de los dos equipos.
+         */
+
+        if (!local || !visitante) {
+
+            const celdas = Array.from(
+                fila.querySelectorAll("td")
+            );
+
+            const textos = celdas.map(
+                celda => limpiar(celda.innerText)
+            ).filter(Boolean);
+
+            const candidatos = textos.filter(
+                texto =>
+                    !/^\d{1,2}-\d{1,2}-\d{4}/.test(texto) &&
+                    !/^\d+$/.test(texto)
+            );
+
+            if (!local && candidatos.length >= 2) {
+                local = candidatos[0];
+            }
+
+            if (!visitante && candidatos.length >= 2) {
+                visitante = candidatos[candidatos.length - 1];
+            }
+        }
 
         if (local && visitante) {
+
             partidos[acta] = {
-                local,
-                visitante
+                local: local,
+                visitante: visitante
             };
+
         }
     }
 
@@ -806,12 +965,16 @@ def main():
                 print(f"\nJORNADA {jornada}")
                 print("-" * 140)
 
-                cargar_jornada(page, jornada)
+                actas = cargar_jornada(page, jornada)
 
-                actas = page.evaluate(JS_ACTAS)
-                equipos_calendario = page.evaluate(JS_CALENDARIO)
+                equipos_calendario = page.evaluate(
+                    JS_CALENDARIO
+                )
 
-                print(f"Partidos encontrados: {len(actas)}")
+                print(
+                    f"Partidos con equipos identificados: "
+                    f"{len(equipos_calendario)}"
+                )
 
                 for acta_id in actas:
 
@@ -826,7 +989,6 @@ def main():
 
                     print(mostrar_linea(datos))
 
-                    # Mostrar tarjetas individuales
                     print("  TARJETAS INDIVIDUALES:")
                     mostrar_tarjetas_individuales(datos)
 
