@@ -1,3 +1,4 @@
+
 import os
 import re
 import sys
@@ -461,7 +462,6 @@ def extraer_jornada(page, grupo, jornada):
             f"Jornada {numero_jornada} omitida correctamente."
         )
 
-        # Se contabiliza una jornada futura omitida.
         return [], 0, 1
 
     # --------------------------------------------------------
@@ -568,6 +568,17 @@ def construir_registro(datos):
 
     tarjetas = datos["tarjetas"]
 
+    # Totales generales calculados a partir de ambos equipos.
+    total_amarillas = (
+        tarjetas["amarillas_local"]
+        + tarjetas["amarillas_visitante"]
+    )
+
+    total_rojas = (
+        tarjetas["rojas_local"]
+        + tarjetas["rojas_visitante"]
+    )
+
     return {
         "id": f"rfaf_{acta_id}",
         "acta_id": acta_id,
@@ -587,10 +598,17 @@ def construir_registro(datos):
         "arbitro_nombre": datos["arbitro"],
         "delegacion": datos["delegacion"],
         "delegacion_arbitro": datos["delegacion"],
+
+        # TOTALES GENERALES
+        "tarjetas_amarillas": total_amarillas,
+        "tarjetas_rojas": total_rojas,
+
+        # DESGLOSE POR EQUIPO
         "tarjetas_amarillas_local": tarjetas["amarillas_local"],
         "tarjetas_amarillas_visitante": tarjetas["amarillas_visitante"],
         "tarjetas_rojas_local": tarjetas["rojas_local"],
         "tarjetas_rojas_visitante": tarjetas["rojas_visitante"],
+
         "estado": "Finalizado",
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
@@ -650,10 +668,17 @@ def guardar_partido(supabase, datos):
         "arbitro_nombre",
         "delegacion",
         "delegacion_arbitro",
+
+        # VERIFICAR TOTALES GENERALES
+        "tarjetas_amarillas",
+        "tarjetas_rojas",
+
+        # VERIFICAR DESGLOSE POR EQUIPO
         "tarjetas_amarillas_local",
         "tarjetas_amarillas_visitante",
         "tarjetas_rojas_local",
         "tarjetas_rojas_visitante",
+
         "fecha",
         "jornada",
         "grupo",
