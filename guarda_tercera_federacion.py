@@ -7,28 +7,19 @@ import sys
 import time
 
 from datetime import datetime, timezone
-
-
+from zoneinfo import ZoneInfo
 
 from playwright.sync_api import sync_playwright
 
 from supabase import create_client
 
-
-
 import testacta_tercera as rfaf
-
-
-
-
 
 # ============================================================
 
 # CONFIGURACION
 
 # ============================================================
-
-
 
 SUPABASE_URL = os.getenv(
 
@@ -38,17 +29,11 @@ SUPABASE_URL = os.getenv(
 
 )
 
-
-
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
-
 
 COMPETICION = "3.ª Federación"
 
 COMPETICION_ID = rfaf.COMPETICION_ID
-
-
 
 ESPERA_ENTRE_ACTAS = 1
 
@@ -58,43 +43,32 @@ TEMPORADA_ID = "22"
 
 GRUPOS_ESPERADOS = {"48710553", "48710554"}
 
-
-
-
-
 # ============================================================
 
 # UTILIDADES
 
 # ============================================================
 
-
-
 def limpiar(texto):
 
     return re.sub(r"\s+", " ", texto or "").strip()
 
+def fecha_actual_espana():
 
-
+    return datetime.now(ZoneInfo("Europe/Madrid")).date().isoformat()
 
 
 def normalizar(texto):
 
     return limpiar(texto).casefold()
 
-
 def normalizar_equipo(texto):
 
     # Reutiliza exactamente la normalización validada en testacta.py.
+
     return rfaf.normalizar_equipo(texto)
 
-
-
-
-
 def obtener_opciones(page, selector):
-
-
 
     opciones = page.locator(
 
@@ -118,43 +92,27 @@ def obtener_opciones(page, selector):
 
     )
 
-
-
     opciones_validas = []
 
-
-
     for opcion in opciones:
-
-
 
         valor = str(opcion["value"]).strip()
 
         texto = limpiar(opcion["texto"])
 
-
-
         texto_normalizado = texto.lower()
-
-
 
         if not valor or valor == "0":
 
             continue
 
-
-
         if "seleccione" in texto_normalizado:
 
             continue
 
-
-
         if texto_normalizado in ("--", "-", "seleccionar"):
 
             continue
-
-
 
         opciones_validas.append({
 
@@ -164,17 +122,9 @@ def obtener_opciones(page, selector):
 
         })
 
-
-
     return opciones_validas
 
-
-
-
-
 def seleccionar_competicion(page):
-
-
 
     page.goto(
 
@@ -185,8 +135,6 @@ def seleccionar_competicion(page):
         timeout=60000
 
     )
-
-
 
     page.locator(
 
@@ -200,8 +148,6 @@ def seleccionar_competicion(page):
 
     )
 
-
-
     rfaf.seleccionar_opcion(
 
         page,
@@ -214,17 +160,9 @@ def seleccionar_competicion(page):
 
     )
 
-
-
-
-
 def cargar_grupo(page, grupo_id):
 
-
-
     seleccionar_competicion(page)
-
-
 
     rfaf.seleccionar_opcion(
 
@@ -238,31 +176,19 @@ def cargar_grupo(page, grupo_id):
 
     )
 
-
-
-
-
 # ============================================================
 
 # DESCUBRIR GRUPOS
 
 # ============================================================
 
-
-
 def descubrir_grupos(page):
-
-
 
     print("\nDESCUBRIENDO GRUPOS")
 
     print("=" * 90)
 
-
-
     seleccionar_competicion(page)
-
-
 
     grupos = obtener_opciones(
 
@@ -272,29 +198,35 @@ def descubrir_grupos(page):
 
     )
 
-
-
     if len(grupos) != NUMERO_GRUPOS_ESPERADO:
+
         raise RuntimeError(
+
             "Se esperaban exactamente "
+
             f"{NUMERO_GRUPOS_ESPERADO} grupos reales, "
+
             f"pero se han encontrado {len(grupos)}: {grupos}"
+
         )
 
     ids_detectados = {str(grupo["value"]) for grupo in grupos}
+
     if ids_detectados != GRUPOS_ESPERADOS:
+
         raise RuntimeError(
+
             "Los grupos detectados no coinciden con los IDs configurados "
+
             f"para 3.ª Federación. Esperados: {sorted(GRUPOS_ESPERADOS)}; "
+
             f"detectados: {sorted(ids_detectados)}. Se cancela para evitar "
+
             "guardar datos en una competición o grupo incorrecto."
+
         )
 
-
-
     for grupo in grupos:
-
-
 
         print(
 
@@ -304,13 +236,7 @@ def descubrir_grupos(page):
 
         )
 
-
-
     return grupos
-
-
-
-
 
 # ============================================================
 
@@ -318,19 +244,13 @@ def descubrir_grupos(page):
 
 # ============================================================
 
-
-
 def descubrir_jornadas(page, grupo):
-
-
 
     print(
 
         f"\nDESCUBRIENDO JORNADAS: {grupo['texto']}"
 
     )
-
-
 
     cargar_grupo(
 
@@ -340,8 +260,6 @@ def descubrir_jornadas(page, grupo):
 
     )
 
-
-
     opciones = obtener_opciones(
 
         page,
@@ -350,21 +268,13 @@ def descubrir_jornadas(page, grupo):
 
     )
 
-
-
     jornadas = {}
 
-
-
     for opcion in opciones:
-
-
 
         valor = str(opcion["value"]).strip()
 
         texto = str(opcion["texto"]).strip()
-
-
 
         coincidencia = re.fullmatch(
 
@@ -374,11 +284,7 @@ def descubrir_jornadas(page, grupo):
 
         )
 
-
-
         if not coincidencia:
-
-
 
             coincidencia = re.match(
 
@@ -388,23 +294,15 @@ def descubrir_jornadas(page, grupo):
 
             )
 
-
-
         if not coincidencia:
 
             continue
 
-
-
         numero = int(coincidencia.group(1))
-
-
 
         if numero <= 0:
 
             continue
-
-
 
         jornadas[numero] = {
 
@@ -416,8 +314,6 @@ def descubrir_jornadas(page, grupo):
 
         }
 
-
-
     resultado = sorted(
 
         jornadas.values(),
@@ -426,19 +322,13 @@ def descubrir_jornadas(page, grupo):
 
     )
 
-
-
     print(
 
         f"Jornadas encontradas: {len(resultado)}"
 
     )
 
-
-
     for jornada in resultado:
-
-
 
         print(
 
@@ -448,13 +338,7 @@ def descubrir_jornadas(page, grupo):
 
         )
 
-
-
     return resultado
-
-
-
-
 
 # ============================================================
 
@@ -462,15 +346,9 @@ def descubrir_jornadas(page, grupo):
 
 # ============================================================
 
-
-
 def obtener_fecha(page, jornada):
 
-
-
     texto = limpiar(jornada.get("texto", ""))
-
-
 
     coincidencia = re.search(
 
@@ -480,11 +358,7 @@ def obtener_fecha(page, jornada):
 
     )
 
-
-
     if not coincidencia:
-
-
 
         texto = page.locator(
 
@@ -504,8 +378,6 @@ def obtener_fecha(page, jornada):
 
         )
 
-
-
         coincidencia = re.search(
 
             r"(\d{1,2})-(\d{1,2})-(\d{4})",
@@ -514,11 +386,7 @@ def obtener_fecha(page, jornada):
 
         )
 
-
-
     if not coincidencia:
-
-
 
         raise RuntimeError(
 
@@ -528,17 +396,9 @@ def obtener_fecha(page, jornada):
 
         )
 
-
-
     dia, mes, anio = coincidencia.groups()
 
-
-
     return f"{anio}-{int(mes):02d}-{int(dia):02d}"
-
-
-
-
 
 # ============================================================
 
@@ -546,21 +406,13 @@ def obtener_fecha(page, jornada):
 
 # ============================================================
 
-
-
 def validar_tarjetas_individuales(datos):
-
-
 
     tarjetas = datos.get("tarjetas", {})
 
     individuales = datos.get("tarjetas_individuales")
 
-
-
     if not isinstance(individuales, list):
-
-
 
         raise RuntimeError(
 
@@ -568,19 +420,13 @@ def validar_tarjetas_individuales(datos):
 
         )
 
-
-
     errores_individuales = datos.get(
 
         "errores_individuales"
 
     )
 
-
-
     if errores_individuales:
-
-
 
         raise RuntimeError(
 
@@ -590,8 +436,6 @@ def validar_tarjetas_individuales(datos):
 
         )
 
-
-
     for numero, tarjeta in enumerate(
 
         individuales,
@@ -600,19 +444,13 @@ def validar_tarjetas_individuales(datos):
 
     ):
 
-
-
         if not isinstance(tarjeta, dict):
-
-
 
             raise RuntimeError(
 
                 f"La tarjeta {numero} no tiene formato válido."
 
             )
-
-
 
         campos = [
 
@@ -626,15 +464,9 @@ def validar_tarjetas_individuales(datos):
 
         ]
 
-
-
         for campo in campos:
 
-
-
             if not limpiar(str(tarjeta.get(campo) or "")):
-
-
 
                 raise RuntimeError(
 
@@ -642,15 +474,9 @@ def validar_tarjetas_individuales(datos):
 
                 )
 
-
-
         tipo = str(tarjeta["tipo"]).lower().strip()
 
-
-
         if tipo not in ("amarilla", "roja"):
-
-
 
             raise RuntimeError(
 
@@ -658,17 +484,13 @@ def validar_tarjetas_individuales(datos):
 
             )
 
-
-
         if not re.fullmatch(
 
-            r"\d+(?:\+\d+)?",
+            r"\d+(?:**\\+**\d+)?",
 
             str(tarjeta["minuto"]).strip()
 
         ):
-
-
 
             raise RuntimeError(
 
@@ -677,8 +499,6 @@ def validar_tarjetas_individuales(datos):
                 f"{tarjeta['minuto']}"
 
             )
-
-
 
     total_esperado = sum([
 
@@ -692,11 +512,7 @@ def validar_tarjetas_individuales(datos):
 
     ])
 
-
-
     if len(individuales) != total_esperado:
-
-
 
         raise RuntimeError(
 
@@ -707,8 +523,6 @@ def validar_tarjetas_individuales(datos):
             f"individuales frente a {total_esperado} totales."
 
         )
-
-
 
     equipos = {
 
@@ -730,8 +544,6 @@ def validar_tarjetas_individuales(datos):
 
     }
 
-
-
     recuento = {
 
         equipo: {
@@ -746,19 +558,11 @@ def validar_tarjetas_individuales(datos):
 
     }
 
-
-
     for tarjeta in individuales:
-
-
 
         equipo = normalizar_equipo(tarjeta["equipo"])
 
-
-
         if equipo not in recuento:
-
-
 
             raise RuntimeError(
 
@@ -768,31 +572,17 @@ def validar_tarjetas_individuales(datos):
 
             )
 
-
-
         tipo = str(tarjeta["tipo"]).lower().strip()
-
-
 
         recuento[equipo][tipo] += 1
 
-
-
     for equipo, esperados in equipos.items():
-
-
 
         obtenidos = recuento[equipo]
 
-
-
         for tipo in ("amarilla", "roja"):
 
-
-
             if obtenidos[tipo] != esperados[tipo]:
-
-
 
                 raise RuntimeError(
 
@@ -804,13 +594,7 @@ def validar_tarjetas_individuales(datos):
 
                 )
 
-
-
     return True
-
-
-
-
 
 # ============================================================
 
@@ -818,28 +602,29 @@ def validar_tarjetas_individuales(datos):
 
 # ============================================================
 
-
-
 def validar(datos):
-
 
     if datos.get("estado") != "OK":
 
         raise RuntimeError(
-            f"El extractor no ha marcado el acta como OK: "
-            f"{datos.get('estado')!r}"
-        )
 
+            f"El extractor no ha marcado el acta como OK: "
+
+            f"{datos.get('estado')!r}"
+
+        )
 
     errores_tarjetas = datos.get("errores_tarjetas") or []
 
     if errores_tarjetas:
 
         raise RuntimeError(
-            "La extracción de totales de tarjetas contiene errores: "
-            f"{errores_tarjetas}"
-        )
 
+            "La extracción de totales de tarjetas contiene errores: "
+
+            f"{errores_tarjetas}"
+
+        )
 
     obligatorios = [
 
@@ -855,16 +640,15 @@ def validar(datos):
 
     ]
 
-
-
     if not all(obligatorios):
 
         raise RuntimeError(
+
             "Faltan datos obligatorios del partido "
+
             "(local, visitante, resultado, árbitro o fecha)."
+
         )
-
-
 
     if not re.fullmatch(
 
@@ -874,19 +658,13 @@ def validar(datos):
 
     ):
 
-
-
         raise RuntimeError(
 
             "Marcador no válido."
 
         )
 
-
-
     tarjetas = datos.get("tarjetas", {})
-
-
 
     campos = [
 
@@ -900,19 +678,11 @@ def validar(datos):
 
     ]
 
-
-
     for campo in campos:
-
-
 
         valor = tarjetas.get(campo)
 
-
-
         if type(valor) is not int or valor < 0:
-
-
 
             raise RuntimeError(
 
@@ -920,18 +690,13 @@ def validar(datos):
 
             )
 
-
-
     if type(tarjetas.get("sin_asignar")) is not int or tarjetas.get("sin_asignar") != 0:
-
-
 
         raise RuntimeError(
 
             "Hay tarjetas sin asignar o el contador no está verificado."
 
         )
-
 
     if type(tarjetas.get("total")) is not int or tarjetas.get("total") < 0:
 
@@ -941,7 +706,6 @@ def validar(datos):
 
         )
 
-
     suma = sum(
 
         tarjetas[campo]
@@ -950,18 +714,13 @@ def validar(datos):
 
     )
 
-
-
     if suma != tarjetas.get("total"):
-
-
 
         raise RuntimeError(
 
             "El total de tarjetas no coincide."
 
         )
-
 
     individuales = datos.get("tarjetas_individuales")
 
@@ -970,28 +729,20 @@ def validar(datos):
         raise RuntimeError(
 
             "El número de tarjetas individuales no coincide con "
+
             "las imágenes detectadas en el acta."
 
         )
 
-
     validar_tarjetas_individuales(datos)
 
-
-
     return True
-
-
-
-
 
 # ============================================================
 
 # EXTRAER UNA JORNADA
 
 # ============================================================
-
-
 
 def extraer_jornada(
 
@@ -1003,11 +754,7 @@ def extraer_jornada(
 
 ):
 
-
-
     numero_jornada = jornada["numero"]
-
-
 
     print("\n" + "=" * 100)
 
@@ -1021,11 +768,24 @@ def extraer_jornada(
 
     print("=" * 100)
 
+    # Comprobamos la fecha antes de cargar los partidos.
+    # Así una jornada futura no llega a abrir actas ni a Supabase.
+    fecha = obtener_fecha(page, jornada)
+    hoy = fecha_actual_espana()
 
+    print("Fecha de la jornada:", fecha)
+    print("Fecha actual en España:", hoy)
+
+    if fecha > hoy:
+
+        print()
+        print("JORNADA FUTURA / PENDIENTE")
+        print("No se carga ni se procesa ninguna acta.")
+        print(f"Jornada {numero_jornada} omitida correctamente.")
+
+        return [], 0, 1
 
     rfaf.GRUPO_ID = grupo["value"]
-
-
 
     rfaf.cargar_jornada(
 
@@ -1035,25 +795,11 @@ def extraer_jornada(
 
     )
 
-
-
-    fecha = obtener_fecha(
-
-        page,
-
-        jornada
-
-    )
-
-
-
     actas = page.evaluate(
 
         rfaf.JS_ACTAS
 
     )
-
-
 
     actas = list(dict.fromkeys(
 
@@ -1061,43 +807,25 @@ def extraer_jornada(
 
     ))
 
-
-
     equipos_calendario = page.evaluate(
 
         rfaf.JS_CALENDARIO
 
     )
 
-
-
-    print("Fecha:", fecha)
-
     print("Actas encontradas:", len(actas))
-
-
 
     if not actas:
 
+        print("Jornada sin enlaces de acta. Se omite.")
 
-
-        print(
-
-            "Jornada sin actas. Se omite."
-
-        )
-
-
-
-        return [], 0
-
-
+        return [], 0, 0
 
     resultados = []
 
     errores = 0
 
-
+    omitidos = 0
 
     for numero, acta_id in enumerate(
 
@@ -1107,8 +835,6 @@ def extraer_jornada(
 
     ):
 
-
-
         print(
 
             f"\n[{numero}/{len(actas)}] "
@@ -1117,15 +843,9 @@ def extraer_jornada(
 
         )
 
-
-
         try:
 
-
-
             rfaf.GRUPO_ID = grupo["value"]
-
-
 
             rfaf.cargar_jornada(
 
@@ -1134,8 +854,6 @@ def extraer_jornada(
                 numero_jornada
 
             )
-
-
 
             datos = rfaf.procesar_acta(
 
@@ -1149,7 +867,28 @@ def extraer_jornada(
 
             )
 
+            # Un acta sin marcador verificable todavía no corresponde
+            # a un partido disputado. No se guarda ni se considera error.
+            if not datos.get("resultado"):
 
+                estado = str(datos.get("estado") or "")
+
+                if estado.startswith("ERROR:"):
+
+                    raise RuntimeError(estado)
+
+                omitidos += 1
+
+                print(
+
+                    "PARTIDO PENDIENTE / NO DISPUTADO | "
+                    f"ACTA {acta_id} | Sin marcador. Se omite."
+
+                )
+
+                time.sleep(ESPERA_ENTRE_ACTAS)
+
+                continue
 
             datos["fecha"] = fecha
 
@@ -1157,25 +896,15 @@ def extraer_jornada(
 
             datos["jornada"] = numero_jornada
 
-
-
             datos["grupo"] = grupo["texto"]
 
             datos["id_grupo"] = grupo["value"]
 
-
-
             validar(datos)
-
-
 
             resultados.append(datos)
 
-
-
             tarjetas = datos["tarjetas"]
-
-
 
             print(
 
@@ -1203,15 +932,9 @@ def extraer_jornada(
 
             )
 
-
-
         except Exception as error:
 
-
-
             errores += 1
-
-
 
             print(
 
@@ -1221,17 +944,9 @@ def extraer_jornada(
 
             )
 
-
-
         time.sleep(ESPERA_ENTRE_ACTAS)
 
-
-
-    return resultados, errores
-
-
-
-
+    return resultados, errores, omitidos
 
 # ============================================================
 
@@ -1239,19 +954,11 @@ def extraer_jornada(
 
 # ============================================================
 
-
-
 def construir_registro(datos):
-
-
 
     validar(datos)
 
-
-
     acta_id = str(datos["acta_id"])
-
-
 
     goles_local, goles_visitante = map(
 
@@ -1261,11 +968,7 @@ def construir_registro(datos):
 
     )
 
-
-
     tarjetas = datos["tarjetas"]
-
-
 
     return {
 
@@ -1273,33 +976,23 @@ def construir_registro(datos):
 
         "acta_id": acta_id,
 
-
-
         "fecha": datos["fecha"],
 
         "categoria": COMPETICION,
 
         "competicion": COMPETICION,
 
-
-
         "grupo": datos["grupo"],
 
         "id_grupo": datos["id_grupo"],
-
-
 
         "jornada": datos["jornada"],
 
         "id_jornada": datos["jornada"],
 
-
-
         "equipo_local": datos["local"],
 
         "equipo_visitante": datos["visitante"],
-
-
 
         "goles_local": goles_local,
 
@@ -1307,59 +1000,45 @@ def construir_registro(datos):
 
         "resultado": datos["resultado"],
 
-
-
         "arbitro": datos["arbitro"],
 
         "arbitro_nombre": datos["arbitro"],
-
-
 
         "delegacion": datos["delegacion"],
 
         "delegacion_arbitro": datos["delegacion"],
 
-
-
         "tarjetas_amarillas_local":
 
             tarjetas["amarillas_local"],
-
-
 
         "tarjetas_amarillas_visitante":
 
             tarjetas["amarillas_visitante"],
 
-
-
         "tarjetas_rojas_local":
 
             tarjetas["rojas_local"],
-
-
 
         "tarjetas_rojas_visitante":
 
             tarjetas["rojas_visitante"],
 
-
-
         "tarjetas_amarillas": (
+
             tarjetas["amarillas_local"] + tarjetas["amarillas_visitante"]
+
         ),
 
         "tarjetas_rojas": (
+
             tarjetas["rojas_local"] + tarjetas["rojas_visitante"]
+
         ),
 
         "jugadores_tarjetas": datos["tarjetas_individuales"],
 
-
-
         "estado": "Finalizado",
-
-
 
         "updated_at": datetime.now(
 
@@ -1369,17 +1048,11 @@ def construir_registro(datos):
 
     }
 
-
-
-
-
 # ============================================================
 
 # COMPARAR VALORES
 
 # ============================================================
-
-
 
 def valores_coinciden(
 
@@ -1391,29 +1064,17 @@ def valores_coinciden(
 
 ):
 
-
-
     if campo in ("jornada", "id_jornada"):
-
-
 
         return str(esperado) == str(obtenido)
 
-
-
     return esperado == obtenido
-
-
-
-
 
 # ============================================================
 
 # GUARDAR Y VERIFICAR PARTIDO
 
 # ============================================================
-
-
 
 def guardar_partido(
 
@@ -1423,23 +1084,15 @@ def guardar_partido(
 
 ):
 
-
-
     registro = construir_registro(datos)
 
-
-
     acta_id = registro["acta_id"]
-
-
 
     print(
 
         f"Guardando acta {acta_id}..."
 
     )
-
-
 
     supabase.table(
 
@@ -1452,8 +1105,6 @@ def guardar_partido(
         on_conflict="acta_id"
 
     ).execute()
-
-
 
     respuesta = (
 
@@ -1469,15 +1120,9 @@ def guardar_partido(
 
     )
 
-
-
     filas = respuesta.data or []
 
-
-
     if len(filas) != 1:
-
-
 
         raise RuntimeError(
 
@@ -1487,11 +1132,7 @@ def guardar_partido(
 
         )
 
-
-
     fila = filas[0]
-
-
 
     campos = [
 
@@ -1541,21 +1182,13 @@ def guardar_partido(
 
     ]
 
-
-
     errores = []
 
-
-
     for campo in campos:
-
-
 
         esperado = registro.get(campo)
 
         obtenido = fila.get(campo)
-
-
 
         if not valores_coinciden(
 
@@ -1567,8 +1200,6 @@ def guardar_partido(
 
         ):
 
-
-
             errores.append(
 
                 f"{campo}: esperado {esperado!r}, "
@@ -1577,21 +1208,13 @@ def guardar_partido(
 
             )
 
-
-
     if errores:
 
-
-
         print("\nERROR DE VERIFICACIÓN:")
-
-
 
         for error in errores:
 
             print("-", error)
-
-
 
         raise RuntimeError(
 
@@ -1601,13 +1224,7 @@ def guardar_partido(
 
         )
 
-
-
     return fila
-
-
-
-
 
 # ============================================================
 
@@ -1615,21 +1232,13 @@ def guardar_partido(
 
 # ============================================================
 
-
-
 def construir_registros_tarjetas(datos):
 
-
-
     validar_tarjetas_individuales(datos)
-
-
 
     acta_id = str(datos["acta_id"])
 
     partido_id = f"rfaf_{acta_id}"
-
-
 
     ahora = datetime.now(
 
@@ -1637,11 +1246,7 @@ def construir_registros_tarjetas(datos):
 
     ).isoformat()
 
-
-
     registros = []
-
-
 
     for numero, tarjeta in enumerate(
 
@@ -1651,21 +1256,13 @@ def construir_registros_tarjetas(datos):
 
     ):
 
-
-
         registros.append({
 
-
-
             "partido_id": partido_id,
-
-
 
             "acta_id": acta_id,
 
             "numero_tarjeta": numero,
-
-
 
             "competicion": COMPETICION,
 
@@ -1675,17 +1272,11 @@ def construir_registros_tarjetas(datos):
 
             "fecha": datos["fecha"],
 
-
-
             "equipo": limpiar(tarjeta["equipo"]),
 
             "jugador": limpiar(tarjeta["jugador"]),
 
-
-
             "minuto": str(tarjeta["minuto"]).strip(),
-
-
 
             "tipo_persona": "jugador",
 
@@ -1695,27 +1286,17 @@ def construir_registros_tarjetas(datos):
 
             ).lower().strip(),
 
-
-
             "updated_at": ahora
 
         })
 
-
-
     return registros
-
-
-
-
 
 # ============================================================
 
 # GUARDAR TARJETAS INDIVIDUALES
 
 # ============================================================
-
-
 
 def guardar_tarjetas_individuales(
 
@@ -1725,19 +1306,13 @@ def guardar_tarjetas_individuales(
 
 ):
 
-
-
     acta_id = str(datos["acta_id"])
-
-
 
     registros = construir_registros_tarjetas(
 
         datos
 
     )
-
-
 
     print(
 
@@ -1747,13 +1322,9 @@ def guardar_tarjetas_individuales(
 
     )
 
-
-
     # Primero insertamos o actualizamos las tarjetas.
 
     if registros:
-
-
 
         supabase.table(
 
@@ -1766,8 +1337,6 @@ def guardar_tarjetas_individuales(
             on_conflict="acta_id,numero_tarjeta"
 
         ).execute()
-
-
 
     # Eliminamos posibles tarjetas sobrantes de una
 
@@ -1785,11 +1354,7 @@ def guardar_tarjetas_individuales(
 
     )
 
-
-
     if registros:
-
-
 
         consulta = consulta.gt(
 
@@ -1799,11 +1364,7 @@ def guardar_tarjetas_individuales(
 
         )
 
-
-
     consulta.execute()
-
-
 
     # Comprobamos lo que realmente quedó guardado.
 
@@ -1829,15 +1390,9 @@ def guardar_tarjetas_individuales(
 
     )
 
-
-
     filas = respuesta.data or []
 
-
-
     if len(filas) != len(registros):
-
-
 
         raise RuntimeError(
 
@@ -1849,8 +1404,6 @@ def guardar_tarjetas_individuales(
 
         )
 
-
-
     for esperado, obtenido in zip(
 
         registros,
@@ -1858,8 +1411,6 @@ def guardar_tarjetas_individuales(
         filas
 
     ):
-
-
 
         campos = [
 
@@ -1877,15 +1428,9 @@ def guardar_tarjetas_individuales(
 
         ]
 
-
-
         for campo in campos:
 
-
-
             if str(esperado[campo]) != str(obtenido[campo]):
-
-
 
                 raise RuntimeError(
 
@@ -1901,13 +1446,7 @@ def guardar_tarjetas_individuales(
 
                 )
 
-
-
     return len(filas)
-
-
-
-
 
 # ============================================================
 
@@ -1915,15 +1454,9 @@ def guardar_tarjetas_individuales(
 
 # ============================================================
 
-
-
 def mostrar_partido(datos):
 
-
-
     tarjetas = datos["tarjetas"]
-
-
 
     print(
 
@@ -1953,25 +1486,15 @@ def mostrar_partido(datos):
 
     )
 
-
-
-
-
 # ============================================================
 
 # MAIN
 
 # ============================================================
 
-
-
 def main():
 
-
-
     if not SUPABASE_KEY:
-
-
 
         raise RuntimeError(
 
@@ -1979,11 +1502,7 @@ def main():
 
         )
 
-
-
     if not SUPABASE_URL:
-
-
 
         raise RuntimeError(
 
@@ -1991,21 +1510,17 @@ def main():
 
         )
 
-
-
     print("\nRFAF - 3.ª FEDERACIÓN")
 
     print("=" * 100)
 
-
-
     print("Competición:", COMPETICION)
 
     print("ID competición:", COMPETICION_ID)
+
     print("Temporada:", TEMPORADA_ID)
+
     print("Grupos esperados:", ", ".join(sorted(GRUPOS_ESPERADOS)))
-
-
 
     supabase = create_client(
 
@@ -2014,8 +1529,6 @@ def main():
         SUPABASE_KEY
 
     )
-
-
 
     total_jornadas = 0
 
@@ -2029,19 +1542,17 @@ def main():
 
     total_errores = 0
 
+    total_omitidos = 0
 
+    grupos = []
 
     with sync_playwright() as playwright:
-
-
 
         navegador = playwright.chromium.launch(
 
             headless=True
 
         )
-
-
 
         page = navegador.new_page(
 
@@ -2055,25 +1566,15 @@ def main():
 
         )
 
-
-
         try:
-
-
 
             grupos = descubrir_grupos(page)
 
-
-
             for grupo in grupos:
-
-
 
                 print("\n\n")
 
                 print("#" * 100)
-
-
 
                 print(
 
@@ -2087,11 +1588,7 @@ def main():
 
                 )
 
-
-
                 print("#" * 100)
-
-
 
                 jornadas = descubrir_jornadas(
 
@@ -2101,21 +1598,13 @@ def main():
 
                 )
 
-
-
                 for jornada in jornadas:
-
-
 
                     total_jornadas += 1
 
-
-
                     try:
 
-
-
-                        partidos, errores = extraer_jornada(
+                        partidos, errores, omitidos = extraer_jornada(
 
                             page,
 
@@ -2125,23 +1614,17 @@ def main():
 
                         )
 
-
-
                         total_actas += len(partidos) + errores
 
                         total_extraidos += len(partidos)
 
                         total_errores += errores
 
-
+                        total_omitidos += omitidos
 
                         for datos in partidos:
 
-
-
                             try:
-
-
 
                                 # Guardar primero el partido.
 
@@ -2153,15 +1636,9 @@ def main():
 
                                 )
 
-
-
                                 total_guardados += 1
 
-
-
                                 mostrar_partido(datos)
-
-
 
                                 # Después guardar sus tarjetas.
 
@@ -2173,11 +1650,7 @@ def main():
 
                                 )
 
-
-
                                 total_tarjetas_guardadas += cantidad
-
-
 
                                 print(
 
@@ -2187,15 +1660,9 @@ def main():
 
                                 )
 
-
-
                             except Exception as error:
 
-
-
                                 total_errores += 1
-
-
 
                                 print(
 
@@ -2209,15 +1676,9 @@ def main():
 
                                 )
 
-
-
                     except Exception as error:
 
-
-
                         total_errores += 1
-
-
 
                         print(
 
@@ -2229,15 +1690,9 @@ def main():
 
                         )
 
-
-
         finally:
 
-
-
             navegador.close()
-
-
 
     # ========================================================
 
@@ -2245,15 +1700,11 @@ def main():
 
     # ========================================================
 
-
-
     print("\n" + "=" * 100)
 
     print("RESUMEN FINAL")
 
     print("=" * 100)
-
-
 
     print("Competición:", COMPETICION)
 
@@ -2263,7 +1714,7 @@ def main():
 
     print("Actas procesadas:", total_actas)
 
-
+    print("Jornadas / partidos omitidos por estar pendientes:", total_omitidos)
 
     print(
 
@@ -2273,8 +1724,6 @@ def main():
 
     )
 
-
-
     print(
 
         "Partidos guardados y verificados:",
@@ -2282,8 +1731,6 @@ def main():
         total_guardados
 
     )
-
-
 
     print(
 
@@ -2293,8 +1740,6 @@ def main():
 
     )
 
-
-
     print(
 
         "Errores:",
@@ -2303,15 +1748,9 @@ def main():
 
     )
 
-
-
     print("\nProceso terminado.")
 
-
-
     if total_errores > 0:
-
-
 
         print(
 
@@ -2321,32 +1760,18 @@ def main():
 
         )
 
-
-
         sys.exit(1)
 
-
-
-
-
 if __name__ == "__main__":
-
-
 
     try:
 
         main()
 
-
-
     except Exception as error:
-
-
 
         print("\nERROR GENERAL:")
 
         print(error)
-
-
 
         sys.exit(1)
