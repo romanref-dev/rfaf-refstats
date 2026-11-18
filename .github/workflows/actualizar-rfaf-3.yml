@@ -2,6 +2,9 @@ name: Actualizar 3ª Federación RFAF
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 23 * * 0"
+    - cron: "30 8 * * 1"
 
 permissions:
   contents: read

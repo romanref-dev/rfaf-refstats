@@ -3,6 +3,16 @@ name: Actualizar Division de Honor RFAF
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "guarda_division_honor.py"
+      - "config.py"
+      - ".github/workflows/actualizar-rfaf.yml"
+  schedule:
+    - cron: "30 22 * * 0"
+    - cron: "0 8 * * 1"
 
 permissions:
   contents: read
