@@ -2,6 +2,12 @@ name: Actualizar 1ª Andaluza Sénior (8 Provincias)
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "guarda_primera_andaluza.py"
+      - ".github/workflows/actualizar-primera-andaluza.yml"
   schedule:
     - cron: "30 23 * * 0"
     - cron: "0 9 * * 1"
