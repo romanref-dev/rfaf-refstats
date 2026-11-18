@@ -1,33 +1,26 @@
-
 import re
 import time
 import unicodedata
 from playwright.sync_api import sync_playwright
 
+import config
 
 # ============================================================
 # CONFIGURACION
 # ============================================================
 
-URL_BASE = (
-    "https://www.rfaf.es/pnfg/NPcd/"
-    "NFG_CmpJornada?cod_primaria=1000120"
-)
+URL_BASE = config.URL_BASE
+URL_ACTA_BASE = config.URL_ACTA_BASE
 
-URL_ACTA_BASE = (
-    "https://www.rfaf.es/pnfg/NPcd/"
-    "NFG_CmpPartido?cod_primaria=1000120&CodActa={id}&cod_acta={id}"
-)
-
-COMPETICION_ID = "48466530"
+COMPETICION_ID = config.COD_COMPETICION_DH
 GRUPO_ID = "49641343"
 JORNADAS = [1, 2, 3]
 
-ESPERA = 1500
-ESPERA_ENTRE_ACTAS = 1
-ESPERA_ESTABILIDAD = 500
-REPETICIONES_ESTABLES = 5
-INTENTOS_ESTABILIDAD = 40
+ESPERA = config.ESPERA_MS
+ESPERA_ENTRE_ACTAS = config.ESPERA_ENTRE_ACTAS
+ESPERA_ESTABILIDAD = config.ESPERA_ESTABILIDAD_MS
+REPETICIONES_ESTABLES = config.REPETICIONES_ESTABLES
+INTENTOS_ESTABILIDAD = config.INTENTOS_ESTABILIDAD
 
 
 # ============================================================
@@ -50,7 +43,7 @@ def normalizar(texto):
 def normalizar_equipo(texto):
     """
     El calendario puede mostrar el marcador pegado al nombre:
-    'LA PALMA C.F. 3'. Elimina ese numero final.
+    'LA PALMA C.F. 3'. Elimina ese número final.
     """
     texto = normalizar(texto)
     texto = re.sub(r"\s+\d{1,2}\s*$", "", texto)
@@ -164,7 +157,10 @@ def esperar_actas_estables(page):
     return actas
 
 
-def cargar_jornada(page, jornada):
+def cargar_jornada(page, jornada, competicion_id=None, grupo_id=None):
+    comp_id = competicion_id or COMPETICION_ID
+    grp_id = grupo_id or GRUPO_ID
+
     page.goto(
         URL_BASE,
         wait_until="domcontentloaded",
@@ -173,10 +169,10 @@ def cargar_jornada(page, jornada):
     page.wait_for_timeout(2000)
 
     seleccionar_opcion(
-        page, "select#competicion", COMPETICION_ID, "Competición"
+        page, "select#competicion", comp_id, "Competición"
     )
     seleccionar_opcion(
-        page, "select#grupo", GRUPO_ID, "Grupo"
+        page, "select#grupo", grp_id, "Grupo"
     )
 
     page.wait_for_timeout(2000)
@@ -419,9 +415,11 @@ JS_ARBITRO = r"""
     const patron = /\s+DELEGACI[ÓO]N\s+DE\s+(.+)$/i;
     const m = texto.match(patron);
 
+    const limpiarNombre = t => (t || "").replace(/\s+,/g, ",").replace(/\s+/g, " ").trim();
+
     return {
-        arbitro: m ? texto.substring(0, m.index).trim() : texto,
-        delegacion: m ? m[1].trim() : null
+        arbitro: limpiarNombre(m ? texto.substring(0, m.index) : texto),
+        delegacion: m ? limpiarNombre(m[1]) : null
     };
 }
 """
@@ -813,10 +811,19 @@ def mostrar_tarjetas_individuales(r):
 # MAIN
 # ============================================================
 
-def main():
+def ejecutar_prueba(
+    competicion_id=None,
+    grupo_id=None,
+    jornadas=None,
+    archivo_salida="resultados_j1_j2_j3.txt",
+    titulo="RFAF - JORNADAS 1, 2 Y 3"
+):
+    comp_id = competicion_id or COMPETICION_ID
+    grp_id = grupo_id or GRUPO_ID
+    lista_jornadas = jornadas or JORNADAS
     resultados = []
 
-    print("\nRFAF - JORNADAS 1, 2 Y 3")
+    print(f"\n{titulo}")
     print("=" * 140)
 
     with sync_playwright() as playwright:
@@ -826,11 +833,16 @@ def main():
         )
 
         try:
-            for jornada in JORNADAS:
+            for jornada in lista_jornadas:
                 print(f"\nJORNADA {jornada}")
                 print("-" * 140)
 
-                actas = cargar_jornada(page, jornada)
+                actas = cargar_jornada(
+                    page,
+                    jornada,
+                    competicion_id=comp_id,
+                    grupo_id=grp_id
+                )
                 equipos_calendario = page.evaluate(JS_CALENDARIO)
 
                 print(
@@ -858,7 +870,7 @@ def main():
     print("\n" + "=" * 140)
     print("RESUMEN")
 
-    for jornada in JORNADAS:
+    for jornada in lista_jornadas:
         partidos = [r for r in resultados if r["jornada"] == jornada]
         correctos = sum(1 for r in partidos if r["estado"] == "OK")
         tarjetas_individuales = sum(
@@ -884,7 +896,6 @@ def main():
         f"{sum(len(r['tarjetas_individuales']) for r in resultados)}"
     )
 
-    # CORRECCION: calcular antes de imprimir para evitar el SyntaxError.
     errores_totales = sum(
         len(r.get("errores_individuales", []))
         + len(r.get("errores_tarjetas", []))
@@ -893,7 +904,7 @@ def main():
     print("ERRORES TOTALES:", errores_totales)
 
     with open(
-        "resultados_j1_j2_j3.txt",
+        archivo_salida,
         "w",
         encoding="utf-8"
     ) as archivo:
@@ -919,8 +930,12 @@ def main():
             for error in r.get("errores_individuales", []):
                 archivo.write("    ERROR INDIVIDUAL: " + error + "\n")
 
-    print("Archivo generado: resultados_j1_j2_j3.txt")
+    print(f"Archivo generado: {archivo_salida}")
     print("No se ha conectado ni escrito nada en Supabase.")
+
+
+def main():
+    ejecutar_prueba()
 
 
 if __name__ == "__main__":

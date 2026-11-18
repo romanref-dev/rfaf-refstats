@@ -1,13 +1,14 @@
-
 import os
 import re
 import sys
 import time
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 from playwright.sync_api import sync_playwright
 from supabase import create_client
 
+import config
 import testacta as rfaf
 
 
@@ -15,18 +16,15 @@ import testacta as rfaf
 # CONFIGURACION
 # ============================================================
 
-SUPABASE_URL = os.getenv(
-    "SUPABASE_URL",
-    "https://ijczoeyfgnngocstxgfb.supabase.co"
-)
+SUPABASE_URL = config.SUPABASE_URL
+SUPABASE_KEY = config.SUPABASE_KEY
 
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+COMPETICION = config.COMPETICION_DH
+COMPETICION_ID = config.COD_COMPETICION_DH
 
-COMPETICION = "División Honor Sénior"
-COMPETICION_ID = rfaf.COMPETICION_ID
-
-ESPERA_ENTRE_ACTAS = 1
+ESPERA_ENTRE_ACTAS = config.ESPERA_ENTRE_ACTAS
 NUMERO_GRUPOS_ESPERADO = 2
+GRUPOS_ESPERADOS = config.GRUPOS_ESPERADOS_DH
 
 
 # ============================================================
@@ -34,7 +32,7 @@ NUMERO_GRUPOS_ESPERADO = 2
 # ============================================================
 
 def limpiar(texto):
-    return re.sub(r"\s+", " ", texto or "").strip()
+    return re.sub(r"\s+,", ",", re.sub(r"\s+", " ", texto or "")).strip()
 
 
 def normalizar(texto):
@@ -46,7 +44,7 @@ def normalizar_equipo(texto):
 
 
 def fecha_actual_espana():
-    return datetime.now().date().isoformat()
+    return datetime.now(ZoneInfo("Europe/Madrid")).date().isoformat()
 
 
 def obtener_opciones(page, selector):
@@ -83,7 +81,9 @@ def obtener_opciones(page, selector):
     return opciones_validas
 
 
-def seleccionar_competicion(page):
+def seleccionar_competicion(page, competicion_id=None):
+    comp_id = competicion_id or COMPETICION_ID
+
     page.goto(
         rfaf.URL_BASE,
         wait_until="domcontentloaded",
@@ -98,13 +98,13 @@ def seleccionar_competicion(page):
     rfaf.seleccionar_opcion(
         page,
         "select#competicion",
-        COMPETICION_ID,
+        comp_id,
         "Competición"
     )
 
 
-def cargar_grupo(page, grupo_id):
-    seleccionar_competicion(page)
+def cargar_grupo(page, grupo_id, competicion_id=None):
+    seleccionar_competicion(page, competicion_id=competicion_id)
 
     rfaf.seleccionar_opcion(
         page,
@@ -118,11 +118,16 @@ def cargar_grupo(page, grupo_id):
 # DESCUBRIR GRUPOS
 # ============================================================
 
-def descubrir_grupos(page):
+def descubrir_grupos(
+    page,
+    competicion_id=None,
+    grupos_esperados=None,
+    nombre_competicion=None
+):
     print("\nDESCUBRIENDO GRUPOS")
     print("=" * 90)
 
-    seleccionar_competicion(page)
+    seleccionar_competicion(page, competicion_id=competicion_id)
 
     grupos = obtener_opciones(page, "select#grupo")
 
@@ -132,6 +137,17 @@ def descubrir_grupos(page):
             f"{NUMERO_GRUPOS_ESPERADO} grupos reales, "
             f"pero se han encontrado {len(grupos)}: {grupos}"
         )
+
+    if grupos_esperados:
+        ids_detectados = {str(grupo["value"]) for grupo in grupos}
+        if ids_detectados != set(grupos_esperados):
+            etiqueta = nombre_competicion or COMPETICION
+            raise RuntimeError(
+                "Los grupos detectados no coinciden con los IDs configurados "
+                f"para {etiqueta}. Esperados: {sorted(grupos_esperados)}; "
+                f"detectados: {sorted(ids_detectados)}. Se cancela para evitar "
+                "guardar datos en una competición o grupo incorrecto."
+            )
 
     for grupo in grupos:
         print(
@@ -146,10 +162,10 @@ def descubrir_grupos(page):
 # DESCUBRIR JORNADAS
 # ============================================================
 
-def descubrir_jornadas(page, grupo):
+def descubrir_jornadas(page, grupo, competicion_id=None):
     print(f"\nDESCUBRIENDO JORNADAS: {grupo['texto']}")
 
-    cargar_grupo(page, grupo["value"])
+    cargar_grupo(page, grupo["value"], competicion_id=competicion_id)
 
     opciones = obtener_opciones(page, "select#jornada")
 
@@ -432,7 +448,8 @@ def validar(datos):
 # EXTRAER UNA JORNADA
 # ============================================================
 
-def extraer_jornada(page, grupo, jornada):
+def extraer_jornada(page, grupo, jornada, competicion_id=None, omitir_sin_marcador=True):
+    comp_id = competicion_id or COMPETICION_ID
     numero_jornada = jornada["numero"]
 
     print("\n" + "=" * 100)
@@ -450,14 +467,12 @@ def extraer_jornada(page, grupo, jornada):
     hoy = fecha_actual_espana()
 
     print("Fecha de la jornada:", fecha)
-    print("Fecha actual del ordenador:", hoy)
+    print("Fecha actual en España:", hoy)
 
     if fecha > hoy:
         print()
-        print("JORNADA FUTURA/PENDIENTE")
-        print("No se intenta cargar la jornada.")
-        print("No se buscan enlaces de actas.")
-        print("No se accede a Supabase.")
+        print("JORNADA FUTURA / PENDIENTE")
+        print("No se carga ni se procesa ninguna acta.")
         print(
             f"Jornada {numero_jornada} omitida correctamente."
         )
@@ -465,12 +480,18 @@ def extraer_jornada(page, grupo, jornada):
         return [], 0, 1
 
     # --------------------------------------------------------
-    # SI NO ES FUTURA, CARGARLA NORMALMENTE
+    # SI NO ES FUTURA, CARGARLA UNA SOLA VEZ POR JORNADA
     # --------------------------------------------------------
 
+    rfaf.COMPETICION_ID = comp_id
     rfaf.GRUPO_ID = grupo["value"]
 
-    rfaf.cargar_jornada(page, numero_jornada)
+    rfaf.cargar_jornada(
+        page,
+        numero_jornada,
+        competicion_id=comp_id,
+        grupo_id=grupo["value"]
+    )
 
     actas = page.evaluate(rfaf.JS_ACTAS)
 
@@ -478,22 +499,26 @@ def extraer_jornada(page, grupo, jornada):
         str(acta) for acta in actas
     ))
 
+    equipos_calendario = page.evaluate(rfaf.JS_CALENDARIO)
+
     print("Actas encontradas:", len(actas))
 
     if not actas:
+        if omitir_sin_marcador:
+            print("Jornada sin enlaces de acta. Se omite.")
+            return [], 0, 0
         raise RuntimeError(
             "RFAF no ha cargado ningún enlace de acta "
             "en una jornada que no es futura."
         )
 
     # --------------------------------------------------------
-    # PROCESAMIENTO NORMAL
+    # PROCESAMIENTO DE CADA ACTA (SIN RECARGAR EL CALENDARIO)
     # --------------------------------------------------------
-
-    equipos_calendario = page.evaluate(rfaf.JS_CALENDARIO)
 
     resultados = []
     errores = 0
+    omitidos = 0
 
     for numero, acta_id in enumerate(actas, start=1):
         print(
@@ -502,16 +527,25 @@ def extraer_jornada(page, grupo, jornada):
         )
 
         try:
-            rfaf.GRUPO_ID = grupo["value"]
-
-            rfaf.cargar_jornada(page, numero_jornada)
-
             datos = rfaf.procesar_acta(
                 page,
                 numero_jornada,
                 acta_id,
                 equipos_calendario
             )
+
+            if omitir_sin_marcador and not datos.get("resultado"):
+                estado = str(datos.get("estado") or "")
+                if estado.startswith("ERROR:"):
+                    raise RuntimeError(estado)
+
+                omitidos += 1
+                print(
+                    "PARTIDO PENDIENTE / NO DISPUTADO | "
+                    f"ACTA {acta_id} | Sin marcador. Se omite."
+                )
+                time.sleep(ESPERA_ENTRE_ACTAS)
+                continue
 
             datos["fecha"] = fecha
             datos["acta_id"] = str(acta_id)
@@ -549,16 +583,21 @@ def extraer_jornada(page, grupo, jornada):
 
         time.sleep(ESPERA_ENTRE_ACTAS)
 
-    return resultados, errores, 0
+    return resultados, errores, omitidos
 
 
 # ============================================================
 # CONSTRUIR REGISTRO SUPABASE: PARTIDO
 # ============================================================
 
-def construir_registro(datos):
+def construir_registro(
+    datos,
+    competicion=None,
+    incluir_jugadores_tarjetas=True
+):
     validar(datos)
 
+    nombre_comp = competicion or COMPETICION
     acta_id = str(datos["acta_id"])
 
     goles_local, goles_visitante = map(
@@ -568,7 +607,6 @@ def construir_registro(datos):
 
     tarjetas = datos["tarjetas"]
 
-    # Totales generales calculados a partir de ambos equipos.
     total_amarillas = (
         tarjetas["amarillas_local"]
         + tarjetas["amarillas_visitante"]
@@ -579,12 +617,12 @@ def construir_registro(datos):
         + tarjetas["rojas_visitante"]
     )
 
-    return {
+    registro = {
         "id": f"rfaf_{acta_id}",
         "acta_id": acta_id,
         "fecha": datos["fecha"],
-        "categoria": COMPETICION,
-        "competicion": COMPETICION,
+        "categoria": nombre_comp,
+        "competicion": nombre_comp,
         "grupo": datos["grupo"],
         "id_grupo": datos["id_grupo"],
         "jornada": datos["jornada"],
@@ -598,20 +636,20 @@ def construir_registro(datos):
         "arbitro_nombre": datos["arbitro"],
         "delegacion": datos["delegacion"],
         "delegacion_arbitro": datos["delegacion"],
-
-        # TOTALES GENERALES
         "tarjetas_amarillas": total_amarillas,
         "tarjetas_rojas": total_rojas,
-
-        # DESGLOSE POR EQUIPO
         "tarjetas_amarillas_local": tarjetas["amarillas_local"],
         "tarjetas_amarillas_visitante": tarjetas["amarillas_visitante"],
         "tarjetas_rojas_local": tarjetas["rojas_local"],
         "tarjetas_rojas_visitante": tarjetas["rojas_visitante"],
-
         "estado": "Finalizado",
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
+
+    if incluir_jugadores_tarjetas:
+        registro["jugadores_tarjetas"] = datos["tarjetas_individuales"]
+
+    return registro
 
 
 # ============================================================
@@ -629,8 +667,17 @@ def valores_coinciden(campo, esperado, obtenido):
 # GUARDAR Y VERIFICAR PARTIDO
 # ============================================================
 
-def guardar_partido(supabase, datos):
-    registro = construir_registro(datos)
+def guardar_partido(
+    supabase,
+    datos,
+    competicion=None,
+    incluir_jugadores_tarjetas=True
+):
+    registro = construir_registro(
+        datos,
+        competicion=competicion,
+        incluir_jugadores_tarjetas=incluir_jugadores_tarjetas
+    )
     acta_id = registro["acta_id"]
 
     print(f"Guardando acta {acta_id}...")
@@ -668,17 +715,12 @@ def guardar_partido(supabase, datos):
         "arbitro_nombre",
         "delegacion",
         "delegacion_arbitro",
-
-        # VERIFICAR TOTALES GENERALES
         "tarjetas_amarillas",
         "tarjetas_rojas",
-
-        # VERIFICAR DESGLOSE POR EQUIPO
         "tarjetas_amarillas_local",
         "tarjetas_amarillas_visitante",
         "tarjetas_rojas_local",
         "tarjetas_rojas_visitante",
-
         "fecha",
         "jornada",
         "grupo",
@@ -686,6 +728,9 @@ def guardar_partido(supabase, datos):
         "competicion",
         "estado"
     ]
+
+    if incluir_jugadores_tarjetas:
+        campos.append("jugadores_tarjetas")
 
     errores = []
 
@@ -717,9 +762,10 @@ def guardar_partido(supabase, datos):
 # CONSTRUIR REGISTROS DE TARJETAS INDIVIDUALES
 # ============================================================
 
-def construir_registros_tarjetas(datos):
+def construir_registros_tarjetas(datos, competicion=None):
     validar_tarjetas_individuales(datos)
 
+    nombre_comp = competicion or COMPETICION
     acta_id = str(datos["acta_id"])
     partido_id = f"rfaf_{acta_id}"
 
@@ -735,7 +781,7 @@ def construir_registros_tarjetas(datos):
             "partido_id": partido_id,
             "acta_id": acta_id,
             "numero_tarjeta": numero,
-            "competicion": COMPETICION,
+            "competicion": nombre_comp,
             "grupo": datos["grupo"],
             "jornada": datos["jornada"],
             "fecha": datos["fecha"],
@@ -756,10 +802,10 @@ def construir_registros_tarjetas(datos):
 # GUARDAR TARJETAS INDIVIDUALES
 # ============================================================
 
-def guardar_tarjetas_individuales(supabase, datos):
+def guardar_tarjetas_individuales(supabase, datos, competicion=None):
     acta_id = str(datos["acta_id"])
 
-    registros = construir_registros_tarjetas(datos)
+    registros = construir_registros_tarjetas(datos, competicion=competicion)
 
     print(
         f"Guardando {len(registros)} tarjetas "
@@ -832,6 +878,107 @@ def guardar_tarjetas_individuales(supabase, datos):
 
 
 # ============================================================
+# SINCRONIZAR TABLA DE ÁRBITROS DESDE PARTIDOS
+# ============================================================
+
+def sincronizar_arbitros_desde_partidos(supabase):
+    """Recalcula y sincroniza las estadísticas acumuladas de la tabla `arbitros` a partir de `partidos`."""
+    print("\nSincronizando tabla 'arbitros' a partir de 'partidos'...")
+
+    respuesta_partidos = (
+        supabase
+        .table("partidos")
+        .select("arbitro,arbitro_nombre,delegacion,delegacion_arbitro,tarjetas_amarillas,tarjetas_rojas")
+        .execute()
+    )
+    partidos_db = respuesta_partidos.data or []
+
+    respuesta_arbitros = (
+        supabase
+        .table("arbitros")
+        .select("id,nombre,delegacion")
+        .execute()
+    )
+    arbitros_db = respuesta_arbitros.data or []
+
+    id_por_nombre = {}
+    delegacion_previa = {}
+    max_id_numerico = 0
+
+    for arb in arbitros_db:
+        nombre_limpio = limpiar(arb.get("nombre") or "")
+        if not nombre_limpio:
+            continue
+        arb_id = str(arb.get("id") or "").strip()
+        id_por_nombre[nombre_limpio] = arb_id
+        if arb.get("delegacion"):
+            delegacion_previa[nombre_limpio] = limpiar(arb["delegacion"])
+        if arb_id.isdigit():
+            max_id_numerico = max(max_id_numerico, int(arb_id))
+
+    agregados = {}
+
+    for p in partidos_db:
+        nombre = limpiar(p.get("arbitro") or p.get("arbitro_nombre") or "")
+        if not nombre:
+            continue
+
+        deleg = limpiar(p.get("delegacion") or p.get("delegacion_arbitro") or "")
+        am = int(p.get("tarjetas_amarillas") or 0)
+        ro = int(p.get("tarjetas_rojas") or 0)
+
+        if nombre not in agregados:
+            agregados[nombre] = {
+                "delegacion": deleg or delegacion_previa.get(nombre),
+                "partidos": 0,
+                "amarillas": 0,
+                "rojas": 0,
+            }
+
+        item = agregados[nombre]
+        if deleg and not item["delegacion"]:
+            item["delegacion"] = deleg
+        item["partidos"] += 1
+        item["amarillas"] += am
+        item["rojas"] += ro
+
+    ahora = datetime.now(timezone.utc).isoformat()
+    registros_arbitros = []
+
+    for nombre in sorted(agregados.keys()):
+        datos_arb = agregados[nombre]
+        arb_id = id_por_nombre.get(nombre)
+        if not arb_id:
+            max_id_numerico += 1
+            arb_id = str(max_id_numerico)
+
+        partidos_dir = datos_arb["partidos"]
+        tot_am = datos_arb["amarillas"]
+        tot_ro = datos_arb["rojas"]
+
+        registros_arbitros.append({
+            "id": arb_id,
+            "nombre": nombre,
+            "delegacion": datos_arb["delegacion"],
+            "partidos_dirigidos": partidos_dir,
+            "total_amarillas": tot_am,
+            "total_rojas": tot_ro,
+            "promedio_amarillas": round(tot_am / partidos_dir, 2) if partidos_dir > 0 else 0.0,
+            "promedio_rojas": round(tot_ro / partidos_dir, 2) if partidos_dir > 0 else 0.0,
+            "updated_at": ahora,
+        })
+
+    if registros_arbitros:
+        supabase.table("arbitros").upsert(
+            registros_arbitros,
+            on_conflict="id"
+        ).execute()
+
+    print(f"Tabla 'arbitros' sincronizada: {len(registros_arbitros)} árbitros actualizados.")
+    return len(registros_arbitros)
+
+
+# ============================================================
 # MOSTRAR PARTIDO
 # ============================================================
 
@@ -855,29 +1002,41 @@ def mostrar_partido(datos):
 
 
 # ============================================================
-# MAIN
+# EJECUCIÓN DE SINCRONIZACIÓN
 # ============================================================
 
-def main():
-    if not SUPABASE_KEY:
+def ejecutar_sincronizacion(
+    competicion=COMPETICION,
+    competicion_id=COMPETICION_ID,
+    grupos_esperados=None,
+    incluir_jugadores_tarjetas=True,
+    omitir_sin_marcador=True,
+    titulo="RFAF - DIVISIÓN HONOR SÉNIOR"
+):
+    supabase_url = os.getenv("SUPABASE_URL", SUPABASE_URL)
+    supabase_key = os.getenv("SUPABASE_KEY", SUPABASE_KEY)
+
+    if not supabase_key:
         raise RuntimeError(
             "Falta SUPABASE_KEY en las variables de entorno."
         )
 
-    if not SUPABASE_URL:
+    if not supabase_url:
         raise RuntimeError(
             "Falta SUPABASE_URL en las variables de entorno."
         )
 
-    print("\nRFAF - DIVISIÓN HONOR SÉNIOR")
+    print(f"\n{titulo}")
     print("=" * 100)
-    print("Competición:", COMPETICION)
-    print("ID competición:", COMPETICION_ID)
-    print("Fecha actual del ordenador:", fecha_actual_espana())
+    print("Competición:", competicion)
+    print("ID competición:", competicion_id)
+    print("Fecha actual en España:", fecha_actual_espana())
+    if grupos_esperados:
+        print("Grupos esperados:", ", ".join(sorted(grupos_esperados)))
 
     supabase = create_client(
-        SUPABASE_URL,
-        SUPABASE_KEY
+        supabase_url,
+        supabase_key
     )
 
     total_jornadas = 0
@@ -901,7 +1060,12 @@ def main():
         )
 
         try:
-            grupos = descubrir_grupos(page)
+            grupos = descubrir_grupos(
+                page,
+                competicion_id=competicion_id,
+                grupos_esperados=grupos_esperados,
+                nombre_competicion=competicion
+            )
 
             for grupo in grupos:
                 print("\n\n")
@@ -916,7 +1080,11 @@ def main():
 
                 print("#" * 100)
 
-                jornadas = descubrir_jornadas(page, grupo)
+                jornadas = descubrir_jornadas(
+                    page,
+                    grupo,
+                    competicion_id=competicion_id
+                )
 
                 for jornada in jornadas:
                     total_jornadas += 1
@@ -925,7 +1093,9 @@ def main():
                         partidos, errores, omitidos = extraer_jornada(
                             page,
                             grupo,
-                            jornada
+                            jornada,
+                            competicion_id=competicion_id,
+                            omitir_sin_marcador=omitir_sin_marcador
                         )
 
                         total_actas += len(partidos) + errores
@@ -935,7 +1105,12 @@ def main():
 
                         for datos in partidos:
                             try:
-                                guardar_partido(supabase, datos)
+                                guardar_partido(
+                                    supabase,
+                                    datos,
+                                    competicion=competicion,
+                                    incluir_jugadores_tarjetas=incluir_jugadores_tarjetas
+                                )
 
                                 total_guardados += 1
 
@@ -943,7 +1118,8 @@ def main():
 
                                 cantidad = guardar_tarjetas_individuales(
                                     supabase,
-                                    datos
+                                    datos,
+                                    competicion=competicion
                                 )
 
                                 total_tarjetas_guardadas += cantidad
@@ -975,17 +1151,22 @@ def main():
         finally:
             navegador.close()
 
+    try:
+        sincronizar_arbitros_desde_partidos(supabase)
+    except Exception as error:
+        print("AVISO: No se pudo sincronizar la tabla 'arbitros':", error)
+
     # RESUMEN FINAL
 
     print("\n" + "=" * 100)
     print("RESUMEN FINAL")
     print("=" * 100)
 
-    print("Competición:", COMPETICION)
+    print("Competición:", competicion)
     print("Grupos detectados:", len(grupos))
     print("Jornadas examinadas:", total_jornadas)
     print("Actas procesadas:", total_actas)
-    print("Jornadas futuras omitidas:", total_omitidos)
+    print("Jornadas futuras / partidos pendientes omitidos:", total_omitidos)
     print("Partidos extraídos y validados:", total_extraidos)
     print("Partidos guardados y verificados:", total_guardados)
 
@@ -1004,6 +1185,17 @@ def main():
         )
 
         sys.exit(1)
+
+
+def main():
+    ejecutar_sincronizacion(
+        competicion=COMPETICION,
+        competicion_id=COMPETICION_ID,
+        grupos_esperados=GRUPOS_ESPERADOS,
+        incluir_jugadores_tarjetas=True,
+        omitir_sin_marcador=True,
+        titulo="RFAF - DIVISIÓN HONOR SÉNIOR"
+    )
 
 
 if __name__ == "__main__":
