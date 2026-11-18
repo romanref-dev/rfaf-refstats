@@ -127,7 +127,7 @@ JS_ACTAS = r"""
 """
 
 
-def esperar_actas_estables(page):
+def esperar_actas_estables(page, permitir_sin_actas=False):
     ultimo_numero = -1
     repeticiones = 0
     actas = []
@@ -145,9 +145,14 @@ def esperar_actas_estables(page):
         if numero_actual > 0 and repeticiones >= REPETICIONES_ESTABLES:
             return actas
 
+        if permitir_sin_actas and numero_actual == 0 and repeticiones >= REPETICIONES_ESTABLES:
+            return []
+
         page.wait_for_timeout(ESPERA_ESTABILIDAD)
 
     if not actas:
+        if permitir_sin_actas:
+            return []
         raise RuntimeError("RFAF no ha cargado ningún enlace de acta.")
 
     print(
@@ -157,7 +162,7 @@ def esperar_actas_estables(page):
     return actas
 
 
-def cargar_jornada(page, jornada, competicion_id=None, grupo_id=None):
+def cargar_jornada(page, jornada, competicion_id=None, grupo_id=None, permitir_sin_actas=False):
     comp_id = competicion_id or COMPETICION_ID
     grp_id = grupo_id or GRUPO_ID
 
@@ -189,7 +194,7 @@ def cargar_jornada(page, jornada, competicion_id=None, grupo_id=None):
         )
 
     print("Esperando a que se carguen todos los partidos...")
-    actas = esperar_actas_estables(page)
+    actas = esperar_actas_estables(page, permitir_sin_actas=permitir_sin_actas)
     print(f"Partidos cargados y estabilizados: {len(actas)}")
     return actas
 
@@ -556,6 +561,234 @@ JS_TARJETAS_INDIVIDUALES = r"""
 
 
 # ============================================================
+# EXTRAER DETALLES EXTENDIDOS DEL ACTA (ASISTENTES, GOLES,
+# TITULARES, SUPLENTES, CUERPO TECNICO, CAMBIOS, ESTADIO, HORA)
+# ============================================================
+
+JS_DETALLES_ACTA = r"""
+() => {
+    const limpiar = t => (t || "").replace(/\s+,/g, ",").replace(/\s+/g, " ").trim();
+
+    // 1. Hora y fecha exacta del encabezado
+    let hora = null;
+    const textoBody = limpiar(document.body?.innerText || "");
+    const mHora = textoBody.match(/Jornada\s+\d+\s+\d{1,2}-\d{1,2}-\d{4}\s+(\d{1,2}:\d{2})\s*h/i);
+    if (mHora) hora = mHora[1];
+
+    // 2. Estadio y Ciudad
+    let estadio = null;
+    let ciudad = null;
+    const tablas = Array.from(document.querySelectorAll("table"));
+    for (const tb of tablas) {
+        const txt = limpiar(tb.innerText);
+        if (txt.includes("Estadio:") && txt.includes("Ciudad:")) {
+            const enlaceCampo = tb.querySelector('a[href*="NFG_VisCampos"]');
+            if (enlaceCampo) estadio = limpiar(enlaceCampo.innerText);
+            const h4Ciudad = Array.from(tb.querySelectorAll("h4")).find(h => h.innerText.includes("Ciudad:"));
+            if (h4Ciudad) ciudad = limpiar(h4Ciudad.innerText.replace(/^Ciudad:\s*/i, ""));
+            break;
+        }
+    }
+
+    // 3. Cuerpo arbitral completo (Árbitro principal y Asistentes)
+    const equipo_arbitral = [];
+    const details = Array.from(document.querySelectorAll("div.details"));
+    const bloqueArbitros = details.find(d => limpiar(d.querySelector(":scope > .number")?.innerText).toUpperCase().includes("RBITRO"));
+    if (bloqueArbitros) {
+        const subTablas = Array.from(bloqueArbitros.querySelectorAll("table"));
+        for (const st of subTablas) {
+            const filas = Array.from(st.querySelectorAll("tr"));
+            if (filas.length >= 2) {
+                const rol = limpiar(filas[0].innerText);
+                const textoCol = limpiar(filas[1].innerText);
+                const mDel = textoCol.match(/\s+DELEGACI[ÓO]N\s+DE\s+(.+)$/i);
+                equipo_arbitral.push({
+                    rol: rol || "ARBITRO",
+                    nombre: limpiar(mDel ? textoCol.substring(0, mDel.index) : textoCol),
+                    delegacion: mDel ? limpiar(mDel[1]) : null
+                });
+            }
+        }
+    }
+
+    // 4. Goles y goleadores
+    const goles = [];
+    const bloqueGoles = details.find(d => limpiar(d.querySelector(":scope > .number")?.innerText).toUpperCase() === "GOLES");
+    if (bloqueGoles) {
+        const filasGoles = Array.from(bloqueGoles.querySelectorAll("table tr"));
+        for (const fg of filasGoles) {
+            const celdas = fg.querySelectorAll("td");
+            if (celdas.length < 2) continue;
+            const tipoGol = fg.querySelector("a.lgol")?.getAttribute("title") || "Gol";
+            const textoAutor = limpiar(celdas[1].innerText);
+            const mMin = textoAutor.match(/^\(?(\d+(?:\+\d+)?)'\)?\s*(.+)$/);
+            goles.push({
+                minuto: mMin ? mMin[1] : null,
+                jugador: mMin ? limpiar(mMin[2]) : textoAutor,
+                tipo: tipoGol
+            });
+        }
+    }
+
+    // 5. Bloques de Equipos (Titulares, Suplentes, Cuerpo Técnico, Sustituciones)
+    const bloquesEquipos = details.filter(d => {
+        const titulo = limpiar(d.querySelector(":scope > .number")?.innerText).toUpperCase();
+        return titulo && !titulo.includes("RBITRO") && titulo !== "GOLES";
+    });
+
+    const plantillas = {};
+    for (const bEq of bloquesEquipos) {
+        const nombreEq = limpiar(bEq.querySelector(":scope > .number")?.innerText);
+        if (!nombreEq) continue;
+
+        const desc = bEq.querySelector(":scope > .desc") || bEq;
+        const titulares = [];
+        const suplentes = [];
+        const cuerpo_tecnico = [];
+        const sustituciones = [];
+
+        // Recorrer hijos de .desc para clasificar tablas según el encabezado h5/h4 previo
+        let seccionActual = "";
+        for (const el of Array.from(desc.children)) {
+            const tag = el.tagName.toUpperCase();
+            const txt = limpiar(el.innerText);
+
+            if (tag === "H5" || tag === "H4") {
+                const upper = txt.toUpperCase();
+                if (upper === "TITULARES") seccionActual = "TITULARES";
+                else if (upper === "SUPLENTES") seccionActual = "SUPLENTES";
+                else if (upper === "SUSTITUCIONES") seccionActual = "SUSTITUCIONES";
+                else if (upper === "TARJETAS") seccionActual = "TARJETAS";
+                else if (txt.includes(":")) {
+                    const partes = txt.split(":");
+                    const cargo = limpiar(partes[0]);
+                    const persona = limpiar(partes.slice(1).join(":"));
+                    if (cargo && persona) {
+                        cuerpo_tecnico.push({ cargo, nombre: persona });
+                    }
+                }
+            } else if (tag === "TABLE") {
+                if (seccionActual === "TITULARES" || seccionActual === "SUPLENTES") {
+                    const filasJug = Array.from(el.querySelectorAll("tr"));
+                    for (const fj of filasJug) {
+                        const tds = fj.querySelectorAll("td");
+                        if (tds.length >= 3) {
+                            const dorsal = limpiar(tds[0].innerText);
+                            const nombreJug = limpiar(tds[2].innerText);
+                            if (nombreJug) {
+                                const obj = { dorsal, jugador: nombreJug };
+                                if (seccionActual === "TITULARES") titulares.push(obj);
+                                else suplentes.push(obj);
+                            }
+                        }
+                    }
+                } else if (seccionActual === "SUSTITUCIONES") {
+                    const filasSub = Array.from(el.querySelectorAll("tr"));
+                    if (filasSub.length >= 2) {
+                        const tdsEntra = filasSub[0].querySelectorAll("td");
+                        const tdsSale = filasSub[1].querySelectorAll("td");
+                        const entra = tdsEntra.length >= 2 ? limpiar(tdsEntra[1].innerText) : null;
+                        const textoSale = tdsSale.length >= 2 ? limpiar(tdsSale[1].innerText) : "";
+                        const mSub = textoSale.match(/^\(?(\d+(?:\+\d+)?)'\)?\s*(.+)$/);
+                        sustituciones.push({
+                            minuto: mSub ? mSub[1] : null,
+                            entra: entra,
+                            sale: mSub ? limpiar(mSub[2]) : textoSale
+                        });
+                    }
+                }
+            }
+        }
+
+        plantillas[nombreEq] = {
+            titulares,
+            suplentes,
+            cuerpo_tecnico,
+            sustituciones
+        };
+    }
+
+    return {
+        hora,
+        estadio,
+        ciudad,
+        equipo_arbitral,
+        goles,
+        plantillas
+    };
+}
+"""
+
+
+# ============================================================
+# EXTRAER TODOS LOS PARTIDOS DE UNA JORNADA DESDE EL CALENDARIO
+# (INCLUYE JORNADAS FUTURAS / PENDIENTES SIN ENTRAR AL ACTA)
+# ============================================================
+
+JS_PARTIDOS_CALENDARIO_COMPLETO = r"""
+() => {
+    const limpiar = t => (t || "").replace(/\s+,/g, ",").replace(/\s+/g, " ").trim();
+    const tablasPartido = Array.from(document.querySelectorAll("table.table-bordered table"));
+    const resultados = [];
+
+    for (let idx = 0; idx < tablasPartido.length; idx++) {
+        const tb = tablasPartido[idx];
+        const linkLocal = tb.querySelector(".font_widgetL a");
+        const linkVisitante = tb.querySelector(".font_widgetV a");
+        if (!linkLocal || !linkVisitante) continue;
+
+        const local = limpiar(linkLocal.innerText);
+        const visitante = limpiar(linkVisitante.innerText);
+        if (!local || !visitante) continue;
+
+        const enlaceActa = tb.querySelector('a[href*="CodActa"]');
+        let acta_id = null;
+        if (enlaceActa) {
+            const href = enlaceActa.getAttribute("href") || "";
+            const mActa = href.match(/[?&]CodActa=(\d+)/i);
+            if (mActa) acta_id = mActa[1];
+        }
+
+        const horarios = Array.from(tb.querySelectorAll("span.horario")).map(s => limpiar(s.innerText));
+        let fecha = null;
+        let hora = null;
+        for (const h of horarios) {
+            const mF = h.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+            if (mF) {
+                fecha = `${mF[3]}-${mF[2].padStart(2, "0")}-${mF[1].padStart(2, "0")}`;
+            } else if (/^\d{1,2}:\d{2}$/.test(h)) {
+                hora = h;
+            }
+        }
+
+        const enlaceCampo = tb.querySelector('a[href*="NFG_VisCampos"]');
+        const estadio = enlaceCampo ? limpiar(enlaceCampo.innerText) : null;
+
+        let arbitro = null;
+        const textoTabla = limpiar(tb.innerText);
+        const mArb = textoTabla.match(/[ÁA]rbitro:\s*([A-ZÁÉÍÓÚÑ\s,.-]+)$/i);
+        if (mArb) {
+            arbitro = limpiar(mArb[1]);
+        }
+
+        resultados.push({
+            orden: idx + 1,
+            acta_id,
+            local,
+            visitante,
+            fecha,
+            hora,
+            estadio,
+            arbitro
+        });
+    }
+
+    return resultados;
+}
+"""
+
+
+# ============================================================
 # VALIDAR TOTALES CONTRA TARJETAS INDIVIDUALES
 # ============================================================
 
@@ -656,6 +889,24 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
             JS_TARJETAS_INDIVIDUALES
         )
 
+        try:
+            detalles_acta = page.evaluate(JS_DETALLES_ACTA)
+        except Exception:
+            detalles_acta = {}
+
+        # Enriquecer cada tarjeta individual con el estamento (jugador vs cuerpo_tecnico) si coincide con cuerpo_tecnico
+        nombres_ct = set()
+        for eq_data in (detalles_acta.get("plantillas") or {}).values():
+            for ct in eq_data.get("cuerpo_tecnico") or []:
+                if ct.get("nombre"):
+                    nombres_ct.add(normalizar(ct["nombre"]))
+
+        for t_ind in tarjetas_individuales:
+            jug_norm = normalizar(t_ind.get("jugador") or "")
+            t_ind["tipo_persona"] = (
+                "cuerpo_tecnico" if jug_norm in nombres_ct else "jugador"
+            )
+
         errores_individuales = []
         for numero, tarjeta in enumerate(tarjetas_individuales, start=1):
             if not tarjeta.get("jugador"):
@@ -724,6 +975,7 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
             "delegacion": arbitro.get("delegacion"),
             "tarjetas": tarjetas,
             "tarjetas_individuales": tarjetas_individuales,
+            "detalles_acta": detalles_acta,
             "errores_individuales": errores_individuales,
             "errores_tarjetas": errores_tarjetas,
             "estado": "OK" if correcto else "REVISAR"

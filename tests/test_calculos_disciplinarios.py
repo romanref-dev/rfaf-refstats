@@ -90,3 +90,37 @@ def test_limpiar_normaliza_espacios_antes_de_coma():
         == "MUNUERA SANCHEZ, ALVARO"
     )
 
+
+def test_construir_partido_pendiente_y_registro_futuro():
+    pendiente = guarda_division_honor.construir_partido_pendiente_calendario(
+        {
+            "orden": 1,
+            "acta_id": "2639475",
+            "local": "UNION DEPORTIVA MELILLA",
+            "visitante": "C.D. CHURRIANA DE LA VEGA C.F.",
+            "fecha": "2026-11-22",
+            "hora": "12:00",
+            "estadio": "ALVAREZ CLARO",
+            "arbitro": "GARCIA CALVO , ALVARO",
+        },
+        fecha_jornada="2026-11-22",
+        numero_jornada=12,
+        grupo={"texto": "Grupo 9", "value": "48710553"},
+        competicion_id="48465908",
+    )
+    registro = guarda_division_honor.construir_registro(
+        pendiente,
+        competicion="3.ª Federación",
+    )
+    assert registro["estado"] == "Pendiente"
+    assert registro["goles_local"] is None
+    assert registro["goles_visitante"] is None
+    assert registro["arbitro"] == "GARCIA CALVO, ALVARO"
+    assert registro["jugadores_tarjetas"] == []
+
+
+def test_catalogo_aficionados_completo():
+    import config
+    assert len(config.COMPETICIONES_AFICIONADOS) == 43
+
+

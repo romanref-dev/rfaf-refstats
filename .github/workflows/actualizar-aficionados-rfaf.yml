@@ -1,0 +1,51 @@
+name: Actualizar Catálogo Aficionados RFAF (43 Competiciones)
+
+on:
+  workflow_dispatch:
+    inputs:
+      bloque:
+        description: "Bloque a sincronizar (todas, primera_andaluza, segunda_andaluza, tercera_andaluza, copas, otras)"
+        required: true
+        default: "primera_andaluza"
+      competicion_id:
+        description: "ID específico de competición RFAF (opcional)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Instalar Chromium
+        run: |
+          playwright install --with-deps chromium
+
+      - name: Ejecutar sincronización RFAF
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          if [ -n "${{ github.event.inputs.competicion_id }}" ]; then
+            python -u guarda_aficionados_rfaf.py --competicion-id "${{ github.event.inputs.competicion_id }}"
+          else
+            python -u guarda_aficionados_rfaf.py --bloque "${{ github.event.inputs.bloque }}"
+          fi

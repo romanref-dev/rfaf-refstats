@@ -2,6 +2,12 @@ name: Actualizar 3ª Federación RFAF
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "guarda_tercera_federacion.py"
+      - ".github/workflows/actualizar-rfaf-3.yml"
   schedule:
     - cron: "0 23 * * 0"
     - cron: "30 8 * * 1"
