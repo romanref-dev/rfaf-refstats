@@ -30,7 +30,7 @@ GRUPOS_DH = [
     },
     {
         "nombre": "División de Honor Senior (Grupo 2)",
-        "cod_grupo": "49641344",
+        "cod_grupo": "48933162",
         "total_jornadas": 30,
     },
 ]

@@ -1116,18 +1116,26 @@ def ejecutar_sincronizacion(
 
                                 mostrar_partido(datos)
 
-                                cantidad = guardar_tarjetas_individuales(
-                                    supabase,
-                                    datos,
-                                    competicion=competicion
-                                )
+                                try:
+                                    cantidad = guardar_tarjetas_individuales(
+                                        supabase,
+                                        datos,
+                                        competicion=competicion
+                                    )
 
-                                total_tarjetas_guardadas += cantidad
+                                    total_tarjetas_guardadas += cantidad
 
-                                print(
-                                    "TARJETAS GUARDADAS Y "
-                                    f"VERIFICADAS: {cantidad}"
-                                )
+                                    print(
+                                        "TARJETAS GUARDADAS Y "
+                                        f"VERIFICADAS: {cantidad}"
+                                    )
+                                except Exception as error_tarjetas:
+                                    print(
+                                        "AVISO actas_tarjetas (ya persistido en partidos.jugadores_tarjetas) | ACTA",
+                                        datos["acta_id"],
+                                        "|",
+                                        str(error_tarjetas)
+                                    )
 
                             except Exception as error:
                                 total_errores += 1
