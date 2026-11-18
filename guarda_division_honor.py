@@ -735,6 +735,10 @@ def construir_registro(
 
     if datos.get("es_pendiente"):
         arb = limpiar(datos.get("arbitro") or "")
+        detalles = datos.get("detalles_acta") or {}
+        meta_pendiente = []
+        if any(detalles.values()):
+            meta_pendiente.append({"tipo": "metadata_acta", "detalles_acta": detalles})
         return {
             "id": f"rfaf_{acta_id}",
             "acta_id": acta_id,
@@ -760,7 +764,7 @@ def construir_registro(
             "tarjetas_amarillas_visitante": 0,
             "tarjetas_rojas_local": 0,
             "tarjetas_rojas_visitante": 0,
-            "jugadores_tarjetas": [],
+            "jugadores_tarjetas": meta_pendiente,
             "estado": "Pendiente",
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
@@ -814,7 +818,11 @@ def construir_registro(
     }
 
     if incluir_jugadores_tarjetas:
-        registro["jugadores_tarjetas"] = datos["tarjetas_individuales"]
+        lista_json = list(datos.get("tarjetas_individuales") or [])
+        detalles = datos.get("detalles_acta") or {}
+        if any(detalles.values()):
+            lista_json.append({"tipo": "metadata_acta", "detalles_acta": detalles})
+        registro["jugadores_tarjetas"] = lista_json
 
     return registro
 

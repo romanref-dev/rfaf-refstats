@@ -116,7 +116,12 @@ def test_construir_partido_pendiente_y_registro_futuro():
     assert registro["goles_local"] is None
     assert registro["goles_visitante"] is None
     assert registro["arbitro"] == "GARCIA CALVO, ALVARO"
-    assert registro["jugadores_tarjetas"] == []
+    assert registro["jugadores_tarjetas"] == [
+        {
+            "tipo": "metadata_acta",
+            "detalles_acta": {"hora": "12:00", "estadio": "ALVAREZ CLARO"},
+        }
+    ]
 
 
 def test_catalogo_aficionados_completo():
