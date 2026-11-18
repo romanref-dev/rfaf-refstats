@@ -16,6 +16,16 @@ from guarda_division_honor import (
 
 def obtener_catalogo(bloque: str):
     b = (bloque or "todas").strip().lower()
+    if b in ("division_honor", "dh"):
+        return [{"id": config.COD_COMPETICION_DH, "nombre": config.COMPETICION_DH}]
+    if b in ("tercera", "tercera_federacion", "3fed"):
+        return [{"id": config.COD_COMPETICION_TERCERA, "nombre": config.COMPETICION_TERCERA}]
+    if b in ("principales", "autonomicas"):
+        return [
+            {"id": config.COD_COMPETICION_DH, "nombre": config.COMPETICION_DH},
+            {"id": config.COD_COMPETICION_TERCERA, "nombre": config.COMPETICION_TERCERA},
+            *config.COMPETICIONES_PRIMERA_ANDALUZA,
+        ]
     if b in ("primera_andaluza", "1a", "1_andaluza"):
         return config.COMPETICIONES_PRIMERA_ANDALUZA
     if b in ("segunda_andaluza", "2a", "2_andaluza"):
@@ -29,7 +39,25 @@ def obtener_catalogo(bloque: str):
     return config.COMPETICIONES_AFICIONADOS
 
 
-def ejecutar_lote(competiciones, guardar_futuras=True):
+def limpiar_base_de_datos(supabase):
+    """Vacía por completo las tablas actas_tarjetas, partidos y arbitros antes de una recarga limpia."""
+    print("\n" + "!" * 100)
+    print("LIMPIANDO BASE DE DATOS (MODO RECARGA LIMPIA DESDE CERO)")
+    print("!" * 100)
+
+    for tabla, col_id in [
+        ("actas_tarjetas", "acta_id"),
+        ("partidos", "id"),
+        ("arbitros", "id"),
+    ]:
+        try:
+            supabase.table(tabla).delete().neq(col_id, "__ninguno__").execute()
+            print(f"  - Tabla '{tabla}' vaciada correctamente.")
+        except Exception as exc:
+            print(f"  - Aviso al limpiar '{tabla}': {exc}")
+
+
+def ejecutar_lote(competiciones, guardar_futuras=True, limpiar_antes=False):
     supabase_url = os.getenv("SUPABASE_URL", SUPABASE_URL)
     supabase_key = os.getenv("SUPABASE_KEY", SUPABASE_KEY)
 
@@ -37,6 +65,10 @@ def ejecutar_lote(competiciones, guardar_futuras=True):
         raise RuntimeError(
             "Faltan SUPABASE_URL o SUPABASE_KEY en las variables de entorno."
         )
+
+    supabase = create_client(supabase_url, supabase_key)
+    if limpiar_antes:
+        limpiar_base_de_datos(supabase)
 
     fallidas = []
 
@@ -103,6 +135,11 @@ def main():
         action="store_true",
         help="Si se indica, omite las jornadas futuras sin guardarlas como Pendiente.",
     )
+    parser.add_argument(
+        "--limpiar-bbdd",
+        action="store_true",
+        help="Si se indica, vacía por completo las tablas partidos, actas_tarjetas y arbitros antes de cargar.",
+    )
     args = parser.parse_args()
 
     if args.competicion_id:
@@ -114,7 +151,11 @@ def main():
     else:
         catalogo = obtener_catalogo(args.bloque)
 
-    ejecutar_lote(catalogo, guardar_futuras=not args.sin_futuras)
+    ejecutar_lote(
+        catalogo,
+        guardar_futuras=not args.sin_futuras,
+        limpiar_antes=args.limpiar_bbdd,
+    )
 
 
 if __name__ == "__main__":

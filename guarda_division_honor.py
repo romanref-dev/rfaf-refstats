@@ -1151,6 +1151,15 @@ def sincronizar_arbitros_desde_partidos(supabase):
             on_conflict="id"
         ).execute()
 
+    ids_activos = {r["id"] for r in registros_arbitros}
+    for arb_prev in arbitros_db:
+        id_prev = str(arb_prev.get("id") or "").strip()
+        if id_prev and id_prev not in ids_activos:
+            try:
+                supabase.table("arbitros").delete().eq("id", id_prev).execute()
+            except Exception:
+                pass
+
     print(f"Tabla 'arbitros' sincronizada: {len(registros_arbitros)} árbitros actualizados.")
     return len(registros_arbitros)
 

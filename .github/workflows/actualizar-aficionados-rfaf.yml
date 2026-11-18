@@ -4,13 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       bloque:
-        description: "Bloque a sincronizar (todas, primera_andaluza, segunda_andaluza, tercera_andaluza, copas, otras)"
+        description: "Bloque a sincronizar (principales, todas, primera_andaluza, segunda_andaluza, tercera_andaluza, copas, otras)"
         required: true
-        default: "primera_andaluza"
+        default: "principales"
       competicion_id:
         description: "ID específico de competición RFAF (opcional)"
         required: false
         default: ""
+      limpiar_bbdd:
+        description: "Vaciar por completo las tablas partidos, actas_tarjetas y arbitros antes de cargar (true/false)"
+        required: false
+        default: "false"
 
 permissions:
   contents: read
@@ -44,8 +48,12 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
+          EXTRA_ARGS=""
+          if [ "${{ github.event.inputs.limpiar_bbdd }}" = "true" ]; then
+            EXTRA_ARGS="--limpiar-bbdd"
+          fi
           if [ -n "${{ github.event.inputs.competicion_id }}" ]; then
-            python -u guarda_aficionados_rfaf.py --competicion-id "${{ github.event.inputs.competicion_id }}"
+            python -u guarda_aficionados_rfaf.py --competicion-id "${{ github.event.inputs.competicion_id }}" $EXTRA_ARGS
           else
-            python -u guarda_aficionados_rfaf.py --bloque "${{ github.event.inputs.bloque }}"
+            python -u guarda_aficionados_rfaf.py --bloque "${{ github.event.inputs.bloque }}" $EXTRA_ARGS
           fi
