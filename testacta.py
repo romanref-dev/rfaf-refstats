@@ -894,6 +894,12 @@ def procesar_acta(page, jornada, acta_id, equipos_calendario):
         except Exception:
             detalles_acta = {}
 
+        if not local or not visitante:
+            equipos_en_acta = list((detalles_acta.get("plantillas") or {}).keys())
+            if len(equipos_en_acta) >= 2:
+                local = local or equipos_en_acta[0]
+                visitante = visitante or equipos_en_acta[1]
+
         # Enriquecer cada tarjeta individual con el estamento (jugador vs cuerpo_tecnico) si coincide con cuerpo_tecnico
         nombres_ct = set()
         for eq_data in (detalles_acta.get("plantillas") or {}).values():

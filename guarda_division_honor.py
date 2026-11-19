@@ -44,7 +44,10 @@ def normalizar_equipo(texto):
 
 
 def fecha_actual_espana():
-    return datetime.now(ZoneInfo("Europe/Madrid")).date().isoformat()
+    try:
+        return datetime.now(ZoneInfo("Europe/Madrid")).date().isoformat()
+    except Exception:
+        return datetime.now().date().isoformat()
 
 
 def obtener_opciones(page, selector):
@@ -595,6 +598,12 @@ def extraer_jornada(
         for it in partidos_cal_lista
         if it.get("acta_id")
     }
+    for aid, info in mapa_cal_por_acta.items():
+        if aid not in equipos_calendario and info.get("local") and info.get("visitante"):
+            equipos_calendario[aid] = {
+                "local": info["local"],
+                "visitante": info["visitante"],
+            }
 
     print("Actas encontradas:", len(actas))
 
@@ -1056,25 +1065,41 @@ def guardar_tarjetas_individuales(supabase, datos, competicion=None):
 # SINCRONIZAR TABLA DE ÁRBITROS DESDE PARTIDOS
 # ============================================================
 
+def cargar_tabla_paginada(supabase, tabla, columnas, page_size=1000):
+    """Lee todas las filas de una tabla de Supabase paginando de 1000 en 1000."""
+    resultados = []
+    desde = 0
+    while True:
+        resp = (
+            supabase
+            .table(tabla)
+            .select(columnas)
+            .range(desde, desde + page_size - 1)
+            .execute()
+        )
+        pagina = resp.data or []
+        resultados.extend(pagina)
+        if len(pagina) < page_size:
+            break
+        desde += page_size
+    return resultados
+
+
 def sincronizar_arbitros_desde_partidos(supabase):
     """Recalcula y sincroniza las estadísticas acumuladas de la tabla `arbitros` a partir de `partidos`."""
     print("\nSincronizando tabla 'arbitros' a partir de 'partidos'...")
 
-    respuesta_partidos = (
-        supabase
-        .table("partidos")
-        .select("arbitro,arbitro_nombre,delegacion,delegacion_arbitro,tarjetas_amarillas,tarjetas_rojas,estado")
-        .execute()
+    partidos_db = cargar_tabla_paginada(
+        supabase,
+        "partidos",
+        "arbitro,arbitro_nombre,delegacion,delegacion_arbitro,tarjetas_amarillas,tarjetas_rojas,estado",
     )
-    partidos_db = respuesta_partidos.data or []
 
-    respuesta_arbitros = (
-        supabase
-        .table("arbitros")
-        .select("id,nombre,delegacion")
-        .execute()
+    arbitros_db = cargar_tabla_paginada(
+        supabase,
+        "arbitros",
+        "id,nombre,delegacion",
     )
-    arbitros_db = respuesta_arbitros.data or []
 
     id_por_nombre = {}
     delegacion_previa = {}
@@ -1203,27 +1228,19 @@ def mostrar_partido(datos):
 def sincronizar_competiciones_desde_partidos(supabase):
     """Asegura que todos los pares (competicion, grupo) de `partidos` existan en la tabla `competiciones`."""
     print("\nSincronizando tabla 'competiciones' a partir de 'partidos'...")
-    resp_partidos = (
-        supabase
-        .table("partidos")
-        .select("competicion,grupo")
-        .execute()
-    )
+    partidos_db = cargar_tabla_paginada(supabase, "partidos", "competicion,grupo")
     pares_partidos = {
         (limpiar(p.get("competicion") or ""), limpiar(p.get("grupo") or ""))
-        for p in (resp_partidos.data or [])
+        for p in partidos_db
         if limpiar(p.get("competicion") or "") and limpiar(p.get("grupo") or "")
     }
 
-    resp_comp = (
-        supabase
-        .table("competiciones")
-        .select("id,nombre,grupo,temporada")
-        .execute()
+    comps_db = cargar_tabla_paginada(
+        supabase, "competiciones", "id,nombre,grupo,temporada"
     )
     existentes = {
         (limpiar(c.get("nombre") or ""), limpiar(c.get("grupo") or ""))
-        for c in (resp_comp.data or [])
+        for c in comps_db
     }
 
     nuevos = []
