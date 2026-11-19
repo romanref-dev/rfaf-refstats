@@ -9,7 +9,7 @@ on:
       - "guarda_primera_andaluza.py"
       - ".github/workflows/actualizar-primera-andaluza.yml"
   schedule:
-    - cron: "30 23 * * 0"
+    # 1 pasada semanal óptima: Lunes 09:00 UTC (10:00 España invierno / 11:00 verano)
     - cron: "0 9 * * 1"
 
 permissions:

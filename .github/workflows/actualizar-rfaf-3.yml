@@ -9,7 +9,7 @@ on:
       - "guarda_tercera_federacion.py"
       - ".github/workflows/actualizar-rfaf-3.yml"
   schedule:
-    - cron: "0 23 * * 0"
+    # 1 pasada semanal óptima: Lunes 08:30 UTC (09:30 España invierno / 10:30 verano)
     - cron: "30 8 * * 1"
 
 permissions:

@@ -11,7 +11,7 @@ on:
       - "config.py"
       - ".github/workflows/actualizar-rfaf.yml"
   schedule:
-    - cron: "30 22 * * 0"
+    # 1 pasada semanal óptima: Lunes 08:00 UTC (09:00 España invierno / 10:00 verano)
     - cron: "0 8 * * 1"
 
 permissions:

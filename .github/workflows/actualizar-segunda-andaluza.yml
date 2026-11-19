@@ -2,9 +2,10 @@ name: Actualizar 2ª Andaluza Sénior (8 Provincias)
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 1"
-    - cron: "30 9 * * 1"
+  # Cron desactivado temporalmente para ahorrar minutos de Actions mientras solo se usan las 12 competiciones principales.
+  # Descomentar cuando quieras activar la carga automática semanal de 2ª Andaluza:
+  # schedule:
+  #   - cron: "30 9 * * 1"
 
 permissions:
   contents: read
