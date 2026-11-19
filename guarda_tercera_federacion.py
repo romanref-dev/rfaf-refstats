@@ -1,3 +1,4 @@
+"""Sincronizador de 3.ª Federación RFAF (Grupos 9 y 10) con actas extendidas (asistentes, goles y alineaciones)."""
 import sys
 
 import config
